@@ -2,8 +2,6 @@ const prisma = require("../database/db")
 
 const goodiesController = {}
 
-// Il faut entrourer tous les requêtes vers prisma dans un bloc try/catch
-
 /**
  * Get all goodies
  */

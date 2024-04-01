@@ -19,5 +19,5 @@ const options = {
 const server = https.createServer(options, app)
 
 server.listen(PORT, () => {
-  console.log(`Server listing to port ${PORT}`)
+  console.log(`Listing on port ${PORT}`)
 })

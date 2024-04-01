@@ -1,5 +1,6 @@
 const { Router } = require("express")
 
+const auth = require("../auth/auth")
 const goodiesController = require("../controllers/goodies.controller")
 const { extractData, successResponse } = require("../lib/helper")
 
@@ -35,7 +36,7 @@ goodiesRouter.get("/:goodieId", async function (req, res) {
 /** 
  * Route to add goodie item 
  */
-goodiesRouter.post("/", async function (req, res) {
+goodiesRouter.post("/", auth, async function (req, res) {
   try {
     const data = JSON.parse(await extractData(req))
     const goodieData = {
@@ -54,7 +55,7 @@ goodiesRouter.post("/", async function (req, res) {
 /**
  * Route to get modify goodie item 
  */
-goodiesRouter.put("/:goodieId", async function (req, res) {
+goodiesRouter.put("/:goodieId", auth, async function (req, res) {
   try {
     const goodieId = req.params.goodieId
     const data = JSON.parse(await extractData(req))
@@ -72,7 +73,7 @@ goodiesRouter.put("/:goodieId", async function (req, res) {
 /**
  * Route to get delete student item
  */
-goodiesRouter.delete("/:goodieId", async function (req, res) {
+goodiesRouter.delete("/:goodieId", auth, async function (req, res) {
   try {
     const goodieId = req.params.goodieId
     const deleteResult = await goodiesController.deleteGoodie(goodieId)

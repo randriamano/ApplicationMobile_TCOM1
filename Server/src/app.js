@@ -2,19 +2,13 @@ const path = require('node:path')
 
 const express = require('express')
 
-// initialize express app
+// Initialize express app
 const app = express()
 
-const logger = (req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next()
-}
-
-// parse json
-app
-  .use(logger)
+// Path to the public directory
+const public = path.join(__dirname, 'public')
 
 // Import all the routes
-require('./routes/route')(app)
+require('./routes/route')(app, public)
 
 module.exports = app
