@@ -47,8 +47,7 @@ import com.example.e_comget.ui.theme.TextColor
 
 
 @Composable
-fun ProfileHomeScreen(navController: NavController, modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
+fun ProfileHomeScreen(navController: NavHostController, modifier: Modifier = Modifier) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
