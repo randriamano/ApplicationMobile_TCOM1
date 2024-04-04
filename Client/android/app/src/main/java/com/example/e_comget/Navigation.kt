@@ -1,14 +1,10 @@
-package com.example.e_comget
+ package com.example.e_comget
 
-import android.graphics.drawable.Icon
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.sharp.Home
-import androidx.compose.material.icons.sharp.Person
-import androidx.compose.material.icons.sharp.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -21,53 +17,35 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.e_comget.screens.Card.CardScreen
-import com.example.e_comget.screens.Details.DetailsScreenWrapper
+import com.example.e_comget.screens.Home.Components.ProductDetailsScreen
+import com.example.e_comget.screens.Home.Components.ProductOrderScreen
 import com.example.e_comget.screens.Home.HomeScreen
 import com.example.e_comget.screens.MyAccount.ProfileScreen
+import com.example.e_comget.screens.MyAccount.SignIn.LoginScreen
+import com.example.e_comget.screens.MyAccount.SignIn.SignUpScreen
+import com.example.e_comget.screens.Routes.MainScreens
+import com.example.e_comget.screens.Routes.MyAccountScreens
+import com.example.e_comget.screens.Routes.ProductScreens
+import com.example.e_comget.screens.data.BottomNavigationItem
 
-sealed class Screens(val route: String){
-        object Home: Screens("home_route")
-        object  Card: Screens("card_route")
-        object  Profile: Screens("profile_route")
-    }
+    @Composable
+    fun App(){
 
-    data class BottomNavigationItem (
-        val label: String = "",
-        val icon: ImageVector = Icons.Filled.Home,
-        val route : String = ""
-    ){
-        fun bottomNavigationItems() : List<BottomNavigationItem> {
-            return listOf(
-                BottomNavigationItem(
-                    label = "Home",
-                    icon = Icons.Sharp.Home,
-                    route = Screens.Home.route
-                ),
-                BottomNavigationItem(
-                    label = "Card",
-                    icon = Icons.Sharp.ShoppingCart,
-                    route = Screens.Card.route
-                ),
-                BottomNavigationItem(
-                    label = "Profile",
-                    icon = Icons.Sharp.Person,
-                    route = Screens.Profile.route
-                )
-            )
-        }
+        AppNavigation()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun BottomNavigationBar(){
+    fun BottomNavigationBar(navControllerApp: NavHostController){
         var navigationSelectedItem by remember {
             mutableStateOf(0)
         }
@@ -77,8 +55,12 @@ sealed class Screens(val route: String){
             modifier = Modifier
                 .fillMaxSize()
                 .fillMaxWidth(),
-            bottomBar = {
-                NavigationBar {
+            bottomBar= {
+                NavigationBar(
+                    containerColor = Color.White,
+                    modifier = Modifier
+                        .height(80.dp)
+                ){
                     BottomNavigationItem().bottomNavigationItems().forEachIndexed  { index, navigationItem ->
                         NavigationBarItem(
                             selected = index == navigationSelectedItem,
@@ -109,16 +91,45 @@ sealed class Screens(val route: String){
            paddingValues ->
             NavHost(
                 navController = navController,
-                startDestination = Screens.Home.route,
-                modifier = Modifier.padding(paddingValues = paddingValues)) {
-                composable(Screens.Home.route) {
-                    HomeScreen(navController = navController)
+                startDestination = MainScreens.Home.route,
+                modifier = Modifier.padding(paddingValues = paddingValues)
+            ) {
+                composable(MainScreens.Home.route) {
+                    HomeScreen(navControllerApp = navControllerApp)
                 }
-                composable(Screens.Card.route) {
+                composable(MainScreens.Card.route) {
                     CardScreen(navController = navController)
                 }
-                composable(Screens.Profile.route) {
-                    ProfileScreen(navController = navController)
+                composable(MainScreens.Profile.route) {
+                    ProfileScreen(navControllerApp = navControllerApp, navController = navController)
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun AppNavigation(){
+        var navControllerApp = rememberNavController()
+
+
+        Box{
+            NavHost(navController = navControllerApp, startDestination = "bottomNavigation"){
+                composable("bottomNavigation") {
+                    BottomNavigationBar(navControllerApp = navControllerApp)
+                }
+                composable(ProductScreens.ProductDetails.route) {
+                    ProductDetailsScreen(
+                        navControllerApp = navControllerApp
+                    )
+                }
+                composable(ProductScreens.ProductOrder.route) {
+                    ProductOrderScreen(navControllerApp = navControllerApp)
+                }
+                composable(MyAccountScreens.Login.route) {
+                    LoginScreen(navControllerApp = navControllerApp)
+                }
+                composable(MyAccountScreens.SignUp.route) {
+                    SignUpScreen(navControllerApp = navControllerApp)
                 }
             }
         }
@@ -127,5 +138,6 @@ sealed class Screens(val route: String){
     @Composable
     @Preview
     fun BottomNavigationBarPreview(){
-        BottomNavigationBar();
+        var navControllerApp = rememberNavController()
+        BottomNavigationBar(navControllerApp);
     }

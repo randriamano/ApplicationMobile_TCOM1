@@ -1,8 +1,6 @@
-package com.example.e_comget.screens.MyAccount
+package com.example.e_comget.screens.MyAccount.SignIn
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,22 +8,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.e_comget.screens.MyAccount.SignIn.SignUpScreen
-import androidx.compose.ui.res.painterResource
 import com.example.e_comget.R
 import com.example.e_comget.screens.MyAccount.SignIn.components.ButtonComponent
 import com.example.e_comget.screens.MyAccount.SignIn.components.ClickableLoginTextComponent
@@ -36,26 +31,13 @@ import com.example.e_comget.screens.MyAccount.SignIn.components.PasswordTextFiel
 import com.example.e_comget.screens.Routes.MainScreens
 import com.example.e_comget.screens.Routes.MyAccountScreens
 
-@OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProfileScreen(navControllerApp: NavHostController, navController: NavHostController) {
-    var isLoggedIn = Math.random().toInt();
-
-    if(isLoggedIn % 2 == 0){
-        SignUpSubScreen(navControllerApp = navControllerApp, navController = navController)
-    }else {
-        ProfileHomeScreen(navController = navControllerApp)
-    }
-}
-
-@Composable
-fun SignUpSubScreen(navControllerApp: NavHostController, navController: NavHostController){
+fun LoginScreen(navControllerApp: NavHostController){
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-    ) {
+    ){
         Column(
             modifier = Modifier
                 .padding(end = 10.dp)
@@ -65,7 +47,7 @@ fun SignUpSubScreen(navControllerApp: NavHostController, navController: NavHostC
         ) {
             Spacer(Modifier.height(10.dp))
             IconButton(onClick = {
-                navController.navigate(MainScreens.Home.route)
+                navControllerApp.navigate("bottomNavigation")
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.close_24px),
@@ -73,35 +55,31 @@ fun SignUpSubScreen(navControllerApp: NavHostController, navController: NavHostC
                 )
             }
         }
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(start = 28.dp, end = 28.dp, top = 10.dp),
         ) {
-            NormalTextComponent("Hey there, ")
-            HeadingTextComponent("Create an Account")
-            Spacer(modifier = Modifier.height(20.dp))
-            MyTextFieldComponent(labelValue = " First name", painterResource = painterResource(id = R.drawable.ic_profile) )
-            MyTextFieldComponent(labelValue = " Last name", painterResource = painterResource(id = R.drawable.ic_profile))
+            NormalTextComponent("Login")
+            HeadingTextComponent("Welcom Back")
             MyTextFieldComponent(labelValue = " Email", painterResource = painterResource(id = R.drawable.mail_24px))
             PasswordTextFieldComponent(labelValue = " Password", painterResource = painterResource(id = R.drawable.lock_24px))
-            Spacer(modifier = Modifier.height(80.dp))
-            ButtonComponent(value = "Register")
+            Spacer(modifier = Modifier.height(50.dp))
+            ButtonComponent(value = "Login")
             Spacer(modifier = Modifier.height(10.dp))
-            ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
-                navControllerApp.navigate(MyAccountScreens.Login.route)
+            ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {
+                navControllerApp.navigate(MyAccountScreens.SignUp.route)
             })
+
         }
 
     }
+
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun ProfilePreview() {
+fun LoginScreenPreview(){
     val navController = rememberNavController()
-    ProfileScreen(navControllerApp = navController, navController)
+    LoginScreen(navControllerApp = navController)
 }
-
-
