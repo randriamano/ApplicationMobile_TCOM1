@@ -7,16 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Goodies {
-  id    Int    @id @default(autoincrement())
-  name  String
-  price String
-  buy   Buy[]
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       String
+  description String?
+  category    String?
+  postedAt    DateTime @default(now())
+  image       String
+  buy         Buy[]
 }
 
 model Buy {
-  id        Int     @id @default(autoincrement())
-  goodies   Goodies @relation(fields: [idGoodies], references: [id])
-  idGoodies Int
+  id        Int      @id @default(autoincrement())
+  product   Product  @relation(fields: [idProduct], references: [id])
+  idProduct Int
   idClient  Int
+  buyedAt   DateTime @default(now())
+}
+
+model Admin {
+  id   Int    @id @default(autoincrement())
+  name String
+  key  String
 }
