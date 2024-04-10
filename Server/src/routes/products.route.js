@@ -15,7 +15,8 @@ productsRouter.get("/", async function (req, res) {
   if (result.length === 0) {
     res.json({ message: "Products list is empty" })
   } else {
-    res.json(successResponse("Products list", result))
+    //res.json(successResponse("Products list", result))
+    res.json(result)
   }
 })
 
@@ -40,16 +41,16 @@ productsRouter.post("/", auth, async function (req, res) {
   try {
     const data = JSON.parse(await extractData(req))
     const productData = {
-      name: data.name,
-      price: data.price,
-      description: data.description,
-      category: data.category,
-      available: data.available,
+      productName: data.productName,
+      productPrice: data.productPrice,
+      productDescription: data.productDescription,
+      productCategory: data.productCategory,
+      productRemainingStock: data.productRemainingStock,
       // image: image,
     }
-    const otherImgNumber = data.otherImgNumber || 0
+    const imagesNumber = data.imagesNumber || 0
 
-    const product = await productsController.addProduct(productData, otherImgNumber)
+    const product = await productsController.addProduct(productData, imagesNumber)
 
     res.json(successResponse("Product added", product))
   } catch (e) {

@@ -8,23 +8,22 @@ datasource db {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  price       String
-  description String?
-  category    String?
-  color       String[]
-  size        String[]
-  available   Int
-  image       String
-  otherImages String[]
-  postedAt    DateTime @default(now())
-  buy         Buy[]
+  productId             Int      @id @default(autoincrement())
+  productName           String
+  productPrice          String
+  productDescription    String?
+  productCategory       String?
+  availableColorList    String[]
+  availableSizeList     String[]
+  productRemainingStock Int
+  productImageURLList   String[]
+  productPostedDate     DateTime @default(now())
+  buy                   Buy[]
 }
 
 model Buy {
   id        Int      @id @default(autoincrement())
-  product   Product  @relation(fields: [idProduct], references: [id])
+  product   Product  @relation(fields: [idProduct], references: [productId])
   student   Student  @relation(fields: [idStudent], references: [id])
   idProduct Int
   idStudent Int

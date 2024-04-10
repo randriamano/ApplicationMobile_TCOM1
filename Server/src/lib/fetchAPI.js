@@ -6,7 +6,7 @@ const fetchAPI = (apiURL) => {
     fetch(apiURL, {
       method: 'GET',
       headers: {
-        "Accept": "applicatioin/json",
+        "Accept": "application/json",
         "Content-Type": "application/json",
       },
     })

@@ -11,10 +11,10 @@ productsController.getAllProducts = async (filter) => {
   // Get all products from prisma
   const products = await prisma.product.findMany({
     select: {
-      id: true,
-      name: true,
-      price: true,
-      image: true,
+      productId: true,
+      productName: true,
+      productPrice: true,
+      productImageURLList: true,
     }
   })
   
@@ -36,19 +36,19 @@ productsController.getProductById = async (productId) => {
 /**
  * Add a product item
  */
-productsController.addProduct = async (productData, otherImgNumber) => {
+productsController.addProduct = async (productData, imagesNumber) => {
   const now = new Date()
   const productID = `${productData.name}_${now.getTime()}`
-  const imagePath = `/images/${productID}`
-  let otherImages = [ imagePath ]
+  const imagePath = `/images/${productID}/0`
+  let imagesURL = [ imagePath ]
 
-  for (let i = 1; i <= otherImgNumber; i++) {
-    otherImages.push(`${imagePath}/${i}`) 
+  for (let i = 1; i <= imagesNumber; i++) {
+    imagesURL.push(`${imagePath}/${i}`) 
   }
 
   // Add new product from prisma
   const product = await prisma.product.create({
-    data: { ...productData, otherImages: otherImages, image: imagePath }
+    data: { ...productData, productImageURLList: imagesURL }
   })
 
   let public = __dirname.split('\\')

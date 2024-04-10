@@ -7,8 +7,9 @@ const signinController = {}
  * Add a new student 
  */
 signinController.addStudent = async (studentData) => {
+  const apiURL = process.env.API_URL
   // Verify student data from other api
-  // studentInfo = await fetchAPI('')
+  studentInfo = await fetchAPI(apiURL)
 
   // Add new student from prisma
   const student = await prisma.student.create({

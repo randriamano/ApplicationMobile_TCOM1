@@ -1,18 +1,17 @@
 -- CreateTable
 CREATE TABLE "Product" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "price" TEXT NOT NULL,
-    "description" TEXT,
-    "category" TEXT,
-    "color" TEXT[],
-    "size" TEXT[],
-    "available" INTEGER NOT NULL,
-    "image" TEXT NOT NULL,
-    "otherImages" TEXT[],
-    "postedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "productId" SERIAL NOT NULL,
+    "productName" TEXT NOT NULL,
+    "productPrice" TEXT NOT NULL,
+    "productDescription" TEXT,
+    "productCategory" TEXT,
+    "availableColorList" TEXT[],
+    "availableSizeList" TEXT[],
+    "productRemainingStock" INTEGER NOT NULL,
+    "productImageURLList" TEXT[],
+    "productPostedDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Product_pkey" PRIMARY KEY ("productId")
 );
 
 -- CreateTable
@@ -50,7 +49,7 @@ CREATE TABLE "Admin" (
 CREATE UNIQUE INDEX "Student_cardNum_key" ON "Student"("cardNum");
 
 -- AddForeignKey
-ALTER TABLE "Buy" ADD CONSTRAINT "Buy_idProduct_fkey" FOREIGN KEY ("idProduct") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Buy" ADD CONSTRAINT "Buy_idProduct_fkey" FOREIGN KEY ("idProduct") REFERENCES "Product"("productId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Buy" ADD CONSTRAINT "Buy_idStudent_fkey" FOREIGN KEY ("idStudent") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

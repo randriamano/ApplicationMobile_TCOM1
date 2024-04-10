@@ -21,26 +21,12 @@ module.exports = (app, public) => {
   app.use('/api/buy', buyRouter)
 
   // URL to get image
-  app.get('/images/:productId', (req, res) => {
-    try {
-      const path = req.path.split('/')
-      const imageId = path[path.length - 1]
-      const imagePath = `${public}/img/${imageId}/${imageId}`
-      const image = fs.readFileSync(imagePath)
-
-      res.contentType('image/jpeg').send(image)
-    } catch (e) {
-      res.status(404).json({ message: "Image doesn't exist"})
-    }
-  })
-
-  // URL to get other images
-  app.get('/images/:productId/:imageNum', (req, res) => {
+  app.get('/images/:productId/:imageNumber', (req, res) => {
     try {
       const path = req.path.split('/')
       const imageId = path[path.length - 2]
-      const imageNum = path[path.length - 1]
-      const imagePath = `${public}/img/${imageId}/${imageNum}`
+      const imageNumber = path[path.length - 1]
+      const imagePath = `${public}/img/${imageId}/${imageNumber}`
       const image = fs.readFileSync(imagePath)
 
       res.contentType('image/jpeg').send(image)

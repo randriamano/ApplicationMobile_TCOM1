@@ -23,7 +23,11 @@ signinRouter.post("/signup", auth, async function (req, res) {
 
     res.json(successResponse("Student added", student))
   } catch (e) {
-    res.status(400).json({ message: "The request or data type is not correct" })
+    if (e.message === 'Failed to parse URL from ') {
+      res.status(404).json({ message: `The URL '${process.env.API_URL}' is invalid` })
+    } else {
+      res.status(400).json({ message: "The request or data type is not correct" })
+    }
   }
 })
 

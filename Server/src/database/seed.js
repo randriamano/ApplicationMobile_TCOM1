@@ -11,15 +11,14 @@ const adminData = [
 
 const productData = [
   {
-    name: "Polo",
-    price: "21 000",
-    description: "Polo avec les logos TELECOM et ESPA conçu par le GET",
-    category: "Vêtements",
-    color: [ 'Rouge', 'Vert' ],
-    size: [ 'M', 'L', 'XL' ],
-    image: "/images/polo",
-    otherImages: [ "/images/polo", '/images/polo/1', '/images/polo/2', ],
-    available: 5,
+    productName: "Polo",
+    productPrice: "21 000",
+    productDescription: "Polo avec les logos TELECOM et ESPA conçu par le GET",
+    productCategory: "Vêtements",
+    availableColorList: [ 'Rouge', 'Vert' ],
+    availableSizeList: [ 'M', 'L', 'XL' ],
+    productImageURLList: [ "/images/polo", '/images/polo/1', '/images/polo/2', ],
+    productRemainingStock: 5,
   },
 ]
 
