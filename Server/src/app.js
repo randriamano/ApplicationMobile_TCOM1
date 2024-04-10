@@ -1,9 +1,16 @@
 const path = require('node:path')
 
 const express = require('express')
+const cors = require('cors')
+const helmet = require('helmet')
 
 // Initialize express app
 const app = express()
+
+app.use(cors({
+  origin: '*',
+}))
+app.use(helmet())
 
 // Path to the public directory
 const public = path.join(__dirname, 'public')

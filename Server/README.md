@@ -4,6 +4,6 @@ This API allows to request data on items sold by GET.
 
 ## API endpoint
 
-- GET /api/goodies : to get all the goodies
+- GET /api/products : to get all the products
 
-- GET /api/goodies/:goodieId : to get the specified goodie
+- GET /api/products/:productId : to get the specified product
