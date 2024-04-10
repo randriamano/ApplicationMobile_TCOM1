@@ -44,10 +44,12 @@ productsRouter.post("/", auth, async function (req, res) {
       price: data.price,
       description: data.description,
       category: data.category,
+      available: data.available,
       // image: image,
     }
+    const otherImgNumber = data.otherImgNumber || 0
 
-    const product = await productsController.addProduct(productData)
+    const product = await productsController.addProduct(productData, otherImgNumber)
 
     res.json(successResponse("Product added", product))
   } catch (e) {

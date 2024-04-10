@@ -1,3 +1,5 @@
+const fs = require('node:fs')
+
 const prisma = require("../database/db")
 
 const productsController = {}
@@ -34,14 +36,27 @@ productsController.getProductById = async (productId) => {
 /**
  * Add a product item
  */
-productsController.addProduct = async (productData) => {
+productsController.addProduct = async (productData, otherImgNumber) => {
   const now = new Date()
   const productID = `${productData.name}_${now.getTime()}`
   const imagePath = `/images/${productID}`
+  let otherImages = [ imagePath ]
+
+  for (let i = 1; i <= otherImgNumber; i++) {
+    otherImages.push(`${imagePath}/${i}`) 
+  }
+
   // Add new product from prisma
   const product = await prisma.product.create({
-    data: { ...productData, image: imagePath }
+    data: { ...productData, otherImages: otherImages, image: imagePath }
   })
+
+  let public = __dirname.split('\\')
+  public.pop()
+  public = public.join('\\')
+  const imageDir = `${public}\\public\\img\\${productID}`
+  
+  fs.mkdirSync(imageDir)
 
   return product
 }
