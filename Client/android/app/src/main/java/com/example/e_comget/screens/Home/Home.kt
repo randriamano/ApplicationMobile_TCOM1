@@ -1,22 +1,36 @@
 package com.example.e_comget.screens.Home
 
 
+import android.os.Build
+import android.provider.Settings.Global
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.e_comget.Datoum.model.ProductDetail
+import com.example.e_comget.GlobalViewModel
+import com.example.e_comget.MainViewModel
 import com.example.e_comget.screens.Home.Components.ProductSection
 import com.example.e_comget.screens.Home.Components.CategorySection
 import com.example.e_comget.screens.Home.Components.SearchBarSection
+import dagger.hilt.android.AndroidEntryPoint
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(navControllerApp: NavHostController) {
+fun HomeScreen(navControllerApp: NavHostController, mainViewModel: MainViewModel, productList: List<ProductDetail>) {
+    val globalViewModel: GlobalViewModel = viewModel()
+    val apiURL = globalViewModel.apiUrl.toString()
+    
     Surface(modifier = Modifier.padding(10.dp, top = 0.dp)){
         Column {
             SearchBarSection()
@@ -25,7 +39,9 @@ fun HomeScreen(navControllerApp: NavHostController) {
             CategorySection()
             Spacer(modifier = Modifier
                 .height(25.dp))
-            ProductSection(navControllerApp)
+            ProductSection(navControllerApp,
+                productList  = productList
+            )
         }
     }
 }

@@ -7,9 +7,9 @@ module.exports = async (req, res, next) => {
   
   if (key) {
     admin = await prisma.admin.findMany({
-      where: { key: key },
+      where: { adminKey: key },
       select: {
-        name: true,
+        adminName: true,
       },
     })
   }

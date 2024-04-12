@@ -1,5 +1,8 @@
  package com.example.e_comget
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -35,17 +39,25 @@ import com.example.e_comget.screens.MyAccount.SignIn.SignUpScreen
 import com.example.e_comget.screens.Routes.MainScreens
 import com.example.e_comget.screens.Routes.MyAccountScreens
 import com.example.e_comget.screens.Routes.ProductScreens
-import com.example.e_comget.screens.data.BottomNavigationItem
+import com.example.e_comget.Datoum.model.BottomNavigationItem
+import com.example.e_comget.Datoum.model.productList
+import com.example.e_comget.screens.Card.Components.BilletScreen
+import com.example.e_comget.screens.Card.Components.GoodiesScreen
+import com.example.e_comget.screens.Card.Components.VetementScreen
+import com.example.e_comget.screens.MyAccount.ProfileHomeScreen
+import com.example.e_comget.screens.Routes.MyChartScreen
+import com.example.e_comget.screens.Start.StartScreen
 
+ @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun App(){
-
-        AppNavigation()
+        val mainViewModel: MainViewModel = hiltViewModel();
+        AppNavigation(mainViewModel)
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    fun BottomNavigationBar(navControllerApp: NavHostController){
+    fun BottomNavigationBar(navControllerApp: NavHostController, mainViewModel: MainViewModel){
         var navigationSelectedItem by remember {
             mutableStateOf(0)
         }
@@ -95,32 +107,43 @@ import com.example.e_comget.screens.data.BottomNavigationItem
                 modifier = Modifier.padding(paddingValues = paddingValues)
             ) {
                 composable(MainScreens.Home.route) {
-                    HomeScreen(navControllerApp = navControllerApp)
+                    HomeScreen(navControllerApp = navControllerApp, mainViewModel = mainViewModel, productList = mainViewModel.uiState.value.data)
                 }
                 composable(MainScreens.Card.route) {
-                    CardScreen(navController = navController)
+                    CardScreen(navControllerApp = navControllerApp)
                 }
                 composable(MainScreens.Profile.route) {
                     ProfileScreen(navControllerApp = navControllerApp, navController = navController)
+//                    ProfileHomeScreen(navController = navController)
                 }
             }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    fun AppNavigation(){
+    fun AppNavigation(mainViewModel: MainViewModel){
         var navControllerApp = rememberNavController()
 
 
         Box{
-            NavHost(navController = navControllerApp, startDestination = "bottomNavigation"){
+            NavHost(navController = navControllerApp, startDestination = "startScreen"){
                 composable("bottomNavigation") {
-                    BottomNavigationBar(navControllerApp = navControllerApp)
+                    BottomNavigationBar(navControllerApp = navControllerApp, mainViewModel)
                 }
-                composable(ProductScreens.ProductDetails.route) {
-                    ProductDetailsScreen(
-                        navControllerApp = navControllerApp
-                    )
+                composable(ProductScreens.ProductDetails.route + "/{productId}") { backStateEntry ->
+
+                    val productIdString = backStateEntry.arguments?.getString("productId")
+                    val productId = productIdString?.toIntOrNull() ?: 1
+                    var mainViewModel : MainViewModel = hiltViewModel()
+
+                    if (productId != null) {
+                        ProductDetailsScreen(
+                            navControllerApp = navControllerApp,
+                            productId = productId,
+                            productList = mainViewModel.uiState.value.data
+                        )
+                    }
                 }
                 composable(ProductScreens.ProductOrder.route) {
                     ProductOrderScreen(navControllerApp = navControllerApp)
@@ -131,13 +154,26 @@ import com.example.e_comget.screens.data.BottomNavigationItem
                 composable(MyAccountScreens.SignUp.route) {
                     SignUpScreen(navControllerApp = navControllerApp)
                 }
+                composable("startScreen") {
+                    StartScreen(navControllerApp = navControllerApp)
+                }
+                composable(MyChartScreen.Vetement.route){
+                    VetementScreen(navController = navControllerApp)
+                }
+                composable(MyChartScreen.Billet.route){
+                    BilletScreen(navControllerApp = navControllerApp)
+                }
+                composable(MyChartScreen.Goodies.route){
+                    GoodiesScreen(navControllerApp = navControllerApp)
+                }
             }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     @Preview
     fun BottomNavigationBarPreview(){
         var navControllerApp = rememberNavController()
-        BottomNavigationBar(navControllerApp);
+        BottomNavigationBar(navControllerApp, mainViewModel = hiltViewModel());
     }

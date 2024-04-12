@@ -1,6 +1,10 @@
 package com.example.e_comget.screens.Home.Components
 
 
+import android.annotation.SuppressLint
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,16 +27,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.e_comget.screens.data.Product
-import com.example.e_comget.screens.data.productList
+import coil.compose.rememberAsyncImagePainter
+import com.example.e_comget.Datoum.model.Product
+import com.example.e_comget.Datoum.model.ProductDetail
+import com.example.e_comget.GlobalViewModel
+//import com.example.e_comget.Datoum.model.productList
+import com.example.e_comget.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
 //TO DO
 //Adding sign in button at the bottom of the product (tsy maika)
 //Fetching all products details by product Id before navigating into the ProductDetails
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ProductSection(navController: NavController){
+fun ProductSection(navController: NavController
+                   , productList: List<ProductDetail>
+){
     Column {
         Text(
             fontWeight = FontWeight.Bold,
@@ -45,23 +60,26 @@ fun ProductSection(navController: NavController){
                 .padding(start = 10.dp, end = 10.dp)
         ) {
             items(productList.size) {
-                index -> ProductItem(index = index, navController)
+                index -> ProductItem(productList[index], navController)
             }
         }
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
-fun ProductItem(index : Int, navController: NavController){
-    var product: Product = productList[index];
+fun ProductItem(product: ProductDetail, navController: NavController){
     var context = LocalContext.current;
-    val imageResId = context.resources.getIdentifier(product.productImage, "drawable", context.packageName)
+    val globalViewModel: GlobalViewModel = viewModel()
+    val apiURL = globalViewModel.apiUrl.toString()
+    var image = rememberAsyncImagePainter(apiURL + product.productImageURLList[0])
 
-    var image = painterResource(id = imageResId)
     Box(
         modifier = Modifier
             .padding(bottom = 15.dp)
-            .clickable { navController.navigate("product_details_route") },
+            .clickable {
+                navController.navigate("product_details_route/${product.productId}")
+            },
     ){
         Column(
             modifier = Modifier

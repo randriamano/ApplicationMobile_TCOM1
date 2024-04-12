@@ -1,42 +1,42 @@
-const path = require('node:path')
-const fs = require('node:fs')
+const path = require("node:path");
+const fs = require("node:fs");
 
-const productsRouter = require('./products.route')
-const signinRouter = require('./signin.route')
-const buyRouter = require('./buy.route')
+const productsRouter = require("./products.route");
+const signinRouter = require("./signin.route");
+const commandRouter = require("./command.route");
 
 module.exports = (app, public) => {
   // Sample hello world
-  app.get('/', (req, res) => {
+  app.get("/", (req, res) => {
     res.sendFile(path.join(public, 'index.html'))
-  })
+  });
 
   // Signup and login api endpoints
-  app.use('/api', signinRouter)
+  app.use("/api", signinRouter);
 
   // Products api endpoints
-  app.use('/api/products', productsRouter)
+  app.use("/api/products", productsRouter);
 
   // Buy api endpoints
-  app.use('/api/buy', buyRouter)
+  app.use("/api/command", commandRouter);
 
   // URL to get image
-  app.get('/images/:productId/:imageNumber', (req, res) => {
+  app.get("/images/:productId/:imageNumber", (req, res) => {
     try {
-      const path = req.path.split('/')
-      const imageId = path[path.length - 2]
-      const imageNumber = path[path.length - 1]
-      const imagePath = `${public}/img/${imageId}/${imageNumber}`
-      const image = fs.readFileSync(imagePath)
+      const path = req.path.split("/");
+      const imageId = path[path.length - 2];
+      const imageNumber = path[path.length - 1];
+      const imagePath = `${public}/img/${imageId}/${imageNumber}`;
+      const image = fs.readFileSync(imagePath);
 
-      res.contentType('image/jpeg').send(image)
+      res.contentType("image/jpeg").send(image);
     } catch (e) {
-      res.status(404).json({ message: "Image doesn't exist"})
+      res.status(404).json({ message: "Image doesn't exist" });
     }
-  })
+  });
 
   // Error for undefined endpoints
-  app.all('*', (req, res) => {
-    res.status(404).json({ message: "The URL is undefined" })
-  })
-}
+  app.all("*", (req, res) => {
+    res.status(404).json({ message: "The URL is undefined" });
+  });
+};
