@@ -1,5 +1,6 @@
 package com.example.e_comget.screens.MyAccount.SignIn
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,6 @@ fun LoginScreen(navControllerApp: NavHostController){
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
     ){
         Column(
             modifier = Modifier
@@ -60,13 +60,26 @@ fun LoginScreen(navControllerApp: NavHostController){
                 .fillMaxSize()
                 .padding(start = 28.dp, end = 28.dp, top = 10.dp),
         ) {
-            NormalTextComponent("Login")
-            HeadingTextComponent("Welcom Back")
-            MyTextFieldComponent(labelValue = " Email", painterResource = painterResource(id = R.drawable.mail_24px))
-            PasswordTextFieldComponent(labelValue = " Password", painterResource = painterResource(id = R.drawable.lock_24px))
+            NormalTextComponent("Bienvenu")
+            HeadingTextComponent("Se connecter")
+
+            MyTextFieldComponent(
+                labelValue = "Numéro étudiant (001-L1)",
+                painterResource = painterResource(id = R.drawable.id_card_24px),
+                onTextSelected = {})
+
+            PasswordTextFieldComponent(
+                labelValue = "Mot de passe",
+                painterResource = painterResource(id = R.drawable.lock_24px),
+                onTextSelected = {})
+
             Spacer(modifier = Modifier.height(50.dp))
-            ButtonComponent(value = "Login")
+
+            ButtonComponent(
+                value = "Connexion",
+                onButtonClicked = { Log.d("", "sign in ") })
             Spacer(modifier = Modifier.height(10.dp))
+
             ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {
                 navControllerApp.navigate(MyAccountScreens.SignUp.route)
             })

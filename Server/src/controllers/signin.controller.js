@@ -9,7 +9,7 @@ const signinController = {}
 signinController.addStudent = async (studentData) => {
   const apiURL = process.env.API_URL
   // Verify student data from other api
-  studentInfo = await fetchAPI(apiURL)
+  //studentInfo = await fetchAPI(apiURL)
 
   // Add new student from prisma
   const student = await prisma.student.create({
@@ -25,7 +25,7 @@ signinController.addStudent = async (studentData) => {
 signinController.verifyStudent = async (studentData) => {
   // Verify student from prisma
   const student = await prisma.student.findMany({
-    where: { cardNum: studentData.cardNum, password: studentData.password },
+    where: { studentCardNum: studentData.studentCardNum, studentPassword: studentData.studentPassword },
   })
 
   return student

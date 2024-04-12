@@ -1,21 +1,21 @@
-const path = require('node:path')
+const path = require("node:path");
+const cors = require("cors");
 
-const express = require('express')
-const cors = require('cors')
-const helmet = require('helmet')
+const express = require("express");
 
 // Initialize express app
-const app = express()
+const app = express();
 
-app.use(cors({
-  origin: '*',
-}))
-app.use(helmet())
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 // Path to the public directory
-const public = path.join(__dirname, 'public')
+const public = path.join(__dirname, "public");
 
 // Import all the routes
-require('./routes/route')(app, public)
+require("./routes/route")(app, public);
 
-module.exports = app
+module.exports = app;

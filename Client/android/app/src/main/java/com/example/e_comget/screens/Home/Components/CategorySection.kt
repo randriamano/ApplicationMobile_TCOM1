@@ -2,6 +2,7 @@ package com.example.e_comget.screens.Home.Components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,10 +34,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.e_comget.screens.data.Category
-import com.example.e_comget.screens.data.categoryList
+import com.example.e_comget.Datoum.model.Category
+import com.example.e_comget.Datoum.model.categoryList
+import com.example.e_comget.ui.theme.Primary
 import com.example.e_comget.ui.theme.PurpleEnd
 import com.example.e_comget.ui.theme.PurpleStart
+import com.example.e_comget.ui.theme.Secondary
 import com.example.e_comget.ui.theme.getGradient
 
 //TODO
@@ -96,8 +99,11 @@ fun CategoryItem(data: Category, onClick: () -> Unit){
     ) {
        Box(
            modifier = Modifier
-               .background((getGradient(PurpleStart, PurpleEnd)))
-               .size(height = 55.dp, width = 190.dp),
+               .background(
+                   brush = Brush.horizontalGradient(listOf(Secondary, Primary))
+               )
+               .size(height = 55.dp, width = 190.dp)
+               .clickable { /*just for the ripple effect*/ },
            contentAlignment = Alignment.Center
        ){
            Text(

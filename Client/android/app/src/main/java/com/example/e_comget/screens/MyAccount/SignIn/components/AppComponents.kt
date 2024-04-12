@@ -2,6 +2,7 @@ package com.example.e_comget.screens.MyAccount.SignIn.components
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -83,15 +84,14 @@ fun HeadingTextComponent(value: String){
 
 
 @Composable
-fun MyTextFieldComponent(labelValue: String, painterResource: Painter){
+fun MyTextFieldComponent(labelValue: String, painterResource: Painter,
+                         onTextSelected: (String) -> Unit){
 
     val textValue = remember {
         mutableStateOf("")
     }
 
-
     Box {
-
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -115,8 +115,11 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter){
             ),
             keyboardOptions = KeyboardOptions.Default,
             value = textValue.value ,
+//            value = textValue,
             onValueChange = {
                 textValue.value = it
+                onTextSelected(it)
+//                textValue = it
             },
             leadingIcon = {
                 Icon(painter = painterResource, contentDescription = "profile")
@@ -131,7 +134,7 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter){
 
 
 @Composable
-fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter){
+fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter, onTextSelected: (String) -> Unit){
 
     val password = remember {
         mutableStateOf("")
@@ -168,6 +171,7 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter){
             value = password.value ,
             onValueChange = {
                 password.value = it
+                onTextSelected(it)
             },
             leadingIcon = {
                 Icon(painter = painterResource, contentDescription = "")
@@ -198,8 +202,8 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter){
 
 @Composable
 fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (String) -> Unit){
-    val initialText = if (tryingToLogin)"Already have an account? " else "Don't have an account yet? "
-    val loginText = if (tryingToLogin) "Login" else "Register"
+    val initialText = if (tryingToLogin)"Vous-avez déjà un compte? " else "Vous n'avez pas de compte? "
+    val loginText = if (tryingToLogin) "Se connecter" else "Créer un compte"
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
@@ -234,11 +238,12 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
 }
 
 @Composable
-fun ButtonComponent(value: String){
-    Button(onClick = {/*TODO*/},
+fun ButtonComponent(value: String, onButtonClicked : () -> Unit){
+    Button(onClick = {onButtonClicked.invoke()},
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(48.dp),
+            .heightIn(48.dp)
+            .clickable {  },
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent)
     ){

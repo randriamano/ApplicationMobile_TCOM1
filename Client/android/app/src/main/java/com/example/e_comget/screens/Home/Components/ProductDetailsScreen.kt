@@ -1,5 +1,10 @@
 package com.example.e_comget.screens.Home.Components
 
+import android.annotation.SuppressLint
+import android.os.Build
+import android.provider.Settings.Global
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,6 +17,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -23,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
@@ -47,9 +54,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.e_comget.screens.data.product
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import com.example.e_comget.Datoum.model.ProductDetail
+import com.example.e_comget.GlobalViewModel
+//import com.example.e_comget.Datoum.model.product
+import com.example.e_comget.MainViewModel
 import com.example.e_comget.ui.theme.PoloColorBlack
 import com.example.e_comget.ui.theme.PoloColorGray
 import com.example.e_comget.ui.theme.PoloColorNavyBlue
@@ -64,27 +78,41 @@ import com.example.e_comget.ui.theme.VeryLightGray
 //  If not signined : redirect into sign in screen before productOrder
 //Logic to enable the "Continue" button when all data are complete
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProductDetailsScreen(
     navControllerApp: NavHostController,
-    ){
-    Column (
-        verticalArrangement = Arrangement.SpaceBetween
-    ){
-        DetailsTopBarSection(navControllerApp)
-        DetailsBodySection()
-        DetailsFooterSection(navControllerApp);
+    productId: Int,
+    productList: List<ProductDetail>
+    ) {
+    var product : ProductDetail? = null;
+
+
+    for(value in productList){
+        if(value.productId == productId){
+            product = value
+            break
+        }
+    }
+    if(product != null){
+        Column (
+            verticalArrangement = Arrangement.SpaceBetween
+        ){
+            DetailsTopBarSection(navControllerApp, product = product)
+            DetailsBodySection(product = product)
+            DetailsFooterSection(navControllerApp, product = product);
+        }
     }
 }
 
 @Composable
-fun DetailsTopBarSection(navControllerApp: NavHostController){
+fun DetailsTopBarSection(navControllerApp: NavHostController, product: ProductDetail){
     Box(
         modifier = Modifier
             .fillMaxWidth(1f)
             .background(Color.White)
     ){
-        ImageCarousel(images = product.productImageNameList)
+        ImageCarousel(images = product!!.productImageURLList)
         DetailHeader(navControllerApp = navControllerApp)
     }
 }
@@ -105,10 +133,14 @@ fun DetailHeader(navControllerApp: NavHostController){
 @Composable
 fun ImageCarousel(images: List<String>) {
     var currentIndex by remember { mutableStateOf(0) }
-    var context = LocalContext.current;
-    var imageId = context.resources.getIdentifier(images[currentIndex], "drawable", context.packageName);
-    var painter = painterResource(id = imageId);
 
+    var Images : ArrayList<AsyncImagePainter> = ArrayList<AsyncImagePainter>()
+    val globalViewModel: GlobalViewModel = viewModel()
+    var apiURL = globalViewModel.apiUrl.toString()
+
+    for(imagePath in images){
+        Images.add(rememberAsyncImagePainter(apiURL + imagePath))
+    }
 
     Column(
         modifier = Modifier
@@ -121,7 +153,7 @@ fun ImageCarousel(images: List<String>) {
        ){
 
            Image(
-               painter = painter,
+               painter = Images[currentIndex],
                contentDescription = null,
                contentScale = ContentScale.FillBounds,
                modifier = Modifier
@@ -199,7 +231,7 @@ fun ImageCarousel(images: List<String>) {
 }
 
 @Composable
-fun DetailsBodySection(){
+fun DetailsBodySection(product: ProductDetail){
     var scrollState = rememberScrollState();
     var selectedColorIndex by remember {
         mutableStateOf(0)
@@ -228,7 +260,7 @@ fun DetailsBodySection(){
 
         ){
             Text(
-                text = "Ar ${product.productPrice}",
+                text = "Ar ${product!!.productPrice}",
                 fontSize = 17.sp,
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Bold,
@@ -237,7 +269,7 @@ fun DetailsBodySection(){
             Text(
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
-                text = "${product.productName}"
+                text = "${product!!.productName}"
             )
         }
         Spacer(Modifier.height(10.dp))
@@ -251,10 +283,10 @@ fun DetailsBodySection(){
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Light,
                 color = Color.Gray,
-                text = "${product.productDescription}"
+                text = "${product!!.productDescription}"
             )
             Spacer(modifier = Modifier.height(15.dp))
-            if (product.availableColorList.size > 0){
+            if (product!!.availableColorList!!.size > 0){
                 Column (
                     modifier = Modifier
                         .fillMaxWidth(1f)
@@ -264,23 +296,23 @@ fun DetailsBodySection(){
                     Text(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
-                        text = "Color : ${selectedColorIndex + 1}. ${product.availableColorList[selectedColorIndex]}",
+                        text = "Color : ${selectedColorIndex + 1}. ${product.availableColorList!![selectedColorIndex]}",
                     )
                     Spacer(modifier = Modifier.height(7.dp))
                     ColorItems(
-                        product.availableColorList
+                        product.availableColorList!!
                         , selectedColorIndex,
                         changeTheSelectedColorIndex = ::changeSelectedColorIndex
                     )
                 }
             }
-            if(product.availableSizeList.size > 0){
+            if(product.availableSizeList!!.size > 0){
                 Spacer(modifier = Modifier.height(20.dp))
                 Column {
                     Text(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
-                        text = "Size : ${product.availableSizeList[selectedSizeIndex]}",
+                        text = "Size : ${product.availableSizeList!![selectedSizeIndex]}",
                     )
                     Spacer(modifier = Modifier.height(7.dp))
                     SizeItems(
@@ -290,6 +322,9 @@ fun DetailsBodySection(){
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
+            CountingUI()
         }
     }
 }
@@ -407,7 +442,7 @@ fun AvailableSizeItem(index: Int, selectedIndex: Int, size: String, onClick: (In
 }
 
 @Composable
-fun DetailsFooterSection(navControllerApp: NavHostController){
+fun DetailsFooterSection(navControllerApp: NavHostController, product: ProductDetail?){
     Row(
         modifier = Modifier
             .fillMaxWidth(1f)
@@ -433,13 +468,46 @@ fun DetailsFooterSection(navControllerApp: NavHostController){
     }
 }
 
+@Composable
+fun CountingUI(){
+    var productToCommandCount by remember {
+        mutableStateOf(0);
+    }
+
+    Row (
+        verticalAlignment = Alignment.CenterVertically,
+    ){
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .heightIn(20.dp)
+                .padding(end = 15.dp)
+        ) {
+            Text(text = "-")
+        }
+        Text(
+            text = "${productToCommandCount}",
+            fontSize = 25.sp
+        )
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .heightIn(20.dp)
+                .padding(start = 15.dp)
+        ) {
+            Text(text = "+")
+        }
+    }
+}
+
 @Preview
 @Composable
 fun DetailsPreview(){
     var navControllerApp = rememberNavController()
     Column {
-        DetailsTopBarSection(navControllerApp)
-        DetailsBodySection()
-        DetailsFooterSection(navControllerApp);
+////        CountingUI()
+//        DetailsTopBarSection(navControllerApp)
+//        DetailsBodySection()
+//        DetailsFooterSection(navControllerApp);
     }
 }

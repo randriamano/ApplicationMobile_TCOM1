@@ -1,4 +1,4 @@
-package com.example.e_comget.screens.data
+package com.example.e_comget.Datoum.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
