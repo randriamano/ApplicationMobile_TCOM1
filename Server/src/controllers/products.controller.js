@@ -1,8 +1,8 @@
-const fs = require('node:fs')
+const fs = require("node:fs");
 
-const prisma = require("../database/db")
+const prisma = require("../database/db");
 
-const productsController = {}
+const productsController = {};
 
 /**
  * Get all products
@@ -14,12 +14,17 @@ productsController.getAllProducts = async (filter) => {
       productId: true,
       productName: true,
       productPrice: true,
+      productDescription: true,
+      availableColorList: true,
+      availableSizeList: true,
+      productCategory: true,
+      productRemainingStock: true,
       productImageURLList: true,
-    }
-  })
-  
-  return products
-}
+    },
+  });
+
+  return products;
+};
 
 /**
  * Get a product item
@@ -27,39 +32,50 @@ productsController.getAllProducts = async (filter) => {
 productsController.getProductById = async (productId) => {
   // Get the specified product from prisma
   const product = await prisma.product.findUnique({
-    where: { id: Number(productId) },
-  })
+    where: { productId: Number(productId) },
+    select: {
+      productId: true,
+      productName: true,
+      productPrice: true,
+      productDescription: true,
+      availableColorList: true,
+      availableSizeList: true,
+      productCategory: true,
+      productRemainingStock: true,
+      productImageURLList: true,
+    },
+  });
 
-  return product
-}
+  return product;
+};
 
 /**
  * Add a product item
  */
 productsController.addProduct = async (productData, imagesNumber) => {
-  const now = new Date()
-  const productID = `${productData.name}_${now.getTime()}`
-  const imagePath = `/images/${productID}/0`
-  let imagesURL = [ imagePath ]
+  const now = new Date();
+  const productID = `${productData.name}_${now.getTime()}`;
+  const imagePath = `/images/${productID}/0`;
+  let imagesURL = [imagePath];
 
   for (let i = 1; i <= imagesNumber; i++) {
-    imagesURL.push(`${imagePath}/${i}`) 
+    imagesURL.push(`${imagePath}/${i}`);
   }
 
   // Add new product from prisma
   const product = await prisma.product.create({
-    data: { ...productData, productImageURLList: imagesURL }
-  })
+    data: { ...productData, productImageURLList: imagesURL },
+  });
 
-  let public = __dirname.split('\\')
-  public.pop()
-  public = public.join('\\')
-  const imageDir = `${public}\\public\\img\\${productID}`
-  
-  fs.mkdirSync(imageDir)
+  let public = __dirname.split("\\");
+  public.pop();
+  public = public.join("\\");
+  const imageDir = `${public}\\public\\img\\${productID}`;
 
-  return product
-}
+  fs.mkdirSync(imageDir);
+
+  return product;
+};
 
 /**
  * Update product item
@@ -67,12 +83,12 @@ productsController.addProduct = async (productData, imagesNumber) => {
 productsController.updateProduct = async ({ productId, productData }) => {
   // Update product data from prisma
   const product = await prisma.product.update({
-    where: { id: Number(productId) },
+    where: { productId: Number(productId) },
     data: productData,
-  })
+  });
 
-  return product
-}
+  return product;
+};
 
 /**
  * Delete product item
@@ -80,10 +96,10 @@ productsController.updateProduct = async ({ productId, productData }) => {
 productsController.deleteProduct = async (productId) => {
   // Delete product from prisma
   const deletedItem = await prisma.product.delete({
-    where: { id: Number(productId) }
-  })
-  
-  return deletedItem
-}
+    where: { productId: Number(productId) },
+  });
 
-module.exports = productsController
+  return deletedItem;
+};
+
+module.exports = productsController;
