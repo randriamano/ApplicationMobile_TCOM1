@@ -9,7 +9,6 @@ module.exports = (app, public) => {
   // Sample hello world
   app.get("/", (req, res) => {
     res.sendFile(path.join(public, 'index.html'))
-    // res.json({ nom: "Tommy Ramarokoto" });
   });
 
   // Signup and login api endpoints

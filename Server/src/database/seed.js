@@ -11,31 +11,46 @@ const adminData = [
 
 const productData = [
   {
-    productName: "Polo",
-    productPrice: "21 000",
-    productDescription: "Polo avec les logos TELECOM et ESPA conçu par le GET",
-    productCategory: "Vêtements",
-    availableColorList: ["Red", "Black", "Navy Blue", "Grey", "White"],
-    availableSizeList: ["M", "L", "XL"],
-    productImageURLList: ["/images/polo/0", "/images/polo/1", "/images/polo/2", "/images/polo/3"],
-    productRemainingStock: 5,
+    productName:"T-shirt",
+    productPrice:"21 000",
+    productDescription:" Polo avec Logo Get conçu par le GET 2024",
+    productCategory:"Vetements",
+    availableColorList:['Navy Blue','White'],
+    availableSizeList:['S','M','L','XL','3XL'],
+    productImageURLList:[ "/images/tshirt/0", "/images/tshirt/1", "/images/tshirt/2", ],
+    productRemainingStock:15,
   },
   {
-    productName: "Chaussure",
-    productPrice: "125 000",
-    productDescription: "Chaussure conçu par le GET",
-    productCategory: "Vêtements",
-    availableColorList: ["Red", "Black", "Navy Blue", "Grey", "White"],
-    availableSizeList: ["M", "L", "XL"],
-    productImageURLList: [
-      "/images/chaussure/0",
-      "/images/chaussure/1",
-      "/images/chaussure/2",
-      "/images/chaussure/3"
-    ],
-    productRemainingStock: 3,
+    productName:"Parapluie",
+    productPrice:"30 000",
+    productDescription:" Parapluie avec Logo Get conçu par le GET 2024",
+    productCategory:"Parapluie",
+    availableColorList:['Navy Blue',],
+    availableSizeList:['XL'],
+    productImageURLList:["/images/parapluie/0" ],
+    productRemainingStock:10,
   },
-];
+  {
+    productName:"Tote Bag",
+    productPrice:"15 000",
+    productDescription:" Tote Bag avec Logo Get conçu par le GET 2024",
+    productCategory:"Sac",
+    availableColorList:['Navy Blue'],
+    availableSizeList:['XL'],
+    productImageURLList:[ "/images/totebag/0", "/images/totebag/1", "/images/totebag/2", "/images/totebag/3", ],
+    productRemainingStock:20,
+  },
+  {
+    productName:"Porte-Clés",
+    productPrice:"5000",
+    productDescription:" Porte-Clés Logo Get conçu par le GET 2024",
+    productCategory:"Porte-Clés",
+    availableColorList:["White"],
+    availableSizeList:["L"],
+    productImageURLList:[ "/images/portecles/0", "/images/portecles/1", ],
+    productRemainingStock:50,
+  }
+]
 
 const studentData = [
   {
