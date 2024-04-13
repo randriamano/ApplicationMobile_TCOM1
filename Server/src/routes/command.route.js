@@ -9,11 +9,13 @@ const commandRouter = Router()
 /** 
  * Route to get commanded product
  */
- commandRouter.get('/', auth, async (req, res) => {
-  const result = await commandController.getCommandedProduct();
+
+ commandRouter.get('/:category', async (req, res) => {
+  const category = req.params.category
+  const result = await commandController.getCommandedProduct(category);
 
   res.json({
-    commandedProduct: result,
+    products: result,
   });
 })
 
