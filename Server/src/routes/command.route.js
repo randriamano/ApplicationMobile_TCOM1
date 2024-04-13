@@ -9,6 +9,7 @@ const commandRouter = Router()
 /** 
  * Route to get commanded product
  */
+
  commandRouter.get('/:category', async (req, res) => {
   const category = req.params.category
   const result = await commandController.getCommandedProduct(category);

@@ -31,7 +31,7 @@ commandController.getCommandedProduct = async (category) => {
       })
     }
   });
-
+  
   return commanded
 }
 

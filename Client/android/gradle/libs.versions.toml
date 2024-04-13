@@ -1,16 +1,34 @@
 [versions]
 agp = "8.3.0"
+coilCompose = "2.4.0"
+constraintlayoutCompose = "1.0.1"
+converterGson = "2.9.0"
+hiltAndroid = "2.51.1"
+hiltAndroidGradlePlugin = "2.51"
+hiltNavigationCompose = "1.2.0"
 kotlin = "1.9.0"
 coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
+kotlinBom = "1.9.20"
+kotlinxCoroutinesAndroid = "1.7.1"
+kotlinxCouroutinesCore = "1.7.1"
 lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.8.2"
 composeBom = "2023.08.00"
+navigationCompose = "2.7.0-rc01"
 
 [libraries]
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePlugin" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -24,6 +42,10 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+kotlinx-couroutines-core = { module = "org.jetbrains.kotlink:kotlinx-couroutines-core", version.ref = "kotlinxCouroutinesCore" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
