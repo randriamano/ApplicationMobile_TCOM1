@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const productsRouter = require("./products.route");
 const signinRouter = require("./signin.route");
 const commandRouter = require("./command.route");
+const searchRouter = require("./search.route")
 
 module.exports = (app, public) => {
   // Sample hello world
@@ -19,6 +20,9 @@ module.exports = (app, public) => {
 
   // Buy api endpoints
   app.use("/api/command", commandRouter);
+
+  // Search api endpoints
+  app.use("/api/search", searchRouter);
 
   // URL to get image
   app.get("/images/:productId/:imageNumber", (req, res) => {

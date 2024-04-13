@@ -9,12 +9,14 @@ const adminData = [
   },
 ];
 
+const categories = [ 'vetements', 'billets', 'goodies' ]
+
 const productData = [
   {
     productName:"T-shirt",
     productPrice:"21 000",
     productDescription:" Polo avec Logo Get conçu par le GET 2024",
-    productCategory:"Vetements",
+    productCategory:"vetements",
     availableColorList:['Navy Blue','White'],
     availableSizeList:['S','M','L','XL','3XL'],
     productImageURLList:[ "/images/tshirt/0", "/images/tshirt/1", "/images/tshirt/2", ],
@@ -24,7 +26,7 @@ const productData = [
     productName:"Parapluie",
     productPrice:"30 000",
     productDescription:" Parapluie avec Logo Get conçu par le GET 2024",
-    productCategory:"Parapluie",
+    productCategory:"goodies",
     availableColorList:['Navy Blue',],
     availableSizeList:['XL'],
     productImageURLList:["/images/parapluie/0" ],
@@ -34,7 +36,7 @@ const productData = [
     productName:"Tote Bag",
     productPrice:"15 000",
     productDescription:" Tote Bag avec Logo Get conçu par le GET 2024",
-    productCategory:"Sac",
+    productCategory:"goodies",
     availableColorList:['Navy Blue'],
     availableSizeList:['XL'],
     productImageURLList:[ "/images/totebag/0", "/images/totebag/1", "/images/totebag/2", "/images/totebag/3", ],
@@ -44,7 +46,7 @@ const productData = [
     productName:"Porte-Clés",
     productPrice:"5000",
     productDescription:" Porte-Clés Logo Get conçu par le GET 2024",
-    productCategory:"Porte-Clés",
+    productCategory:"goodies",
     availableColorList:["White"],
     availableSizeList:["L"],
     productImageURLList:[ "/images/portecles/0", "/images/portecles/1", ],

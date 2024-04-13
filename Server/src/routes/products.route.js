@@ -18,8 +18,26 @@ productsRouter.get("/", async function (req, res) {
     //res.json(successResponse("Products list", result))
     res.json({
       product: result,
-      size: 1,
+      size: result.length,
     });
+  }
+});
+
+/**
+ * Route to get a product item
+ */
+productsRouter.get("/category/:category", async function (req, res) {
+  const category = req.params.category;
+  const product = await productsController.getProductByCategory(category);
+
+  if (product === null) {
+    res.status(404).json({ message: "Product is not found" });
+  } else {
+    res.json({
+      product: product,
+      size: product.length,
+    })
+    // res.json(successResponse("View product", product));
   }
 });
 
