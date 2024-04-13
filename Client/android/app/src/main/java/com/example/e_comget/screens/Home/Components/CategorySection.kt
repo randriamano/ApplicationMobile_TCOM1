@@ -34,13 +34,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.e_comget.Datoum.model.Category
-import com.example.e_comget.Datoum.model.categoryList
+import com.example.e_comget.Datoum.model.item.Category
+import com.example.e_comget.Datoum.model.item.categoryList
 import com.example.e_comget.ui.theme.Primary
-import com.example.e_comget.ui.theme.PurpleEnd
-import com.example.e_comget.ui.theme.PurpleStart
 import com.example.e_comget.ui.theme.Secondary
-import com.example.e_comget.ui.theme.getGradient
 
 //TODO
 //Adding logic to fetch product based on category names

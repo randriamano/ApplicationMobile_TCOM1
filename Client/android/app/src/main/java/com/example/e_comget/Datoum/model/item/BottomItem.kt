@@ -1,4 +1,4 @@
-package com.example.e_comget.Datoum.model
+package com.example.e_comget.Datoum.model.item
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

@@ -1,4 +1,4 @@
-package com.example.e_comget.Datoum.model
+package com.example.e_comget.Datoum.model.item
 
 data class Category(
     var id: Int,

@@ -39,7 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.e_comget.R
 import com.example.e_comget.screens.MyAccount.SignIn.components.HeadingTextComponent
-import com.example.e_comget.Datoum.model.ProfileItemList
+import com.example.e_comget.Datoum.model.item.ProfileItemList
 import com.example.e_comget.ui.theme.GrayColor
 import com.example.e_comget.ui.theme.TextColor
 

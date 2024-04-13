@@ -1,4 +1,4 @@
-package com.example.e_comget.Datoum.model
+package com.example.e_comget.Datoum.model.registration
 
 sealed class UIEvent {
     data class FirstNameChanged(var studentName: String) : UIEvent()

@@ -1,9 +1,6 @@
 package com.example.e_comget.screens.Home.Components
 
-import android.annotation.SuppressLint
 import android.os.Build
-import android.provider.Settings.Global
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +28,7 @@ import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -38,6 +36,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,15 +45,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -62,8 +58,8 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.example.e_comget.Datoum.model.ProductDetail
 import com.example.e_comget.GlobalViewModel
-//import com.example.e_comget.Datoum.model.product
 import com.example.e_comget.MainViewModel
+//import com.example.e_comget.Datoum.model.product
 import com.example.e_comget.ui.theme.PoloColorBlack
 import com.example.e_comget.ui.theme.PoloColorGray
 import com.example.e_comget.ui.theme.PoloColorNavyBlue
@@ -82,44 +78,62 @@ import com.example.e_comget.ui.theme.VeryLightGray
 @Composable
 fun ProductDetailsScreen(
     navControllerApp: NavHostController,
-    productId: Int,
-    productList: List<ProductDetail>
+    onGetProductDetails: () -> Unit,
+    mainViewModel: MainViewModel
     ) {
-    var product : ProductDetail? = null;
 
-
-    for(value in productList){
-        if(value.productId == productId){
-            product = value
-            break
+    DisposableEffect(Unit) {
+        onDispose {
+            mainViewModel.reinitializeTheProductFetchedById()
+//            onGetProductDetails()
         }
     }
-    if(product != null){
-        Column (
-            verticalArrangement = Arrangement.SpaceBetween
-        ){
-            DetailsTopBarSection(navControllerApp, product = product)
-            DetailsBodySection(product = product)
-            DetailsFooterSection(navControllerApp, product = product);
+
+    var product = mainViewModel.uiStateProductFetchedById.value.data
+    val uiState = mainViewModel.uiStateProductFetchedById.value
+
+    if(product == null) onGetProductDetails()
+    else {
+        if(uiState.isLoading){
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(35.dp),
+            )
+        }else if(!uiState.error.isNullOrEmpty()){
+            Text(text = "Error")
+            Button(onClick = onGetProductDetails) {
+                Text(text = "Recharger")
+            }
+        }else {
+            Column (
+                verticalArrangement = Arrangement.SpaceBetween
+            ){
+                DetailsTopBarSection(navControllerApp, product = product!!, mainViewModel = mainViewModel)
+                DetailsBodySection(product = product!!)
+                DetailsFooterSection(navControllerApp, product = product);
+            }
         }
     }
 }
 
 @Composable
-fun DetailsTopBarSection(navControllerApp: NavHostController, product: ProductDetail){
+fun DetailsTopBarSection(navControllerApp: NavHostController, product: ProductDetail, mainViewModel: MainViewModel){
     Box(
         modifier = Modifier
             .fillMaxWidth(1f)
             .background(Color.White)
     ){
         ImageCarousel(images = product!!.productImageURLList)
-        DetailHeader(navControllerApp = navControllerApp)
+        DetailHeader(navControllerApp = navControllerApp, mainViewModel = mainViewModel)
     }
 }
 
 @Composable
-fun DetailHeader(navControllerApp: NavHostController){
-    IconButton(onClick = {navControllerApp.popBackStack()},
+fun DetailHeader(navControllerApp: NavHostController, mainViewModel: MainViewModel){
+    IconButton(onClick = {
+        mainViewModel.reinitializeTheProductFetchedById()
+        navControllerApp.popBackStack()
+         },
         enabled = true,
     ) {
         Icon(
@@ -155,7 +169,8 @@ fun ImageCarousel(images: List<String>) {
            Image(
                painter = Images[currentIndex],
                contentDescription = null,
-               contentScale = ContentScale.FillBounds,
+//               contentScale = ContentScale.FillBounds,
+               contentScale = ContentScale.Crop,
                modifier = Modifier
                    .fillMaxWidth()
                    .fillMaxHeight()
