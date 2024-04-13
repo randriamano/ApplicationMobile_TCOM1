@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.e_comget.Datoum.model.RegistationViewModel
-import com.example.e_comget.Datoum.model.RegistrationUIState
-import com.example.e_comget.Datoum.model.UIEvent
+import com.example.e_comget.Datoum.model.registration.RegistationViewModel
+import com.example.e_comget.Datoum.model.registration.RegistrationUIState
+import com.example.e_comget.Datoum.model.registration.UIEvent
 import com.example.e_comget.R
 import com.example.e_comget.screens.MyAccount.SignIn.components.ButtonComponent
 import com.example.e_comget.screens.MyAccount.SignIn.components.ClickableLoginTextComponent

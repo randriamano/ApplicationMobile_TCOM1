@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -39,14 +38,14 @@ import com.example.e_comget.screens.MyAccount.SignIn.SignUpScreen
 import com.example.e_comget.screens.Routes.MainScreens
 import com.example.e_comget.screens.Routes.MyAccountScreens
 import com.example.e_comget.screens.Routes.ProductScreens
-import com.example.e_comget.Datoum.model.BottomNavigationItem
-import com.example.e_comget.Datoum.model.productList
-import com.example.e_comget.screens.Card.Components.BilletScreen
-import com.example.e_comget.screens.Card.Components.GoodiesScreen
-import com.example.e_comget.screens.Card.Components.VetementScreen
-import com.example.e_comget.screens.MyAccount.ProfileHomeScreen
-import com.example.e_comget.screens.Routes.MyChartScreen
+import com.example.e_comget.Datoum.model.item.BottomNavigationItem
+import com.example.e_comget.Datoum.model.item.CommandItem
+import com.example.e_comget.Datoum.model.tempProductCommandedDetails
+import com.example.e_comget.screens.Card.Components.CommandCategoryDetailsScreen
 import com.example.e_comget.screens.Start.StartScreen
+
+ //TODO
+ //Fetching product commanded before navigating into ProductCommandedDetails
 
  @RequiresApi(Build.VERSION_CODES.O)
     @Composable
@@ -107,7 +106,12 @@ import com.example.e_comget.screens.Start.StartScreen
                 modifier = Modifier.padding(paddingValues = paddingValues)
             ) {
                 composable(MainScreens.Home.route) {
-                    HomeScreen(navControllerApp = navControllerApp, mainViewModel = mainViewModel, productList = mainViewModel.uiState.value.data)
+                    HomeScreen(
+                        navControllerApp = navControllerApp,
+                        productList = mainViewModel.uiState.value.data,
+                        uiState = mainViewModel.uiState.value,
+                        onGetProduct = {mainViewModel.getProduct()},
+                        mainViewModel = mainViewModel)
                 }
                 composable(MainScreens.Card.route) {
                     CardScreen(navControllerApp = navControllerApp)
@@ -128,20 +132,25 @@ import com.example.e_comget.screens.Start.StartScreen
 
         Box{
             NavHost(navController = navControllerApp, startDestination = "startScreen"){
+                composable("startScreen") {
+                    StartScreen(navControllerApp = navControllerApp)
+                }
                 composable("bottomNavigation") {
                     BottomNavigationBar(navControllerApp = navControllerApp, mainViewModel)
                 }
                 composable(ProductScreens.ProductDetails.route + "/{productId}") { backStateEntry ->
 
                     val productIdString = backStateEntry.arguments?.getString("productId")
-                    val productId = productIdString?.toIntOrNull() ?: 1
-                    var mainViewModel : MainViewModel = hiltViewModel()
+                    val productId = productIdString?.toIntOrNull() ?: 4
 
                     if (productId != null) {
                         ProductDetailsScreen(
                             navControllerApp = navControllerApp,
-                            productId = productId,
-                            productList = mainViewModel.uiState.value.data
+                            onGetProductDetails = {
+                                mainViewModel.reinitializeTheProductFetchedById()
+                                mainViewModel.getProductById(productId)
+                                                  },
+                            mainViewModel = mainViewModel
                         )
                     }
                 }
@@ -154,17 +163,26 @@ import com.example.e_comget.screens.Start.StartScreen
                 composable(MyAccountScreens.SignUp.route) {
                     SignUpScreen(navControllerApp = navControllerApp)
                 }
-                composable("startScreen") {
-                    StartScreen(navControllerApp = navControllerApp)
-                }
-                composable(MyChartScreen.Vetement.route){
-                    VetementScreen(navController = navControllerApp)
-                }
-                composable(MyChartScreen.Billet.route){
-                    BilletScreen(navControllerApp = navControllerApp)
-                }
-                composable(MyChartScreen.Goodies.route){
-                    GoodiesScreen(navControllerApp = navControllerApp)
+                composable("commandDetails/{productCommandRoute}"){backStateEntry ->
+                    val productCommandRoute = backStateEntry.arguments?.getString("productCommandRoute")
+                    var commandItem: CommandItem = CommandItem();
+
+                    for(value in CommandItem().getCommandItems()){
+                        if(value.productCategoryNavigationRoute.equals(productCommandRoute)){
+                            commandItem = value;
+                            break;
+                        }
+                    }
+
+                    CommandCategoryDetailsScreen(
+                        navController = navControllerApp,
+                        commandItem = commandItem,
+                        mainViewModel = mainViewModel,
+                        onGetCommandCategoryProducts = {
+                            Log.d("", "ddddddddddddddddddddddddddddddddddddddddddddddddddddd${commandItem.productCategoryEndpointName}")
+                            mainViewModel.getCommandedProducts(commandItem.productCategoryEndpointName)
+                        }
+                    )
                 }
             }
         }

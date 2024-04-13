@@ -1,4 +1,4 @@
-package com.example.e_comget.Datoum.model
+package com.example.e_comget.Datoum.model.registration
 
 import android.util.Log
 import androidx.compose.runtime.MutableState

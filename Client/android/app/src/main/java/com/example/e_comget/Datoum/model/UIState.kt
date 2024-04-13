@@ -3,7 +3,6 @@ package com.example.e_comget.Datoum.model
 import com.example.e_comget.Datoum.Nom
 
 data class UIState(
-    //var r
     val isLoading: Boolean = false,
     val error: String? = null,
     val data : List<ProductDetail> = emptyList()
@@ -13,6 +12,12 @@ data class UIStateProduct(
     val isLoading: Boolean = false,
     val error: String? = null,
     val data: ProductDetail? = null
+)
+
+data class UIStateProductCommanded(
+    val isLoading: Boolean = false,
+    val error: String? = null,
+    val data: List<ProductCommandedDetails>? = emptyList()
 )
 
 data class UIStateName(

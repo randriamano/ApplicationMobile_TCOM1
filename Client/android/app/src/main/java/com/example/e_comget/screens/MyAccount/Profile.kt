@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,8 +22,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.e_comget.Datoum.model.RegistationViewModel
-import com.example.e_comget.Datoum.model.UIEvent
+import com.example.e_comget.Datoum.model.registration.RegistationViewModel
+import com.example.e_comget.Datoum.model.registration.UIEvent
+import com.example.e_comget.GlobalViewModel
 import com.example.e_comget.R
 import com.example.e_comget.screens.MyAccount.SignIn.components.ButtonComponent
 import com.example.e_comget.screens.MyAccount.SignIn.components.ClickableLoginTextComponent
@@ -35,21 +38,26 @@ import com.example.e_comget.screens.Routes.MyAccountScreens
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen(navControllerApp: NavHostController, navController: NavHostController) {
-    var isLoggedIn = Math.random().toInt();
+    val globalViewModel: GlobalViewModel = viewModel()
 
-    if(isLoggedIn % 2 == 0){
+    
+    if(!globalViewModel.isSignedIn.value){
         SignUpSubScreen(navControllerApp = navControllerApp, navController = navController)
+        Text(text = "Value : ${globalViewModel.isSignedIn.value}" )
     }else {
         ProfileHomeScreen(navController = navControllerApp)
+        Column {
+            Text(text = "Value : ${globalViewModel.isSignedIn.value}" )
+            Button(onClick = {globalViewModel.changeIsSignedIn()}) {
+                Text(text = "Log out")
+            }
+        }
     }
 }
 
 
 @Composable
 fun SignUpSubScreen(navControllerApp: NavHostController, navController: NavHostController, registationViewModel: RegistationViewModel = viewModel()){
-
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -1,4 +1,4 @@
-package com.example.e_comget.Datoum.model
+package com.example.e_comget.Datoum.model.registration
 
 data class RegistrationUIState(
     var studentName: String = "",

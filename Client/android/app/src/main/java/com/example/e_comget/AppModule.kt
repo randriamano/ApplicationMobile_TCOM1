@@ -18,7 +18,8 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit{
-        val baseUrl = "http://192.168.43.10:3000"
+//        val baseUrl = "http://192.168.43.10:3000"
+        val baseUrl = "http://192.168.88.220:3000"
 
         return Retrofit.Builder()
             .baseUrl(baseUrl)

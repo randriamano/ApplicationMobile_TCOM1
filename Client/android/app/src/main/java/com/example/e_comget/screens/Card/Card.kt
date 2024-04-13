@@ -14,7 +14,6 @@ import com.example.e_comget.screens.Card.Components.HeadSection
 fun CardScreen(navControllerApp: NavHostController){
     Scaffold (
         bottomBar = {
-
         }
     ) {padding ->
         Column (
