@@ -73,10 +73,14 @@ const commandedProduct = [
   {
     productId: 1,
     studentId: 2,
+    productSizeChosen: "L",
+    productColorChosen: "White", 
   },
   {
     productId: 2,
     studentId: 1,
+    productSizeChosen: "XL",
+    productColorChosen: "Navy Blue", 
   },
 ]
 

@@ -19,18 +19,25 @@ const commandRouter = Router()
 })
 
 /** 
- * Route to buy product
+ * Route to command product
  */
-commandRouter.post('/:productId', auth, async (req, res) => {
+commandRouter.post('/', auth, async (req, res) => {
   try {
     const data = JSON.parse(await extractData(req))
     const productData = {
-      productId: data.id,
+      productId: data.productId,
+      studentId: data.studentId,
+      productSizeChosen: data.productSizeChosen,
+      productColorChosen: data.productColorChosen, 
     }
 
-    const product = await commandController.buyProduct(productData)
+    const product = await commandController.commandProduct(productData)
 
-    res.json(successResponse("Product buyed", product))
+    // res.json(successResponse("Product buyed", product))
+    res.json({
+      success: true,
+      products: product,
+    })
   } catch (e) {
     res.status(400).json({ message: "The request or data type is not correct" })
   }

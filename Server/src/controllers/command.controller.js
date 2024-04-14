@@ -24,8 +24,8 @@ commandController.getCommandedProduct = async (category) => {
         productName: product.productName,
         productPrice: product.productPrice,
         productDescription: product.productDescription,
-        productSizeChosen: product.availableColorList[0],
-        productColorChosen: product.availableSizeList[0],
+        productSizeChosen: result.productSizeChosen,
+        productColorChosen: result.productColorChosen,
         productCategory: product.productCategory,
         productIsPaid: false,
       })
@@ -38,10 +38,10 @@ commandController.getCommandedProduct = async (category) => {
 /**
  * Buy product
  */
-commandController.buyProduct = async (productData) => {
+commandController.commandProduct = async (productData) => {
   // Buy product from prisma
   const product = await prisma.command.create({
-    data: { productData }
+    data: productData
   })
 
   return product

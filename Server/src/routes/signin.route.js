@@ -21,7 +21,10 @@ signinRouter.post("/signup", auth, async function (req, res) {
 
     const student = await signinController.addStudent(studentData)
 
-    res.json({ sucess: true })
+    res.json({
+      sucess: true,
+      student: student,
+    })
     // res.json(successResponse("Student added", student))
   } catch (e) {
     res.status(404).json({ success: false })
@@ -52,7 +55,10 @@ signinRouter.post("/login", auth, async function (req, res) {
     }
     else {
       // res.json(successResponse("Student logged", student))
-      res.json({ success: true})
+      res.json({
+        success: true,
+        student: student,
+      })
     }
   } catch (e) {
     res.status(400).json({ success: false })

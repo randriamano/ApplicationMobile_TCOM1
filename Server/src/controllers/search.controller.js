@@ -10,6 +10,12 @@ const searchController = {};
 searchController.getProductsByKeyword = async (keyword) => {
   // Get all products from prisma
   const products = await prisma.product.findMany({
+    where: {
+      OR: [
+        { productName: { contains: keyword } },
+        { productCategory: { contains: keyword } },
+      ]
+    },
     select: {
       productId: true,
       productName: true,

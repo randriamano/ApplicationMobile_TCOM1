@@ -19,6 +19,8 @@ CREATE TABLE "Command" (
     "commandId" SERIAL NOT NULL,
     "productId" INTEGER NOT NULL,
     "studentId" INTEGER NOT NULL,
+    "productSizeChosen" TEXT NOT NULL,
+    "productColorChosen" TEXT NOT NULL,
     "commandDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Command_pkey" PRIMARY KEY ("commandId")
