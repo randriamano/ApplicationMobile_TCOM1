@@ -27,11 +27,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //App()
+                    App()
                     val navController = rememberNavController()
                     //ImagePickerViewModel
                     //pickImage()
-                    MyScreen(viewModel = viewModel)
+                    //MyScreen(viewModel = viewModel)
 
 
 
