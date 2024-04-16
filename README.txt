@@ -1,2 +1,1 @@
-- Changer la variable "apiUrl" sur java/com/example/e_comget/GlobalViewModel.kt avec l'adresse ip du serveur
-- Changer la variable "baseUrl" sur java/com/example/e_comget/AppModule.kt avec l'adresse ip du serveur
+
