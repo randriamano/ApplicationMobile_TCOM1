@@ -24,7 +24,7 @@ signinController.addStudent = async (studentData) => {
  */
 signinController.verifyStudent = async (studentData) => {
   // Verify student from prisma
-  const [ student ] = await prisma.student.findMany({
+  const student = await prisma.student.findMany({
     where: { studentCardNum: studentData.studentCardNum, studentPassword: studentData.studentPassword },
   })
 

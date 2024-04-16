@@ -27,6 +27,29 @@ productsController.getAllProducts = async (filter) => {
 };
 
 /**
+ * Get a product filtered by id
+ */
+productsController.getProductById = async (productId) => {
+  // Get the specified product from prisma
+  const product = await prisma.product.findUnique({
+    where: { productId: Number(productId) },
+    select: {
+      productId: true,
+      productName: true,
+      productPrice: true,
+      productDescription: true,
+      availableColorList: true,
+      availableSizeList: true,
+      productCategory: true,
+      productRemainingStock: true,
+      productImageURLList: true,
+    },
+  });
+
+  return product;
+};
+
+/**
  * Get a product filterd by category
  */
 productsController.getProductByCategory = async (category) => {
@@ -49,29 +72,6 @@ productsController.getProductByCategory = async (category) => {
   });
 
   return results;
-};
-
-/**
- * Get a product item
- */
-productsController.getProductById = async (productId) => {
-  // Get the specified product from prisma
-  const product = await prisma.product.findUnique({
-    where: { productId: Number(productId) },
-    select: {
-      productId: true,
-      productName: true,
-      productPrice: true,
-      productDescription: true,
-      availableColorList: true,
-      availableSizeList: true,
-      productCategory: true,
-      productRemainingStock: true,
-      productImageURLList: true,
-    },
-  });
-
-  return product;
 };
 
 /**

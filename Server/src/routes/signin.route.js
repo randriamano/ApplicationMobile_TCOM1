@@ -18,16 +18,39 @@ signinRouter.post("/signup", auth, async function (req, res) {
       studentCardNum: data.studentCardNum,
       studentPassword: data.studentPassword,
     }
+    
+    for (const key in studentData) {
+      if (studentData[key] === "") {
+        res.json({
+          student: {
+            studentId: -1,
+            studentCardNum: "",
+            studentName: "",
+            studentFirstname: "",
+            studentPassword: "",
+          }
+        })
+
+        return
+      }
+    }
 
     const student = await signinController.addStudent(studentData)
 
     res.json({
-      sucess: true,
       student: student,
     })
-    // res.json(successResponse("Student added", student))
   } catch (e) {
-    res.status(404).json({ success: false })
+    res.json({
+      student: {
+        studentId: -1,
+        studentCardNum: "",
+        studentName: "",
+        studentFirstname: "",
+        studentPassword: "",
+      }
+    })
+
     // if (e.message === 'Failed to parse URL from ') {
     //   res.status(404).json({ message: `The URL '${process.env.API_URL}' is invalid` })
     // } else {
@@ -47,21 +70,50 @@ signinRouter.post("/login", async function (req, res) {
       studentPassword: data.studentPassword,
     }
 
+    for (const key in studentData) {
+      if (studentData[key] === "") {
+        res.json({
+          student: {
+            studentId: -1,
+            studentCardNum: "",
+            studentName: "",
+            studentFirstname: "",
+            studentPassword: "",
+          }
+        })
+        
+        return
+      }
+    }
+
     const student = await signinController.verifyStudent(studentData)
 
     if (student.length === 0) {
-      // res.status(404).json({ message: "Student not found" })
-      res.status(404).json({ success: false })
+      res.json({
+        student: {
+          studentId: -1,
+          studentCardNum: "",
+          studentName: "",
+          studentFirstname: "",
+          studentPassword: "",
+        }
+      })
     }
     else {
-      // res.json(successResponse("Student logged", student))
       res.json({
-        success: true,
-        student: student,
+        student: student[0],
       })
     }
   } catch (e) {
-    res.status(400).json({ success: false })
+    res.status(400).json({
+      student: {
+        studentId: -1,
+        studentCardNum: "",
+        studentName: "",
+        studentFirstname: "",
+        studentPassword: "",
+      }
+    })
   }
 })
 
