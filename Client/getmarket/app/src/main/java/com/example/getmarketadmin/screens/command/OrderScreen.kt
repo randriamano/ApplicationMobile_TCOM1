@@ -22,8 +22,6 @@ import com.example.getmarketadmin.screens.command.components.OrderItem
 import com.example.getmarketadmin.screens.data.orderList
 import com.example.getmarketadmin.ui.theme.Bg40
 
-//TODO
-// If the order is not a "vêtements" don't show "Taille"
 
 @Composable
 fun OrderScreen(navControllerApp: NavHostController) {
@@ -36,7 +34,7 @@ fun OrderScreen(navControllerApp: NavHostController) {
     SideEffect {
         val window = (context as Activity).window
         window.statusBarColor = background.toArgb()
-        WindowCompat.getInsetsController(window, context.window.decorView)?.isAppearanceLightStatusBars = !isDarkTheme
+        WindowCompat.getInsetsController(window, context.window.decorView).isAppearanceLightStatusBars = !isDarkTheme
     }
 
      Column(
@@ -44,7 +42,6 @@ fun OrderScreen(navControllerApp: NavHostController) {
                 .background(Bg40)
                 .fillMaxSize()
                 .fillMaxWidth()
-           //     .padding(start = 20.dp, end = 5.dp)
     ) {
         OrderHeader()
          CustomRadioGroup()
@@ -65,7 +62,7 @@ fun OrderScreen(navControllerApp: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun HomePreview(){
-    var navControllerApp = rememberNavController()
+    val navControllerApp = rememberNavController()
     OrderScreen(navControllerApp)
 }
 

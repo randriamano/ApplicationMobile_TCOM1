@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -28,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +43,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
+import com.example.getmarketadmin.screens.data.ColorItem
+import com.example.getmarketadmin.ui.theme.ButtonColor
 
 
 /**
@@ -51,10 +55,11 @@ import androidx.core.graphics.toColorInt
 @Composable
 fun ColorPickerDialog(
     initialColor: String,
-    colors: List<String>,
-    onChoice: (String, String) -> Unit
+    colors: List<ColorItem>,
+    onChoice: (String, String) -> Unit,
+    noChoice: () -> Unit
 ) {
-    var colorName by rememberSaveable { mutableStateOf("Noir") }
+    var colorName by rememberSaveable { mutableStateOf("Gris") }
     var color by remember(initialColor) { mutableStateOf(initialColor) }
     var hexTextColor by remember(initialColor) {
         mutableStateOf(initialColor.toColor(Color.White).contrastColor())
@@ -75,30 +80,53 @@ fun ColorPickerDialog(
     }
 
     AlertDialog(
-        onDismissRequest = onDismissRequest
+        onDismissRequest = noChoice,
     ) {
         Surface(
             shape = AlertDialogDefaults.shape,
             tonalElevation = AlertDialogDefaults.TonalElevation
         ) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                BasicTextField(
-                    value = color,
-                    onValueChange = {
-                        color = it
-                    },
-                    textStyle = MaterialTheme.typography.headlineSmall
-                        .copy(
-                            fontWeight = FontWeight.SemiBold,
-                            textAlign = TextAlign.Center,
-                            color = hexTextColor
-                        ),
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
                         .background(colorRendered)
                         .wrapContentHeight(align = Alignment.CenterVertically)
-                )
+                ) {
+                    Text(
+                        text = "#",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = hexTextColor,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center,
+                    )
+
+                    BasicTextField(
+                        value = color.substring(1),
+                        onValueChange = { newColor ->
+                            if (newColor.length <= 6) {
+                                color = "#$newColor"
+                            }
+                            colorName = ""
+                        },
+                        textStyle = MaterialTheme.typography.headlineSmall
+                            .copy(
+                                fontWeight = FontWeight.SemiBold,
+                                textAlign = TextAlign.Center,
+                                color = hexTextColor
+                            ),
+                        modifier = Modifier
+                            .padding(0.dp)
+                            .background(colorRendered)
+                           .wrapContentHeight(align = Alignment.CenterVertically)
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -112,45 +140,70 @@ fun ColorPickerDialog(
                     ) {
                         items(colors) {
                             Button(
-                                onClick = { color = it },
+                                onClick = {
+                                    color = it.colorItemCode
+                                    colorName = it.colorItemName
+                                          },
                                 shape = CircleShape,
                                 modifier = Modifier.requiredSize(50.dp),
                                 contentPadding = PaddingValues(1.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(it.toColorInt())
+                                    containerColor = Color(it.colorItemCode.toColorInt())
                                 ),
-                                border = if (it == color)
+                                border = if (it.colorItemCode == color)
                                     BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface)
                                 else
                                     null,
                                 content = {}
                             )
+
                         }
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
-                    Row {
-                        Text(
-                            text = "Nom produit",
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                       Text(
+                            text = "Nom du couleur :",
                             style = MaterialTheme.typography.bodyLarge
                         )
 
                         TextField(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth(1f)
+                                .padding(start = 3.dp)
+                                .wrapContentSize(Alignment.BottomStart, false),
                             value = colorName,
-                            textStyle = MaterialTheme.typography.headlineSmall,
                             onValueChange = { colorName = it },
                             placeholder = { Text(text = "e.g. Bleu nuit") },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedIndicatorColor = ButtonColor,
+                                focusedIndicatorColor = ButtonColor,
+                                unfocusedContainerColor = Color.Transparent,
+                            ),
                         )
+
+
+
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    TextButton(onClick = onDismissRequest, modifier = Modifier.align(Alignment.End)) {
-                        Text(text = "Enregistrer", style = MaterialTheme.typography.labelLarge)
+                    TextButton(
+                        onClick = onDismissRequest,
+                        modifier = Modifier.align(Alignment.End),
+                        enabled = colorName != ""
+                    )
+                    {
+                        Text(text = "Enregistrer",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = ButtonColor)
                     }
                 }
             }
         }
     }
 }
+

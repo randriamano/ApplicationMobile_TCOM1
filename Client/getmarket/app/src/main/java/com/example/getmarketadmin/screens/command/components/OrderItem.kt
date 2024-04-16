@@ -23,9 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.getmarketadmin.screens.data.Order
-import com.example.getmarketadmin.screens.data.Product
 import com.example.getmarketadmin.screens.data.orderList
-import com.example.getmarketadmin.screens.data.productList
 import com.example.getmarketadmin.ui.theme.ButtonColor
 
 @Composable
@@ -40,13 +38,11 @@ fun OrderItem(index : Int, navController: NavController){
         modifier = Modifier
             .fillMaxWidth(1f)
             .padding(start = 15.dp, end = 15.dp, bottom = 10.dp),
-        //.clickable {  },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
     ) {
         Column(
             Modifier
-               // .clickable {  }
                 .padding(
                     top = 20.dp,
                     end = 16.dp,
@@ -61,16 +57,16 @@ fun OrderItem(index : Int, navController: NavController){
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${order.orderName}", //order's name
+                    text = order.orderName, //order's name
                     color = Color.Black,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 22.sp
                 )
-                Text(text = "${order.orderClass}", color = Color.Black, fontSize = 16.sp) // order's class
+                Text(text = order.orderClass, color = Color.Black, fontSize = 16.sp) // order's class 001-M1
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "${order.orderProduct} (${order.orderNumber})", // products name
+                text = "${order.orderProduct} (${order.orderNumber})", // product's name
                 color = Color.Black,
                 fontWeight = FontWeight.Normal,
                 fontSize = 20.sp
@@ -89,24 +85,32 @@ fun OrderItem(index : Int, navController: NavController){
 
                 Spacer(modifier = Modifier.width(20.dp))
 
-                Text(
-                    text = "Taille: ${order.orderSize}",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily.Cursive
-                )
+                if(order.orderProductCategory == "Vêtements"){
+
+                    Text(
+                        text = "Taille: ${order.orderSize}",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 20.sp,
+                        fontFamily = FontFamily.Cursive
+                    )
+                }
+
             }
 
             Spacer(modifier = Modifier.height(15.dp))
-            Button(onClick = {  },
-                colors = ButtonDefaults.buttonColors(ButtonColor),
-            ) {
-                Text("Livré")
+
+            if (!(order.isDeliver)){
+                Button(onClick = {
+                                 //TODO
+                                 // change order.isDeliver to true
+                },
+                    colors = ButtonDefaults.buttonColors(ButtonColor),
+                ) {
+                    Text("Livré")
+                }
             }
-
-    }
-
+        }
     }
 
 }

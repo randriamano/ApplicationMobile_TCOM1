@@ -19,26 +19,26 @@ val orderList: List<Order> = listOf(
         orderProduct = "Sac",
         orderProductCategory = "Goodies",
         orderNumber = 2,
-        orderColor = "",
+        orderColor = "Blue",
         orderSize = "",
         isDeliver = false
     ),
 
     Order(
-        orderName = "RANDRIMANOHISOA",
-        orderClass = "015-M1",
-        orderProduct = "Sac",
+        orderName = "RANAIVOMANANA",
+        orderClass = "014-M1",
+        orderProduct = "Mug",
         orderProductCategory = "Goodies",
         orderNumber = 2,
-        orderColor = "",
+        orderColor = "Blanc",
         orderSize = "",
-        isDeliver = false
+        isDeliver = true
     ),
     Order(
         orderName = "RAMAROKOTO",
         orderClass = "010-M1",
         orderProduct = "T-shirt",
-        orderProductCategory = "Vêtement",
+        orderProductCategory = "Vêtements",
         orderNumber = 1,
         orderColor = "Blanc",
         orderSize = "M",
@@ -50,7 +50,7 @@ val orderList: List<Order> = listOf(
         orderProduct = "Porte clés",
         orderProductCategory = "Goodies",
         orderNumber = 5,
-        orderColor = "",
+        orderColor = "Blanc",
         orderSize = "",
         isDeliver = false
     ),
@@ -58,11 +58,11 @@ val orderList: List<Order> = listOf(
         orderName = "RAMANAKOTO",
         orderClass = "012-M1",
         orderProduct = "T-shirt hik",
-        orderProductCategory = "Vêtement",
+        orderProductCategory = "Vêtements",
         orderNumber = 1,
         orderColor = "Blue",
         orderSize = "XL",
-        isDeliver = false
+        isDeliver = true
     ),
     Order(
         orderName = "RAKOTONANDRASANA",
@@ -70,7 +70,7 @@ val orderList: List<Order> = listOf(
         orderProduct = "Mug",
         orderProductCategory = "Goodies",
         orderNumber = 2,
-        orderColor = "",
+        orderColor = "Blanc",
         orderSize = "",
         isDeliver = false
     )

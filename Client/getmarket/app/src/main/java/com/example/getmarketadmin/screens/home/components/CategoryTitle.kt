@@ -36,7 +36,9 @@ fun CategoryTitle(){
             verticalAlignment = Alignment.CenterVertically
         ){
             Text(
-                text = "  Les produits", //change en fonction du catégopy choisi
+                text = "  Les produits",
+                //TODO
+                // change the text related to the category Selected
                 style = TextStyle(
                     color = Color.Black,
                     fontSize = 30.sp,

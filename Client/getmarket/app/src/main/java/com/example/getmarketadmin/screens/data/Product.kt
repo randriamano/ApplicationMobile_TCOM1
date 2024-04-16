@@ -19,7 +19,7 @@ val productList: List<Product> = listOf(
     Product(
         productId = 1,
         productName = "T-shirt",
-        productCategory = "Vetements",
+        productCategory = "Vêtements",
         productPrice = 150000,
         productImage = "pro2"
     ),
@@ -33,7 +33,7 @@ val productList: List<Product> = listOf(
     Product(
         productId = 3,
         productName = "T-shirt hik",
-        productCategory = "Vetements",
+        productCategory = "Vêtements",
         productPrice = 150000,
         productImage = "pro4"
     ),
@@ -54,7 +54,7 @@ val productList: List<Product> = listOf(
     Product(
         productId = 1,
         productName = "T-shirt",
-        productCategory = "Vetements",
+        productCategory = "Vêtements",
         productPrice = 150000,
         productImage = "pro2"
     ),

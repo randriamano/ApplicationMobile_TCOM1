@@ -1,14 +1,12 @@
 package com.example.getmarketadmin.screens.home.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,7 +15,6 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +39,9 @@ fun TextFieldComponent(productName: String,
                        label : String,
                        onProductNameChange: (String) -> Unit,
                        placeholderText: String){
-    Column {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge
@@ -53,6 +52,7 @@ fun TextFieldComponent(productName: String,
             value = productName,
             onValueChange = onProductNameChange,
             placeholder = { Text(text = placeholderText) },
+            singleLine = true,
             colors =
             TextFieldDefaults.colors(
                 focusedContainerColor = BgButtonColor,
@@ -71,19 +71,22 @@ fun MultipleTextFieldComponent(productName: String,
                        label : String,
                        onProductNameChange: (String) -> Unit,
                        placeholderText: String){
-    Column {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge
         )
 
         TextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
             value = productName,
             onValueChange = onProductNameChange,
             placeholder = { Text(text = placeholderText) },
             singleLine = false,
-            maxLines = 2,
+            maxLines = 3,
             colors =
             TextFieldDefaults.colors(
                 focusedContainerColor = BgButtonColor,
@@ -105,7 +108,7 @@ fun NumberFieldComponent(
     placeholderText: String
 ){
     Column(
-      //  verticalArrangement = Arrangement.spacedBy(8.dp)
+          verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         Text(
             text = label,
@@ -119,6 +122,7 @@ fun NumberFieldComponent(
             placeholder = { Text(text = placeholderText) },
             suffix = { Text(text = suffix) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            singleLine = true,
             colors =
             TextFieldDefaults.colors(
                 focusedContainerColor = BgButtonColor,
@@ -141,6 +145,7 @@ fun CategoryDropdownComponent(
 ) {
 
     Column(
+        verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         Text(
             text = "Categorie",
@@ -159,7 +164,7 @@ fun CategoryDropdownComponent(
                         Icon(Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
                     }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier =  Modifier.width(135.dp),
                 singleLine = true,
                 colors =
                 TextFieldDefaults.colors(
@@ -192,51 +197,18 @@ fun CategoryDropdownComponent(
     }
 }
 
-@Composable
-fun SizeSelectionComponent(
-    sizes: List<String>,
-    selectedSizes: List<Boolean>,
-    onSizeSelected: (Int, Boolean) -> Unit
-) {
-    Column(
-        modifier = Modifier.padding(16.dp, 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            text = "Taille: ",
-            style = MaterialTheme.typography.bodyLarge
-        )
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            sizes.forEachIndexed { index, size ->
-                Checkbox(
-                    checked = selectedSizes.getOrNull(index) ?: false,
-                    onCheckedChange = { isChecked ->
-                        onSizeSelected(index, isChecked)
-                    }
-                )
-                Text(
-                    text = size,
-                    modifier = Modifier.clickable { onSizeSelected(index, !(selectedSizes.getOrNull(index) ?: false)) }
-                )
-            }
-        }
-    }
-}
 
 @Composable
-fun ButtonComponent(label : String, enable: Boolean){
+fun ButtonComponent(label : String, enable: Boolean, onClick: () -> Unit){
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp),
-          //  .align(Alignment.CenterHorizontally),
-        onClick = { },
+        onClick = { onClick() },
         colors = ButtonDefaults.buttonColors(containerColor = ButtonColor),
         shape = MaterialTheme.shapes.extraLarge,
-        enabled = true
+        enabled = enable
     ) {
         Text(
             text = label,

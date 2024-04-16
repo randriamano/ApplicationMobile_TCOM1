@@ -3,7 +3,6 @@ package com.example.getmarketadmin.screens.home.components
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
@@ -22,8 +21,10 @@ import androidx.compose.ui.unit.sp
 import com.example.getmarketadmin.R
 import com.example.getmarketadmin.ui.theme.ButtonColor
 
+
+//Main header
 @Composable
-fun header(){
+fun Header(){
     Row(
         modifier = Modifier
             .fillMaxWidth()

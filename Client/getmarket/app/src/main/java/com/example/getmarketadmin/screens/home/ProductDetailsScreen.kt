@@ -1,5 +1,6 @@
-package com.example.e_comget.screens.Home.Components
+package com.example.getmarketadmin.screens.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,30 +21,22 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -55,24 +48,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.getmarketadmin.R
+import com.example.getmarketadmin.screens.data.ColorItem
 import com.example.getmarketadmin.screens.data.product
 import com.example.getmarketadmin.screens.home.components.ButtonComponent
-import com.example.getmarketadmin.screens.home.components.colorPiquer.toColor
 import com.example.getmarketadmin.ui.theme.ButtonColor
-import com.example.getmarketadmin.ui.theme.PoloColorBlack
-import com.example.getmarketadmin.ui.theme.PoloColorGray
-import com.example.getmarketadmin.ui.theme.PoloColorNavyBlue
-import com.example.getmarketadmin.ui.theme.PoloColorRed
-import com.example.getmarketadmin.ui.theme.PoloColorWhite
 import com.example.getmarketadmin.ui.theme.VeryLightGray
 
 //TODO
 // Remove Number, it's only for order
 // replace "Continuer" button by "edit" and "remove" product
-//Create an object to store all data selected by user to send to the next screen (ProductOrderScreen)
+// Create an object to store all data selected by user to send to the next screen (ProductOrderScreen)
 //  If not signined : redirect into sign in screen before productOrder
-//Logic to enable the "Continue" button when all data are complete
+// Logic to enable the "Continue" button when all data are complete
 
 @Composable
 fun ProductDetailsScreen(
@@ -83,7 +70,7 @@ fun ProductDetailsScreen(
     ){
         DetailsTopBarSection(navControllerApp)
         DetailsBodySection()
-        DetailsFooterSection(navControllerApp);
+        DetailsFooterSection(navControllerApp)
     }
 }
 
@@ -101,15 +88,6 @@ fun DetailsTopBarSection(navControllerApp: NavHostController){
 
 @Composable
 fun DetailHeader(navControllerApp: NavHostController){
-   /* IconButton(onClick = {navControllerApp.popBackStack()},
-        enabled = true,
-    ) {
-        Icon(
-            imageVector = Icons.Rounded.ArrowBack,
-            contentDescription = "back",
-            tint = MaterialTheme.colorScheme.onSecondaryContainer
-        )
-    }*/
     IconButton(onClick = { navControllerApp.navigateUp() }) {
         Icon(
             Icons.Outlined.ArrowBack,
@@ -119,12 +97,13 @@ fun DetailHeader(navControllerApp: NavHostController){
     }
 }
 
+@SuppressLint("DiscouragedApi")
 @Composable
 fun ImageCarousel(images: List<String>) {
-    var currentIndex by remember { mutableStateOf(0) }
-    var context = LocalContext.current;
-    var imageId = context.resources.getIdentifier(images[currentIndex], "drawable", context.packageName);
-    var painter = painterResource(id = imageId);
+    var currentIndex by remember { mutableIntStateOf(0) }
+    var context = LocalContext.current
+    var imageId = context.resources.getIdentifier(images[currentIndex], "drawable", context.packageName)
+    var painter = painterResource(id = imageId)
 
 
     Column(
@@ -218,23 +197,21 @@ fun ImageCarousel(images: List<String>) {
 
 @Composable
 fun DetailsBodySection(){
-    var scrollState = rememberScrollState();
+    var scrollState = rememberScrollState()
     var selectedColorIndex by remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
 
     var selectedSizeIndex  by remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
 
-    var numberSelected by remember { mutableStateOf(0) }
-
     fun changeSelectedColorIndex(newVal : Int){
-        selectedColorIndex = newVal;
+        selectedColorIndex = newVal
     }
 
     fun changeSelectedSizeIndex(newSize : Int){
-        selectedSizeIndex = newSize;
+        selectedSizeIndex = newSize
     }
 
     Column(
@@ -244,21 +221,20 @@ fun DetailsBodySection(){
             .fillMaxHeight(0.85f)
             .padding(10.dp)
     ){
-        Column(
-           // verticalArrangement = Arrangement.spacedBy(5.dp)
-        ){
+        Column{
             Text(
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
-                text = "${product.productName}"
+                text = product.productName
             )
 
             Text(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Light,
                 color = Color.Black,
-                text = "${product.productDescription}"
+                text = product.productDescription
             )
+            Spacer(Modifier.height(8.dp))
 
             Text(
                 text = "${product.productPrice} Ar",
@@ -277,7 +253,7 @@ fun DetailsBodySection(){
         ){
 
             Spacer(modifier = Modifier.height(15.dp))
-            if (product.availableColorList!!.size > 0){
+            if (product.availableColorList!!.isNotEmpty()){
                 Column (
                     modifier = Modifier
                         .fillMaxWidth(1f)
@@ -287,8 +263,7 @@ fun DetailsBodySection(){
                     Text(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
-                       // text = "Color : ${selectedColorIndex + 1}. ${product.availableColorList[selectedColorIndex]}",
-                        text = "Couleur : ${product.availableColorList[selectedColorIndex]}",
+                        text = "Couleur : ${product.availableColorList[selectedColorIndex].colorItemName}",
                     )
                     Spacer(modifier = Modifier.height(7.dp))
 
@@ -299,7 +274,7 @@ fun DetailsBodySection(){
                     )
                 }
             }
-            if(product.availableSizeList!!.size > 0){
+            if(product.availableSizeList!!.isNotEmpty()){
                 Spacer(modifier = Modifier.height(20.dp))
                 Column {
                     Text(
@@ -315,98 +290,24 @@ fun DetailsBodySection(){
                     )
                 }
             }
-            if(product.productRemainingStock!!.compareTo(0) > 0){
-                Spacer(modifier = Modifier.height(20.dp))
-                Column {
-                    Text(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                        text = "Nombre : ${numberSelected}",
-                    )
-                    Spacer(modifier = Modifier.height(7.dp))
-                    NumberCounter(onNumberChanged = { updatedNumber ->
-                        numberSelected = updatedNumber
-                    })
-
-                }
-            }
         }
     }
 }
 
-
 @Composable
-fun NumberCounter(onNumberChanged: (Int) -> Unit) {
-    var number by remember { mutableStateOf(0) }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(7.dp))
-                    .size(30.dp)
-                    .background(ButtonColor)
-                    .clickable(enabled = number > 0) {
-                        number--
-                        onNumberChanged(number)
-                    },
-                contentAlignment = Alignment.Center,
-            ){
-                Text(
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    fontFamily = FontFamily.SansSerif,
-                    textAlign = TextAlign.Center,
-                    text = "-",
-                )
-            }
-            Text(
-                text = "$number",
-                fontSize = 20.sp,
-            )
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(7.dp))
-                    .size(30.dp)
-                    .background(ButtonColor)
-                    .clickable(enabled = number < product.productRemainingStock!!) {
-                        number++
-                        onNumberChanged(number)
-                    },
-                contentAlignment = Alignment.Center
-            ){
-                Text(
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    fontFamily = FontFamily.SansSerif,
-                    textAlign = TextAlign.Center,
-                    text = "+",
-                )
-            }
-        }
-
-
-}
-
-
-@Composable
-fun ColorItems(availableColorList: List<String>, selectedIndex: Int, changeTheSelectedColorIndex: (Int) -> Unit){
+fun ColorItems(availableColorList: List<ColorItem>, selectedIndex: Int, changeTheSelectedColorIndex: (Int) -> Unit){
 
 
     LazyRow(
         modifier = Modifier
             .fillMaxWidth(1f)
     ) {
-        itemsIndexed(availableColorList) { index, colorName ->
+        itemsIndexed(availableColorList) { index, _ ->
 
             AvailableColorItem(
+                availableColorList = availableColorList,
                 index = index,
                 indexSelected = selectedIndex,
-                colorName = colorName,
                 onClick = {newIndex -> changeTheSelectedColorIndex(newIndex)}
             )
 
@@ -414,24 +315,19 @@ fun ColorItems(availableColorList: List<String>, selectedIndex: Int, changeTheSe
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AvailableColorItem(index: Int, indexSelected: Int, colorName: String, onClick: (Int) -> Unit){
-    val mapColor: MutableMap<String, Color> = hashMapOf(
-        "Black" to PoloColorBlack,
-        "Navy Blue" to PoloColorNavyBlue,
-        "Red" to PoloColorRed,
-        "Gray" to PoloColorGray,
-        "White" to PoloColorWhite
-    )
+fun AvailableColorItem(availableColorList: List<ColorItem>, index: Int, indexSelected: Int, onClick: (Int) -> Unit){
 
-    var textColor: Color = if(colorName.equals("White")) Color.Black else Color.White;
-    var borderColor: Color = Color.Transparent;
-    var nullableColor = mapColor[colorName];
-    var backgroundColor = nullableColor ?: Color.Black;
+    val colorItem = availableColorList[index]
+    val colorName = colorItem.colorItemName
+    val colorCode = Color(android.graphics.Color.parseColor(colorItem.colorItemCode))
+
+    var textColor: Color = if(colorName == "White") Color.Black else Color.White
+    var borderColor: Color = Color.Transparent
+
 
     if(index == indexSelected){
-        borderColor = if(colorName.equals("White")) Color.Black else Color.White;
+        borderColor = if(colorName == "White") Color.Black else Color.White
     }
 
     var padding = if(index == 0) 0.dp else 10.dp
@@ -448,7 +344,7 @@ fun AvailableColorItem(index: Int, indexSelected: Int, colorName: String, onClic
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
                 .size(55.dp)
-                .background(backgroundColor)
+                .background(colorCode)
                 .border(2.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
                 .clickable { onClick(index) },
             contentAlignment = Alignment.Center
@@ -459,7 +355,7 @@ fun AvailableColorItem(index: Int, indexSelected: Int, colorName: String, onClic
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = FontFamily.SansSerif,
                 textAlign = TextAlign.Center,
-                text = "${colorName.uppercase()}",
+                text = colorName.uppercase(),
             )
         }
 
@@ -483,7 +379,6 @@ fun SizeItems(availableSizeList: List<String>, selectedIndex: Int, changeTheSele
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AvailableSizeItem(index: Int, selectedIndex: Int, size: String, onClick: (Int) -> Unit){
     var padding = if(index == 0) 0.dp else 10.dp
@@ -507,7 +402,7 @@ fun AvailableSizeItem(index: Int, selectedIndex: Int, size: String, onClick: (In
             Text(
                 fontWeight = FontWeight.Bold,
                 color = Color.Gray,
-                text = "${size}"
+                text = size
             )
         }
     }
@@ -525,23 +420,11 @@ fun DetailsFooterSection(navControllerApp: NavHostController){
         verticalAlignment = Alignment.CenterVertically,
 
     ){
-       /* FilledTonalButton(
-            modifier = Modifier
-                .fillMaxWidth(0.75f),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black,
-                contentColor = Color.White
-            ),
-            enabled = false,
-            onClick = { /*TODO*/ }
-        ) {
-            Text(text = "Continuer")
-        }*/
         Row(
             modifier = Modifier
                 .padding(start = 25.dp, end = 25.dp, bottom = 10.dp)
             ){
-            ButtonComponent(label = "Continuer", enable= true)
+            ButtonComponent(label = "Continuer", enable= true, onClick = {/*TODO*/})
         }
 
     }
@@ -554,6 +437,6 @@ fun DetailsPreview(){
     Column {
         DetailsTopBarSection(navControllerApp)
         DetailsBodySection()
-        DetailsFooterSection(navControllerApp);
+        DetailsFooterSection(navControllerApp)
     }
 }

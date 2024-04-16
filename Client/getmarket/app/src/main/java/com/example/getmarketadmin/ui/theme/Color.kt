@@ -14,18 +14,8 @@ val Bg = Color(0x60EEEEEE)
 val Bg40 = Color(0xffF5F7F8)
 val ButtonColor = Color(0xff074173)
 val BgButtonColor = Color(0xffC4E4FF)
-val GrayColor = Color(0xFF7B6F72)
-val Primary = Color(0xFF92A3FD)
-val Secondary = Color(0xFF9DCEFF)
-
-val HighBackgroundColor = Color(0xffFE4243)
 
 val VeryLightGray = Color(0xFFE0E0E0)
 
-val PoloColorWhite = Color(0xFFFFFFFF)
-val PoloColorBlack = Color(0xFF070707)
-val PoloColorRed = Color(0xFF9C0202)
-val PoloColorGray = Color(0xFF646464)
-val PoloColorNavyBlue = Color(0xFF1A2692)
 
 

@@ -2,7 +2,6 @@ package com.example.getmarketadmin.screens.home
 
 import android.app.Activity
 import android.util.Log
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -23,16 +22,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -50,13 +44,9 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
-import com.example.getmarketadmin.R
 import com.example.getmarketadmin.screens.data.ColorItem
 import com.example.getmarketadmin.screens.home.components.ButtonComponent
 import com.example.getmarketadmin.screens.home.components.CategoryDropdownComponent
@@ -67,16 +57,15 @@ import com.example.getmarketadmin.screens.home.components.TextFieldComponent
 import com.example.getmarketadmin.screens.home.components.colorPiquer.ColorPickerDialog
 import com.example.getmarketadmin.screens.home.components.colorPiquer.toColor
 import com.example.getmarketadmin.screens.home.components.imagePicker.ImagePickerViewModel
-import com.example.getmarketadmin.screens.home.components.imagePicker.MyScreen
-import com.example.getmarketadmin.screens.home.components.imagePicker.pickImage
 import com.example.getmarketadmin.ui.theme.BgButtonColor
 import com.example.getmarketadmin.ui.theme.ButtonColor
 import com.example.getmarketadmin.screens.home.ColorItemContent as ColorItemContent
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.getmarketadmin.screens.data.SelectedImage
+import com.example.getmarketadmin.screens.data.predefinedColorList
+import com.example.getmarketadmin.screens.home.components.imagePicker.PickImage
 
-//TODO
-// Add upload photo option
 
 @Composable
 fun AddNewProductScreen(navControllerApp: NavHostController){
@@ -85,49 +74,53 @@ fun AddNewProductScreen(navControllerApp: NavHostController){
     val background = Color.White
     val isDarkTheme = isSystemInDarkTheme()
 
-
     SideEffect {
         val window = (context as Activity).window
         window.statusBarColor = background.toArgb()
-        WindowCompat.getInsetsController(window, context.window.decorView)?.isAppearanceLightStatusBars = !isDarkTheme
+        WindowCompat.getInsetsController(window, context.window.decorView).isAppearanceLightStatusBars = !isDarkTheme
     }
+
     Column (
         modifier = Modifier
-            .background(background)
+            .background(background),
+        verticalArrangement = Arrangement.SpaceBetween
     ){
-        AddMedicationScreen(navControllerApp)
+        HeaderAddNewProduct(navControllerApp)
+        AddProductScreen(navControllerApp)
     }
 }
 
-
-
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMedicationScreen(navControllerApp: NavHostController) {
+fun AddProductScreen(navControllerApp: NavHostController) {
+
+    val options = listOf(
+        "Vêtements",
+        "Goodies",
+        "Billets",
+    )
+
+
+    var productName by rememberSaveable { mutableStateOf("") }
+    var priceString by rememberSaveable { mutableStateOf("0") }
+    var description by rememberSaveable { mutableStateOf("") }
+    var selectedOptionText by remember { mutableStateOf(options[0]) }
+    var sizeSelectedList by remember { mutableStateOf(listOf<String>()) }
+    var colorItemList by remember { mutableStateOf(listOf<ColorItem>()) }
+
 
     Column(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp)
             .verticalScroll(rememberScrollState())
+            .fillMaxHeight(1f)
             .background(Color.White),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
-        //---------------HEAD------------------------
-
-        headerAddNewProduct(navControllerApp)
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        //----------------IMAGES------------------------
-
-       // val viewModel: ImagePickerViewModel by viewModels()
-       // pickImage(viewModel = viewModel)
-
         //-----------------NAME----------------------------
-
-        var productName by rememberSaveable { mutableStateOf("") }
 
         TextFieldComponent(
             productName = productName,
@@ -136,72 +129,38 @@ fun AddMedicationScreen(navControllerApp: NavHostController) {
             placeholderText = "e.g. T-shirt"
         )
 
-        //Spacer(modifier = Modifier.padding(4.dp))
-
         //-----------------PRIX--------------------------------
 
-        var prix by rememberSaveable { mutableStateOf("0") }
-
         NumberFieldComponent(
-            numberOfDosage = prix,
-            onNumberOfDosageChange = { prix = it },
+            numberOfDosage = priceString,
+            onNumberOfDosageChange = { priceString = it },
             label = "Prix",
             placeholderText = "e.g. 1",
             suffix = "Ariary"
         )
 
+        Log.d("", "Price in String $priceString")
+
         //---------------------DESCRIPTION---------------------------
-        var descripton by rememberSaveable { mutableStateOf("") }
 
         MultipleTextFieldComponent(
-            productName = descripton,
+            productName = description,
             label = "Descriptions",
-            onProductNameChange = { descripton = it },
+            onProductNameChange = { description = it },
             placeholderText = "e.g. T-shirt personnalisé"
         )
-        //Spacer(modifier = Modifier.padding(4.dp))
 
+        //--------------------CATEGORY-----------------------------
 
-        //--------------------STOCKE-----------------------------
+        var expanded by remember { mutableStateOf(false) }
 
-        var numberOfDosage by rememberSaveable { mutableStateOf("1") }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-
-            //-----------------Stocks--------------------------------
-
-            NumberFieldComponent(
-                numberOfDosage = numberOfDosage,
-                onNumberOfDosageChange = { numberOfDosage = it },
-                label = "Nombre de stockes",
-                placeholderText = "e.g. 1",
-                suffix = ""
-            )
-
-            //---------------------------CATEGORY-----------------------
-
-
-            val options = listOf(
-                "Vêtements",
-                "Goodies",
-                "Billets",
-            )
-
-            var expanded by remember { mutableStateOf(false) }
-            var selectedOptionText by remember { mutableStateOf(options[0]) }
-
-            CategoryDropdownComponent(
-                selectedOptionText = selectedOptionText,
-                onSelectionChange = { selectedOptionText = it },
-                options = options,
-                expanded = expanded,
-                onExpandedChange = { expanded = it }
-            )
-
-
-        }
+        CategoryDropdownComponent(
+            selectedOptionText = selectedOptionText,
+            onSelectionChange = { selectedOptionText = it },
+            options = options,
+            expanded = expanded,
+            onExpandedChange = { expanded = it }
+        )
 
         //-------------------SIZE------------------------
 
@@ -209,45 +168,55 @@ fun AddMedicationScreen(navControllerApp: NavHostController) {
         var isMSelected by rememberSaveable { mutableStateOf(false) }
         var isLSelected by rememberSaveable { mutableStateOf(false) }
         var isXLSelected by rememberSaveable { mutableStateOf(false) }
+        var imageList by remember { mutableStateOf(listOf<SelectedImage>()) }
 
-        Column(
-            modifier = Modifier
-               // .padding(16.dp, 16.dp),
-        ) {
-            Spacer(modifier = Modifier.padding(4.dp))
 
-            Text(
-                text = "Taille: ",
-                style = MaterialTheme.typography.bodyLarge
-            )
+        if (selectedOptionText == options[0]){
 
-            Row(
+            Column(
                 modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp),
-            ){
-                SizeSelectionComponent(
-                    sizeList = listOf("S", "M", "L", "XL"),
-                    selectedSizes = listOf(isSSelected, isMSelected, isLSelected, isXLSelected),
-                    onSizeSelected = { index ->
-                        when (index) {
-                            0 -> isSSelected = !isSSelected
-                            1 -> isMSelected = !isMSelected
-                            2 -> isLSelected = !isLSelected
-                            3 -> isXLSelected = !isXLSelected
-                        }
-                    }
+            ) {
+                Spacer(modifier = Modifier.padding(4.dp))
+
+                Text(
+                    text = "Tailles: ",
+                    style = MaterialTheme.typography.bodyLarge
                 )
+
+                Row(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp),
+                ){
+                    SizeSelectionComponent(
+                        sizeList = listOf("S", "M", "L", "XL"),
+                        selectedSizes = listOf(isSSelected, isMSelected, isLSelected, isXLSelected),
+                        onSizeSelected = { index ->
+                            when (index) {
+                                0 -> isSSelected = !isSSelected
+                                1 -> isMSelected = !isMSelected
+                                2 -> isLSelected = !isLSelected
+                                3 -> isXLSelected = !isXLSelected
+                            }
+                            sizeSelectedList = listOfNotNull(
+                                if (isSSelected) "S" else null,
+                                if (isMSelected) "M" else null,
+                                if (isLSelected) "L" else null,
+                                if (isXLSelected) "XL" else null
+                            )
+
+                        }
+                    )
+                }
+
+
             }
-
-
         }
 
         //-----------COLOR PICKER---------------------------
+
         var show by remember { mutableStateOf(false) }
         var color by remember { mutableStateOf("#000000") }
         var colorName by rememberSaveable { mutableStateOf("Noir") }
-        var colorItemList by remember { mutableStateOf(listOf<ColorItem>()) }
-
 
         fun addColorItem(pickedColor: String, pickedColorName: String) {
             colorItemList = colorItemList + ColorItem(pickedColor, pickedColorName)
@@ -257,28 +226,26 @@ fun AddMedicationScreen(navControllerApp: NavHostController) {
             colorItemList = colorItemList - colorItem
         }
 
-
         if (show) {
             ColorPickerDialog(
                 initialColor = "#AAAAAA",
-                colors = listOf("#FF0000", "#00FF00", "#0000FF"),
+                colors = predefinedColorList,
                 onChoice = { pickedColor, pickedColorName ->
-                    Log.d("", "Color selected $pickedColor")
                     color = pickedColor
                     colorName = pickedColorName
                     addColorItem(pickedColor, pickedColorName)
                     Log.d("", "colorItemList: $colorItemList")
                     show = false
                 },
+                noChoice = {show = false}
             )
         }
         Text(
-            text = "Couleur: ",
+            text = "Couleur(s): ",
             style = MaterialTheme.typography.bodyLarge
         )
 
-        Row(
-        ) {
+        Row{
 
             FloatingActionButton(
                 onClick = {  show = true },
@@ -289,29 +256,47 @@ fun AddMedicationScreen(navControllerApp: NavHostController) {
                 Icon(Icons.Filled.Add, "Small floating action button.", Modifier.size(30.dp))
             }
 
-
             LazyRow{
-                itemsIndexed(colorItemList){index, colorItem ->
+                itemsIndexed(colorItemList){ _, colorItem ->
                     ColorItemContent(colorItem = colorItem, onRemoveColorItem = { removeColorItem(it) })
                 }
             }
-
-
-
         }
 
+        //-----------------------IMAGES------------------------
+        val viewModel: ImagePickerViewModel = viewModel()
 
+        PickImage(
+            context = LocalContext.current,
+            viewModel = viewModel,
+            onSelected = {
+                imageList = it
+                Log.d("", "Result image selected : $imageList")
+            }
+            )
 
-        //---------------------SAVE-----------------------------------
-
+        //-------------------------SAVE-----------------------------------
         Spacer(modifier = Modifier.padding(8.dp))
 
-        //add onClick parameter
-        ButtonComponent(label = "Ajouter", enable= true)
+        //To verify that all of the informations is completed
+        var isCompleted by rememberSaveable { mutableStateOf(false) }
 
+
+        //TODO
+        // Ajouter dans isCompleted que  si Vêtements est séléctionné il faut que sizeSelectedList soit NotEmpty()
+
+        isCompleted = (
+                ((productName != "") && (priceString != "0") && (description != "") && (colorItemList.isNotEmpty()) && (imageList.isNotEmpty()))
+                )
+        Log.d("", "COMPLETED $isCompleted")
+
+        ButtonComponent(label = "Ajouter",
+            enable = isCompleted,
+            onClick = {
+                Log.d("", "BUTTON ENABLE")
+            })
     }
 }
-
 
 @Composable
 fun ColorItemContent(colorItem: ColorItem, onRemoveColorItem: (ColorItem) -> Unit) {
@@ -337,18 +322,13 @@ fun ColorItemContent(colorItem: ColorItem, onRemoveColorItem: (ColorItem) -> Uni
 }
 
 @Composable
-fun headerAddNewProduct(navControllerApp: NavHostController){
+fun HeaderAddNewProduct(navControllerApp: NavHostController){
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(70.dp)
-          //  .padding(start = 5.dp, end = 5.dp)
-        ,
+            .fillMaxWidth(1f)
+            .height(50.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-
-
         Row(
             Modifier
                 .weight(0.5f),
@@ -378,11 +358,7 @@ fun headerAddNewProduct(navControllerApp: NavHostController){
                 textAlign = TextAlign.Center
             )
         }
-
-
-
     }
-
 }
 
 

@@ -1,25 +1,23 @@
 package com.example.getmarketadmin.screens.home.components.imagePicker
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
+import com.example.getmarketadmin.screens.data.SelectedImage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class ImagePickerViewModel: ViewModel() {
-    private val _selectedImages = MutableStateFlow<List<String>>(emptyList())
+
+    private val _selectedImages = MutableStateFlow<List<SelectedImage>>(emptyList())
     val selectedImages = _selectedImages.asStateFlow()
 
-    fun addSelectedImage(path: String) {
-        val newList = _selectedImages.value.toMutableList().apply { add(path) }
+    fun addSelectedImage(image: SelectedImage) {
+        val newList = _selectedImages.value.toMutableList().apply { add(image) }
         _selectedImages.value = newList
     }
 
-    fun clearSelectedImages() {
-        _selectedImages.value = emptyList()
-    }
 
-    fun removeSelectedImage(path: String) {
-        val newList = _selectedImages.value.toMutableList().apply { remove(path) }
+    fun removeSelectedImage(image: SelectedImage) {
+        val newList = _selectedImages.value.toMutableList().apply { remove(image) }
         _selectedImages.value = newList
     }
 }
