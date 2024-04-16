@@ -6,3 +6,8 @@ data class RegistrationUIState(
     var studentCardNum: String = "",
     var studentPassword: String = ""
 )
+
+data class RegistrationUIStateLogin(
+    var studentCardNum: String = "",
+    var studentPassword: String = ""
+)

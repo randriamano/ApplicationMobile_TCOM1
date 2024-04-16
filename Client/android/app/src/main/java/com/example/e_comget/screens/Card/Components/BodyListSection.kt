@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -29,33 +30,36 @@ import androidx.navigation.NavHostController
 import com.example.e_comget.Datoum.model.item.CommandItem
 
 @Composable
-fun BodyListSection(navControllerApp : NavHostController){
+fun BodyListSection(navControllerApp: NavHostController) {
     CategoryBodySection(navControllerApp)
 }
 
 @Composable
-fun CategoryBodySection(navControllerApp: NavHostController){
+fun CategoryBodySection(navControllerApp: NavHostController) {
     val categoryItemList: List<CommandItem> = CommandItem().getCommandItems()
-    
+
     Column {
         Text(
             modifier = Modifier
-                .absolutePadding(12.dp,0.dp, 0.dp, 0.dp),
+                .absolutePadding(12.dp, 0.dp, 0.dp, 0.dp),
             fontWeight = FontWeight.Bold,
             fontSize = 25.sp,
-            text = "Categories")
+            text = "Categories"
+        )
         Spacer(modifier = Modifier.height(20.dp))
         LazyColumn {
-            items(categoryItemList.size){
-                index ->
-                    CategoryItem(navControllerApp = navControllerApp, commandItem = categoryItemList[index])
+            items(categoryItemList.size) { index ->
+                CategoryItem(
+                    navControllerApp = navControllerApp,
+                    commandItem = categoryItemList[index]
+                )
             }
         }
     }
 }
 
 @Composable
-fun CategoryItem(navControllerApp: NavHostController, commandItem: CommandItem){
+fun CategoryItem(navControllerApp: NavHostController, commandItem: CommandItem) {
     val border = BorderStroke(
         color = Color.LightGray,
         width = 1.dp
@@ -66,7 +70,7 @@ fun CategoryItem(navControllerApp: NavHostController, commandItem: CommandItem){
             .padding(10.dp)
             .clickable { navControllerApp.navigate("commandDetails/" + commandItem.productCategoryNavigationRoute) }
             .border(border, shape = RoundedCornerShape(8.dp))
-    ){
+    ) {
         Row(
             modifier = Modifier
                 .padding(start = 5.dp, end = 5.dp)
@@ -80,20 +84,15 @@ fun CategoryItem(navControllerApp: NavHostController, commandItem: CommandItem){
                     .clip(RoundedCornerShape(10.dp))
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Column {
+            Column(
+                modifier = Modifier.align(Alignment.CenterVertically)
+            ) {
                 Text(
                     modifier = Modifier
-                        .padding(15.dp,10.dp),
+                        .padding(15.dp, 10.dp),
                     text = commandItem.productCategoryName,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(15.dp,10.dp),
-                    text = "Nombre de commande: ${commandItem.productCategoryCommandedCount}",
-                    fontWeight = FontWeight.Light,
-                    fontSize = 15.sp
                 )
             }
         }

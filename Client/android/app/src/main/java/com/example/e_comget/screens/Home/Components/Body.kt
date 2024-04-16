@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.e_comget.Datoum.model.ProductDetail
+import com.example.e_comget.Datoum.model.item.ProductDetail
 import com.example.e_comget.Datoum.model.UIState
 import com.example.e_comget.GlobalViewModel
 import com.example.e_comget.MainViewModel
@@ -48,27 +47,28 @@ import com.example.e_comget.ui.theme.Primary
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ProductSection(navController: NavController
-                   , productList: List<ProductDetail>,
-                   uiState: UIState,
-                   mainViewModel: MainViewModel
-){
-    Column (
+fun ProductSection(
+    navController: NavController, productList: List<ProductDetail>,
+    uiState: UIState,
+    mainViewModel: MainViewModel
+) {
+    Column(
         modifier = Modifier
             .fillMaxHeight()
-    ){
+    ) {
         Text(
             fontWeight = FontWeight.Bold,
             fontSize = 25.sp,
-            text = "Explorer")
+            text = "Explorer"
+        )
         Spacer(modifier = Modifier.height(10.dp))
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxHeight()
-        ){
-            if (uiState.isLoading){
+        ) {
+            if (uiState.isLoading) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -81,7 +81,7 @@ fun ProductSection(navController: NavController
                             .size(35.dp),
                     )
                 }
-            }else if (!uiState.error.isNullOrEmpty()){
+            } else if (!uiState.error.isNullOrEmpty()) {
                 val imageId = R.drawable.nosignal
 
                 Column(
@@ -89,8 +89,10 @@ fun ProductSection(navController: NavController
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Image(painter = painterResource(
-                        id = imageId),
+                    Image(
+                        painter = painterResource(
+                            id = imageId
+                        ),
                         contentDescription = "Loss connexion",
                         modifier = Modifier
                             .size(75.dp)
@@ -102,7 +104,7 @@ fun ProductSection(navController: NavController
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                     Button(
-                        onClick = {mainViewModel.getProduct()},
+                        onClick = { mainViewModel.getProduct() },
                         modifier = Modifier,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Primary
@@ -114,13 +116,13 @@ fun ProductSection(navController: NavController
                         )
                     }
                 }
-            }else{
+            } else {
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(160.dp),
                     modifier = Modifier
                 ) {
-                    items(productList.size) {
-                            index -> ProductItem(productList[index], navController)
+                    items(productList.size) { index ->
+                        ProductItem(productList[index], navController)
                     }
                 }
             }
@@ -130,8 +132,7 @@ fun ProductSection(navController: NavController
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun ProductItem(product: ProductDetail, navController: NavController){
-    var context = LocalContext.current;
+fun ProductItem(product: ProductDetail, navController: NavController) {
     val globalViewModel: GlobalViewModel = viewModel()
     val apiURL = globalViewModel.apiUrl.toString()
     var image = rememberAsyncImagePainter(apiURL + product.productImageURLList[0])
@@ -142,19 +143,29 @@ fun ProductItem(product: ProductDetail, navController: NavController){
             .clickable {
                 navController.navigate("product_details_route/${product.productId}")
             },
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .padding(start = 5.dp, end = 5.dp)
         ) {
-            Image(
-                painter = image,
-                contentDescription = "product",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(165.dp)
-                    .clip(RoundedCornerShape(10.dp))
-            )
+
+            if (image == null) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .size(35.dp),
+                )
+            } else {
+                Image(
+                    painter = image,
+                    contentDescription = "product",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(165.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                )
+            }
+
             Spacer(modifier = Modifier.height(10.dp))
             Column {
                 Text(
@@ -176,7 +187,7 @@ fun ProductItem(product: ProductDetail, navController: NavController){
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview
-fun ProductPreview(){
+fun ProductPreview() {
     Button(
         onClick = {},
         modifier = Modifier,

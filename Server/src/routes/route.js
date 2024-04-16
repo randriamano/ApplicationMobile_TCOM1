@@ -3,6 +3,7 @@ const fs = require("node:fs");
 
 const productsRouter = require("./products.route");
 const signinRouter = require("./signin.route");
+const adminRouter = require("./admin.route")
 const commandRouter = require("./command.route");
 const searchRouter = require("./search.route")
 
@@ -12,8 +13,11 @@ module.exports = (app, public) => {
     res.sendFile(path.join(public, 'index.html'))
   });
 
-  // Signup and login api endpoints
-  app.use("/api", signinRouter);
+  // Signup and login api endpoints for students
+  app.use("/api/student", signinRouter);
+
+  // Signup and login api endpoints for admin
+  app.use("/api/admin", adminRouter);
 
   // Products api endpoints
   app.use("/api/products", productsRouter);

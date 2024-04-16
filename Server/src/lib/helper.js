@@ -20,13 +20,4 @@ const extractData = (request) => {
   })
 }
 
-/*-------------------------------------------------------------------------*/
-
-/** 
- * Return message and data in the response 
- */
-const successResponse = (message, data) => {
-  return { message, data }
-}
-
-module.exports = { extractData, successResponse }
+module.exports = { extractData }

@@ -22,12 +22,14 @@ model Product {
 }
 
 model Command {
-  commandId   Int      @id @default(autoincrement())
-  product     Product  @relation(fields: [productId], references: [productId])
-  student     Student  @relation(fields: [studentId], references: [studentId])
-  productId   Int
-  studentId   Int
-  commandDate DateTime @default(now())
+  commandId          Int      @id @default(autoincrement())
+  product            Product  @relation(fields: [productId], references: [productId])
+  student            Student  @relation(fields: [studentId], references: [studentId])
+  productId          Int
+  studentId          Int
+  productSizeChosen  String
+  productColorChosen String
+  commandDate        DateTime @default(now())
 }
 
 model Student {
@@ -40,7 +42,8 @@ model Student {
 }
 
 model Admin {
-  adminId   Int    @id @default(autoincrement())
-  adminName String
-  adminKey  String
+  adminId        Int    @id @default(autoincrement())
+  studentCardNum String @unique
+  adminPassword  String
+  adminKey       String @unique
 }

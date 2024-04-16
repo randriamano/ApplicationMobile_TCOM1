@@ -1,11 +1,16 @@
+const bcrypt = require("bcrypt")
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
+const saltRounds = 10
+const salt = bcrypt.genSaltSync(saltRounds)
+
 const adminData = [
   {
-    adminName: "Admin",
-    adminKey: "admin",
+    studentCardNum: "025-M1",
+    adminPassword: bcrypt.hashSync("123456", salt),
+    adminKey: bcrypt.hashSync("admin", salt),
   },
 ];
 
@@ -13,44 +18,44 @@ const categories = [ 'vetements', 'billets', 'goodies' ]
 
 const productData = [
   {
-    productName:"T-shirt",
-    productPrice:"21 000",
-    productDescription:" Polo avec Logo Get conçu par le GET 2024",
-    productCategory:"vetements",
-    availableColorList:['Navy Blue','White'],
-    availableSizeList:['S','M','L','XL','3XL'],
-    productImageURLList:[ "/images/tshirt/0", "/images/tshirt/1", "/images/tshirt/2", ],
-    productRemainingStock:15,
+    productName: "T-shirt",
+    productPrice: "21 000",
+    productDescription: "Polo avec Logo Get conçu par le GET 2024",
+    productCategory: "vetements",
+    availableColorList: [ 'Navy Blue','White' ],
+    availableSizeList: [ 'S','M','L','XL','3XL' ],
+    productImageURLList: [ "/images/tshirt/0", "/images/tshirt/1", "/images/tshirt/2", ],
+    productRemainingStock: 15,
   },
   {
-    productName:"Parapluie",
-    productPrice:"30 000",
-    productDescription:" Parapluie avec Logo Get conçu par le GET 2024",
-    productCategory:"goodies",
-    availableColorList:['Navy Blue',],
-    availableSizeList:['XL'],
-    productImageURLList:["/images/parapluie/0" ],
-    productRemainingStock:10,
+    productName: "Parapluie",
+    productPrice: "30 000",
+    productDescription: "Parapluie avec Logo Get conçu par le GET 2024",
+    productCategory: "goodies",
+    availableColorList: [ 'Navy Blue', ],
+    availableSizeList: [ 'XL' ],
+    productImageURLList: [ "/images/parapluie/0" ],
+    productRemainingStock: 10,
   },
   {
-    productName:"Tote Bag",
-    productPrice:"15 000",
-    productDescription:" Tote Bag avec Logo Get conçu par le GET 2024",
-    productCategory:"goodies",
-    availableColorList:['Navy Blue'],
-    availableSizeList:['XL'],
-    productImageURLList:[ "/images/totebag/0", "/images/totebag/1", "/images/totebag/2", "/images/totebag/3", ],
-    productRemainingStock:20,
+    productName: "Tote Bag",
+    productPrice: "15 000",
+    productDescription: "Tote Bag avec Logo Get conçu par le GET 2024",
+    productCategory: "goodies",
+    availableColorList: [ 'Navy Blue' ],
+    availableSizeList: [ 'XL' ],
+    productImageURLList: [ "/images/totebag/0", "/images/totebag/1", "/images/totebag/2", "/images/totebag/3", ],
+    productRemainingStock: 20,
   },
   {
-    productName:"Porte-Clés",
-    productPrice:"5000",
-    productDescription:" Porte-Clés Logo Get conçu par le GET 2024",
-    productCategory:"goodies",
-    availableColorList:["White"],
-    availableSizeList:["L"],
-    productImageURLList:[ "/images/portecles/0", "/images/portecles/1", ],
-    productRemainingStock:50,
+    productName: "Porte-Clés",
+    productPrice: "5 000",
+    productDescription: "Porte-Clés Logo Get conçu par le GET 2024",
+    productCategory: "goodies",
+    availableColorList: [ "White" ],
+    availableSizeList: [ "L" ],
+    productImageURLList: [ "/images/portecles/0", "/images/portecles/1", ],
+    productRemainingStock: 50,
   }
 ]
 
@@ -73,10 +78,14 @@ const commandedProduct = [
   {
     productId: 1,
     studentId: 2,
+    productSizeChosen: "L",
+    productColorChosen: "White", 
   },
   {
     productId: 2,
     studentId: 1,
+    productSizeChosen: "XL",
+    productColorChosen: "Navy Blue", 
   },
 ]
 

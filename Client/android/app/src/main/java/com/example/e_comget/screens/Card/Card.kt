@@ -11,12 +11,12 @@ import com.example.e_comget.screens.Card.Components.BodyListSection
 import com.example.e_comget.screens.Card.Components.HeadSection
 
 @Composable
-fun CardScreen(navControllerApp: NavHostController){
-    Scaffold (
+fun CardScreen(navControllerApp: NavHostController) {
+    Scaffold(
         bottomBar = {
         }
-    ) {padding ->
-        Column (
+    ) { padding ->
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
