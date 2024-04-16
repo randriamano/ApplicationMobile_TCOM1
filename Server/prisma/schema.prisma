@@ -42,7 +42,8 @@ model Student {
 }
 
 model Admin {
-  adminId   Int    @id @default(autoincrement())
-  adminName String
-  adminKey  String
+  adminId        Int    @id @default(autoincrement())
+  studentCardNum String @unique
+  adminPassword  String
+  adminKey       String @unique
 }

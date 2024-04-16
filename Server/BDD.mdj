@@ -1359,7 +1359,24 @@
 											"top": 165,
 											"width": 118,
 											"height": 13,
-											"text": "+adminName",
+											"text": "+studentCardNum",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAGO5WSxBZZ9fY0=",
+											"_parent": {
+												"$ref": "AAAAAAGOnWNucIpE5+4="
+											},
+											"model": {
+												"$ref": "AAAAAAGO5WSw45Z3sCs="
+											},
+											"font": "Arial;13;0",
+											"left": 613,
+											"top": 180,
+											"width": 118,
+											"height": 13,
+											"text": "+adminPassword",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1373,7 +1390,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 613,
-											"top": 180,
+											"top": 195,
 											"width": 118,
 											"height": 13,
 											"text": "+adminKey",
@@ -1384,7 +1401,7 @@
 									"left": 608,
 									"top": 145,
 									"width": 128,
-									"height": 53
+									"height": 68
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -1397,7 +1414,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 608,
-									"top": 198,
+									"top": 213,
 									"width": 128,
 									"height": 10
 								},
@@ -1439,7 +1456,7 @@
 							"left": 608,
 							"top": 120,
 							"width": 128,
-							"height": 88,
+							"height": 103,
 							"nameCompartment": {
 								"$ref": "AAAAAAGOnWNucIo/Yfg="
 							},
@@ -1472,7 +1489,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTZhIQ9h16Y="
 							},
-							"name": "productId"
+							"name": "productId",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1480,7 +1498,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTZhIQ9h16Y="
 							},
-							"name": "productName"
+							"name": "productName",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1488,7 +1507,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTZhIQ9h16Y="
 							},
-							"name": "productPrice"
+							"name": "productPrice",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1496,7 +1516,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTZhIQ9h16Y="
 							},
-							"name": "productDescription"
+							"name": "productDescription",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1504,7 +1525,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTZhIQ9h16Y="
 							},
-							"name": "productCategory"
+							"name": "productCategory",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1512,7 +1534,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTZhIQ9h16Y="
 							},
-							"name": "availableColorList[]"
+							"name": "availableColorList[]",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1520,7 +1543,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTZhIQ9h16Y="
 							},
-							"name": "availableSizeList[]"
+							"name": "availableSizeList[]",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1528,7 +1552,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTZhIQ9h16Y="
 							},
-							"name": "productRemainingStock"
+							"name": "productRemainingStock",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1536,7 +1561,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTZhIQ9h16Y="
 							},
-							"name": "productImageURLList"
+							"name": "productImageURLList",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1544,7 +1570,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTZhIQ9h16Y="
 							},
-							"name": "productPostedDate"
+							"name": "productPostedDate",
+							"type": ""
 						}
 					]
 				},
@@ -1618,7 +1645,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTjFIg+5AtE="
 							},
-							"name": "studentId"
+							"name": "studentId",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1626,7 +1654,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTjFIg+5AtE="
 							},
-							"name": "studentCardNum"
+							"name": "studentCardNum",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1634,7 +1663,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTjFIg+5AtE="
 							},
-							"name": "studentName"
+							"name": "studentName",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1642,7 +1672,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTjFIg+5AtE="
 							},
-							"name": "studentFirstname"
+							"name": "studentFirstname",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1650,7 +1681,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVTjFIg+5AtE="
 							},
-							"name": "studentPassword"
+							"name": "studentPassword",
+							"type": ""
 						}
 					]
 				},
@@ -1705,7 +1737,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVY1YAGpL69Q="
 							},
-							"name": "commandId"
+							"name": "commandId",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1713,7 +1746,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVY1YAGpL69Q="
 							},
-							"name": "productId"
+							"name": "productId",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1721,7 +1755,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVY1YAGpL69Q="
 							},
-							"name": "studentId"
+							"name": "studentId",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1729,7 +1764,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVY1YAGpL69Q="
 							},
-							"name": "productSizeChoosen"
+							"name": "productSizeChoosen",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1737,7 +1773,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVY1YAGpL69Q="
 							},
-							"name": "productColorChosen"
+							"name": "productColorChosen",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1745,7 +1782,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOVY1YAGpL69Q="
 							},
-							"name": "commandDate"
+							"name": "commandDate",
+							"type": ""
 						}
 					]
 				},
@@ -1763,7 +1801,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOnWNub4o8ec4="
 							},
-							"name": "adminId"
+							"name": "adminId",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1771,7 +1810,15 @@
 							"_parent": {
 								"$ref": "AAAAAAGOnWNub4o8ec4="
 							},
-							"name": "adminName"
+							"name": "studentCardNum"
+						},
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAGO5WSw45Z3sCs=",
+							"_parent": {
+								"$ref": "AAAAAAGOnWNub4o8ec4="
+							},
+							"name": "adminPassword"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1779,7 +1826,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGOnWNub4o8ec4="
 							},
-							"name": "adminKey"
+							"name": "adminKey",
+							"type": ""
 						}
 					]
 				},

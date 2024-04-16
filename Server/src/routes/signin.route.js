@@ -39,7 +39,7 @@ signinRouter.post("/signup", auth, async function (req, res) {
 /** 
  * Route to login user
  */
-signinRouter.post("/login", auth, async function (req, res) {
+signinRouter.post("/login", async function (req, res) {
   try {
     const data = JSON.parse(await extractData(req))
     const studentData = {

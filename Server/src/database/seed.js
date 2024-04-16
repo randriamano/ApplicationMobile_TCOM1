@@ -4,7 +4,8 @@ const prisma = new PrismaClient();
 
 const adminData = [
   {
-    adminName: "Admin",
+    studentCardNum: "025-M1",
+    adminPassword: "123456",
     adminKey: "admin",
   },
 ];

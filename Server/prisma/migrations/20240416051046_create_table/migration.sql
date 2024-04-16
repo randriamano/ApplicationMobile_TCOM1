@@ -40,7 +40,8 @@ CREATE TABLE "Student" (
 -- CreateTable
 CREATE TABLE "Admin" (
     "adminId" SERIAL NOT NULL,
-    "adminName" TEXT NOT NULL,
+    "studentCardNum" TEXT NOT NULL,
+    "adminPassword" TEXT NOT NULL,
     "adminKey" TEXT NOT NULL,
 
     CONSTRAINT "Admin_pkey" PRIMARY KEY ("adminId")
@@ -48,6 +49,12 @@ CREATE TABLE "Admin" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Student_studentCardNum_key" ON "Student"("studentCardNum");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Admin_studentCardNum_key" ON "Admin"("studentCardNum");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Admin_adminKey_key" ON "Admin"("adminKey");
 
 -- AddForeignKey
 ALTER TABLE "Command" ADD CONSTRAINT "Command_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("productId") ON DELETE RESTRICT ON UPDATE CASCADE;
