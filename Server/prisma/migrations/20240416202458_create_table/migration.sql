@@ -5,7 +5,7 @@ CREATE TABLE "Product" (
     "productPrice" TEXT NOT NULL,
     "productDescription" TEXT,
     "productCategory" TEXT,
-    "availableColorList" TEXT[],
+    "availableColorList" JSONB[],
     "availableSizeList" TEXT[],
     "productRemainingStock" INTEGER NOT NULL,
     "productImageURLList" TEXT[],
@@ -20,7 +20,8 @@ CREATE TABLE "Command" (
     "productId" INTEGER NOT NULL,
     "studentId" INTEGER NOT NULL,
     "productSizeChosen" TEXT NOT NULL,
-    "productColorChosen" TEXT NOT NULL,
+    "productColorChosen" JSONB NOT NULL,
+    "productIsPayed" BOOLEAN NOT NULL,
     "commandDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Command_pkey" PRIMARY KEY ("commandId")

@@ -13,7 +13,7 @@ model Product {
   productPrice          String
   productDescription    String?
   productCategory       String?
-  availableColorList    String[]
+  availableColorList    Json[]
   availableSizeList     String[]
   productRemainingStock Int
   productImageURLList   String[]
@@ -28,7 +28,8 @@ model Command {
   productId          Int
   studentId          Int
   productSizeChosen  String
-  productColorChosen String
+  productColorChosen Json
+  productIsPayed     Boolean
   commandDate        DateTime @default(now())
 }
 

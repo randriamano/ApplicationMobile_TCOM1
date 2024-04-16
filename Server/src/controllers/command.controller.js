@@ -27,7 +27,31 @@ commandController.getCommandedProduct = async (category) => {
         productSizeChosen: result.productSizeChosen,
         productColorChosen: result.productColorChosen,
         productCategory: product.productCategory,
-        productIsPaid: false,
+        productIsPaid: result.productIsPayed,
+      })
+    }
+    else if (category === "payed" && result.productIsPayed) {
+      commanded.push({
+        productId: product.productId,
+        productName: product.productName,
+        productPrice: product.productPrice,
+        productDescription: product.productDescription,
+        productSizeChosen: result.productSizeChosen,
+        productColorChosen: result.productColorChosen,
+        productCategory: product.productCategory,
+        productIsPaid: result.productIsPayed,
+      })
+    }
+    else if (category === "notpayed" && !result.productIsPayed) {
+      commanded.push({
+        productId: product.productId,
+        productName: product.productName,
+        productPrice: product.productPrice,
+        productDescription: product.productDescription,
+        productSizeChosen: result.productSizeChosen,
+        productColorChosen: result.productColorChosen,
+        productCategory: product.productCategory,
+        productIsPaid: result.productIsPayed,
       })
     }
   });
