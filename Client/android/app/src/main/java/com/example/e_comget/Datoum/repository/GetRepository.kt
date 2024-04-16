@@ -40,7 +40,6 @@ class GetRepository @Inject constructor(
         emit(ResultGet.Loading())
         val name = api.getNom().body()
         emit(ResultGet.Success(data = name))
-
     }.catch { error ->
         emit(ResultGet.Error(message = error.message!!))
     }
@@ -56,7 +55,6 @@ class GetRepository @Inject constructor(
     suspend fun register(userItemToSend: UserItemToSend) = flow {
         emit(ResultGet.Loading())
         val authenticationWrapper = api.register(userItemToSend).body()
-        Log.d("", "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee${authenticationWrapper}")
         emit(ResultGet.Success(data = authenticationWrapper))
     }.catch { error ->
         emit(ResultGet.Error(message = error.message!!))
@@ -65,7 +63,6 @@ class GetRepository @Inject constructor(
     suspend fun login(userLoginItem: UserLoginItem) = flow {
         emit(ResultGet.Loading())
         val loggedUser = api.login(userLoginItem).body()
-        Log.d("", "ddddddddddddddddddddddddddddddddddd ${loggedUser}")
         emit(ResultGet.Success(data = loggedUser))
     }.catch { error ->
         emit(ResultGet.Error(message = error.message!!))

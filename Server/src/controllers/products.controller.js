@@ -27,7 +27,7 @@ productsController.getAllProducts = async (filter) => {
 };
 
 /**
- * Get a product item
+ * Get a product filtered by id
  */
 productsController.getProductById = async (productId) => {
   // Get the specified product from prisma
@@ -47,6 +47,31 @@ productsController.getProductById = async (productId) => {
   });
 
   return product;
+};
+
+/**
+ * Get a product filterd by category
+ */
+productsController.getProductByCategory = async (category) => {
+  let products = []
+
+  // Get the specified product from prisma
+  const results = await prisma.product.findMany({
+    where: { productCategory: category },
+    select: {
+      productId: true,
+      productName: true,
+      productPrice: true,
+      productDescription: true,
+      availableColorList: true,
+      availableSizeList: true,
+      productCategory: true,
+      productRemainingStock: true,
+      productImageURLList: true,
+    },
+  });
+
+  return results;
 };
 
 /**

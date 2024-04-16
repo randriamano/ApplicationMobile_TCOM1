@@ -1,7 +1,9 @@
 package com.example.e_comget.Datoum
 
 import com.example.e_comget.Datoum.model.AuthenticationWrapper
+import com.example.e_comget.Datoum.model.ProductCommandedDetails
 import com.example.e_comget.Datoum.model.ProductCommandedDetailsWrapper
+import com.example.e_comget.Datoum.model.ProductDetail
 import com.example.e_comget.Datoum.model.ProductDetailWrapper
 import com.example.e_comget.Datoum.model.item.ProductDetail
 import com.example.e_comget.Datoum.model.item.UserItemToSend
@@ -34,6 +36,9 @@ interface GetApi {
 
     @POST("/api/student/login")
     suspend fun login(@Body requestData: UserLoginItem): Response<AuthenticationWrapper>
+
+    @GET("/api/command/{category}")
+    suspend fun getCommandedProducts(@Path("category") category: String): Response<ProductCommandedDetailsWrapper>
 
     @GET("/")
     suspend fun getNom(): Response<Nom>
