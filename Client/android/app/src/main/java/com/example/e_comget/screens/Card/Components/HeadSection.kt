@@ -21,14 +21,14 @@ import androidx.navigation.NavHostController
 @Composable
 fun HeadSection(
     navControllerApp: NavHostController
-){
-    Row (
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 15.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
         TopAppBarWithBackArrow(navControllerApp)
     }
 }
@@ -40,7 +40,7 @@ fun TopAppBarWithBackArrow(navControllerApp: NavController) {
     TopAppBar(
         title = {
             Text(text = "Liste des commandes", modifier = Modifier.padding(start = 4.dp))
-                },
+        },
         navigationIcon = {
             Icon(
                 Icons.TwoTone.ShoppingCart,

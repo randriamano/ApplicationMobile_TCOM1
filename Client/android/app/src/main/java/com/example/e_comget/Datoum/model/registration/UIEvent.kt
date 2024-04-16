@@ -1,4 +1,4 @@
-package com.example.e_comget.Datoum.model
+package com.example.e_comget.Datoum.model.registration
 
 sealed class UIEvent {
     data class FirstNameChanged(var studentName: String) : UIEvent()
@@ -6,7 +6,7 @@ sealed class UIEvent {
     data class IdNumChanged(var studentCardNum: String) : UIEvent()
     data class PasswordChanged(var studentPassword: String) : UIEvent()
 
-    object  RegisterButtonClicked : UIEvent()
+//    object  RegisterButtonClicked : UIEvent()
 
 
 }

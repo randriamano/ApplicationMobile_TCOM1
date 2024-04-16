@@ -34,19 +34,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.e_comget.Datoum.model.Category
-import com.example.e_comget.Datoum.model.categoryList
+import com.example.e_comget.Datoum.model.item.Category
+import com.example.e_comget.Datoum.model.item.categoryList
+import com.example.e_comget.MainViewModel
 import com.example.e_comget.ui.theme.Primary
-import com.example.e_comget.ui.theme.PurpleEnd
-import com.example.e_comget.ui.theme.PurpleStart
 import com.example.e_comget.ui.theme.Secondary
-import com.example.e_comget.ui.theme.getGradient
 
 //TODO
 //Adding logic to fetch product based on category names
 
 @Composable
-fun CategorySection(){
+fun CategorySection(mainViewModel: MainViewModel) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -64,7 +62,8 @@ fun CategorySection(){
                     modifier = Modifier.padding(start = 5.dp),
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
-                    text = "Categories")
+                    text = "Categories"
+                )
                 Icon(
                     imageVector = Icons.Rounded.ArrowForward,
                     contentDescription = "Forward",
@@ -72,52 +71,57 @@ fun CategorySection(){
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
-            CategoryItems(categoriesLists = categoryList)
+            CategoryItems(categoriesLists = categoryList, mainViewModel = mainViewModel)
         }
     }
 }
 
 @Composable
-fun CategoryItems(categoriesLists: List<Category>){
-    LazyRow{
-        itemsIndexed(categoriesLists){index, item ->
-            CategoryItem(data = item, onClick = {' '})
+fun CategoryItems(categoriesLists: List<Category>, mainViewModel: MainViewModel) {
+    LazyRow {
+        itemsIndexed(categoriesLists) { index, item ->
+            CategoryItem(data = item, onClick = {
+                mainViewModel.reinitializeProducts()
+
+                if (item.categoryEndPointName.equals("")) mainViewModel.getProduct()
+                else mainViewModel.getProductsByCategoryName(item.categoryEndPointName)
+            })
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryItem(data: Category, onClick: () -> Unit){
+fun CategoryItem(data: Category, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .heightIn(55.dp)
             .widthIn(190.dp)
             .padding(end = 10.dp)
             .border(2.dp, Color.White, shape = RoundedCornerShape(11.dp)),
-        onClick = onClick
+        onClick = { onClick() }
     ) {
-       Box(
-           modifier = Modifier
-               .background(
-                   brush = Brush.horizontalGradient(listOf(Secondary, Primary))
-               )
-               .size(height = 55.dp, width = 190.dp)
-               .clickable { /*just for the ripple effect*/ },
-           contentAlignment = Alignment.Center
-       ){
-           Text(
-               fontSize = 17.sp,
-               color = Color.White,
-               fontWeight = FontWeight.Bold,
-               text = "${data.categoryName}"
-           )
-       }
+        Box(
+            modifier = Modifier
+                .background(
+                    brush = Brush.horizontalGradient(listOf(Secondary, Primary))
+                )
+                .size(height = 55.dp, width = 190.dp)
+                .clickable { onClick() },
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                fontSize = 17.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                text = "${data.categoryName}"
+            )
+        }
     }
 }
 
 @Composable
 @Preview
-fun CategoryPreview(){
+fun CategoryPreview() {
     CategoryItem(Category(1, "Tous les categories"), onClick = {})
 }

@@ -2,35 +2,37 @@ package com.example.e_comget.screens.Start
 
 import android.app.Activity
 import android.view.animation.OvershootInterpolator
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.draw.scale
-import kotlinx.coroutines.delay
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.e_comget.R
 import com.example.e_comget.ui.theme.WhiteColor
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import kotlinx.coroutines.delay
 
 @Composable
 fun StartScreen(navControllerApp: NavHostController) {
@@ -40,17 +42,19 @@ fun StartScreen(navControllerApp: NavHostController) {
     val isDarkTheme = isSystemInDarkTheme()
 
 
-   SideEffect {
+    SideEffect {
         val window = (context as Activity).window
         window.statusBarColor = background.toArgb()
-        WindowCompat.getInsetsController(window, context.window.decorView)?.isAppearanceLightStatusBars = !isDarkTheme
+        WindowCompat.getInsetsController(
+            window,
+            context.window.decorView
+        )?.isAppearanceLightStatusBars = !isDarkTheme
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(background)
-        ,
+            .background(background),
         contentAlignment = Alignment.Center
     ) {
         Box(
@@ -62,7 +66,7 @@ fun StartScreen(navControllerApp: NavHostController) {
 
             SplashScreen(navController = navControllerApp)
 
-            if (isTimeFinished){
+            if (isTimeFinished) {
 
                 SecondSplashScreen()
 
@@ -98,12 +102,16 @@ fun SplashScreen(navController: NavController) {
     }
 
 
-    Box(contentAlignment = Alignment.Center,
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
-            .fillMaxSize()) {
-        Image(painter = painterResource(id = R.drawable.logo),
+            .fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
-            modifier = Modifier.scale(scale.value))
+            modifier = Modifier.scale(scale.value)
+        )
     }
 }
 

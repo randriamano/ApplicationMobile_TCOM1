@@ -1,14 +1,12 @@
- package com.example.e_comget
+package com.example.e_comget
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -29,51 +27,57 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.e_comget.Datoum.model.item.BottomNavigationItem
+import com.example.e_comget.Datoum.model.item.CommandItem
+import com.example.e_comget.Datoum.model.item.ProductDetail
+import com.example.e_comget.Routes.MainScreens
+import com.example.e_comget.Routes.MyAccountScreens
+import com.example.e_comget.Routes.ProductScreens
 import com.example.e_comget.screens.Card.CardScreen
+import com.example.e_comget.screens.Card.Components.CommandCategoryDetailsScreen
 import com.example.e_comget.screens.Home.Components.ProductDetailsScreen
 import com.example.e_comget.screens.Home.Components.ProductOrderScreen
 import com.example.e_comget.screens.Home.HomeScreen
 import com.example.e_comget.screens.MyAccount.ProfileScreen
 import com.example.e_comget.screens.MyAccount.SignIn.LoginScreen
 import com.example.e_comget.screens.MyAccount.SignIn.SignUpScreen
-import com.example.e_comget.screens.Routes.MainScreens
-import com.example.e_comget.screens.Routes.MyAccountScreens
-import com.example.e_comget.screens.Routes.ProductScreens
-import com.example.e_comget.Datoum.model.BottomNavigationItem
-import com.example.e_comget.Datoum.model.productList
-import com.example.e_comget.screens.Card.Components.BilletScreen
-import com.example.e_comget.screens.Card.Components.GoodiesScreen
-import com.example.e_comget.screens.Card.Components.VetementScreen
-import com.example.e_comget.screens.MyAccount.ProfileHomeScreen
-import com.example.e_comget.screens.Routes.MyChartScreen
 import com.example.e_comget.screens.Start.StartScreen
 
- @RequiresApi(Build.VERSION_CODES.O)
-    @Composable
-    fun App(){
-        val mainViewModel: MainViewModel = hiltViewModel();
-        AppNavigation(mainViewModel)
+//TODO
+//Fetching product commanded before navigating into ProductCommandedDetails
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun App() {
+    val mainViewModel: MainViewModel = hiltViewModel();
+    val dataStoreViewModel: DataStoreViewModel = hiltViewModel()
+    AppNavigation(mainViewModel = mainViewModel, dataStoreViewModel = dataStoreViewModel)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun BottomNavigationBar(navControllerApp: NavHostController, mainViewModel: MainViewModel) {
+    var navigationSelectedItem by remember {
+        mutableStateOf(0)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    @Composable
-    fun BottomNavigationBar(navControllerApp: NavHostController, mainViewModel: MainViewModel){
-        var navigationSelectedItem by remember {
-            mutableStateOf(0)
-        }
+    var productList: List<ProductDetail> by remember {
+        mutableStateOf(emptyList())
+    }
 
-        var navController = rememberNavController()
-        Scaffold (
-            modifier = Modifier
-                .fillMaxSize()
-                .fillMaxWidth(),
-            bottomBar= {
-                NavigationBar(
-                    containerColor = Color.White,
-                    modifier = Modifier
-                        .height(80.dp)
-                ){
-                    BottomNavigationItem().bottomNavigationItems().forEachIndexed  { index, navigationItem ->
+    var navController = rememberNavController()
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .fillMaxWidth(),
+        bottomBar = {
+            NavigationBar(
+                containerColor = Color.White,
+                modifier = Modifier
+                    .height(80.dp)
+            ) {
+                BottomNavigationItem().bottomNavigationItems()
+                    .forEachIndexed { index, navigationItem ->
                         NavigationBarItem(
                             selected = index == navigationSelectedItem,
                             label = {
@@ -97,83 +101,105 @@ import com.example.e_comget.screens.Start.StartScreen
                             }
                         )
                     }
-                }
             }
-        ){
-           paddingValues ->
-            NavHost(
-                navController = navController,
-                startDestination = MainScreens.Home.route,
-                modifier = Modifier.padding(paddingValues = paddingValues)
-            ) {
-                composable(MainScreens.Home.route) {
-                    HomeScreen(navControllerApp = navControllerApp, mainViewModel = mainViewModel, productList = mainViewModel.uiState.value.data)
-                }
-                composable(MainScreens.Card.route) {
-                    CardScreen(navControllerApp = navControllerApp)
-                }
-                composable(MainScreens.Profile.route) {
-                    ProfileScreen(navControllerApp = navControllerApp, navController = navController)
+        }
+    ) { paddingValues ->
+        NavHost(
+            navController = navController,
+            startDestination = MainScreens.Home.route,
+            modifier = Modifier.padding(paddingValues = paddingValues)
+        ) {
+            composable(MainScreens.Home.route) {
+                productList = mainViewModel.uiState.value.data
+
+                HomeScreen(
+                    navControllerApp = navControllerApp,
+//                    productList = productList,
+                    uiState = mainViewModel.uiState.value,
+                    onGetProduct = { mainViewModel.getProduct() },
+                    mainViewModel = mainViewModel
+                )
+            }
+            composable(MainScreens.Card.route) {
+                CardScreen(navControllerApp = navControllerApp)
+            }
+            composable(MainScreens.Profile.route) {
+                ProfileScreen(navControllerApp = navControllerApp, mainViewModel = mainViewModel)
 //                    ProfileHomeScreen(navController = navController)
-                }
             }
         }
     }
+}
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    @Composable
-    fun AppNavigation(mainViewModel: MainViewModel){
-        var navControllerApp = rememberNavController()
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun AppNavigation(mainViewModel: MainViewModel, dataStoreViewModel: DataStoreViewModel) {
+    var navControllerApp = rememberNavController()
 
+    Box {
+        NavHost(navController = navControllerApp, startDestination = "startScreen") {
+            composable("startScreen") {
+                StartScreen(navControllerApp = navControllerApp)
+            }
+            composable("bottomNavigation") {
+                BottomNavigationBar(navControllerApp = navControllerApp, mainViewModel)
+            }
+            composable(ProductScreens.ProductDetails.route + "/{productId}") { backStateEntry ->
 
-        Box{
-            NavHost(navController = navControllerApp, startDestination = "startScreen"){
-                composable("bottomNavigation") {
-                    BottomNavigationBar(navControllerApp = navControllerApp, mainViewModel)
+                val productIdString = backStateEntry.arguments?.getString("productId")
+                val productId = productIdString?.toIntOrNull() ?: 4
+
+                if (productId != null) {
+                    ProductDetailsScreen(
+                        navControllerApp = navControllerApp,
+                        onGetProductDetails = {
+                            mainViewModel.getProductById(productId)
+                        },
+                        mainViewModel = mainViewModel
+                    )
                 }
-                composable(ProductScreens.ProductDetails.route + "/{productId}") { backStateEntry ->
+            }
+            composable(ProductScreens.ProductOrder.route) {
+                ProductOrderScreen(navControllerApp = navControllerApp)
+            }
+            composable(MyAccountScreens.Login.route) {
+                LoginScreen(navControllerApp = navControllerApp, mainViewModel = mainViewModel)
+            }
+            composable(MyAccountScreens.SignUp.route) {
+                SignUpScreen(
+                    navControllerApp = navControllerApp,
+                    mainViewModel = mainViewModel,
+                    dataStoreViewModel = dataStoreViewModel
+                )
+            }
+            composable("commandDetails/{productCommandRoute}") { backStateEntry ->
+                val productCommandRoute = backStateEntry.arguments?.getString("productCommandRoute")
+                var commandItem: CommandItem = CommandItem();
 
-                    val productIdString = backStateEntry.arguments?.getString("productId")
-                    val productId = productIdString?.toIntOrNull() ?: 1
-                    var mainViewModel : MainViewModel = hiltViewModel()
-
-                    if (productId != null) {
-                        ProductDetailsScreen(
-                            navControllerApp = navControllerApp,
-                            productId = productId,
-                            productList = mainViewModel.uiState.value.data
-                        )
+                for (value in CommandItem().getCommandItems()) {
+                    if (value.productCategoryNavigationRoute.equals(productCommandRoute)) {
+                        commandItem = value;
+                        break;
                     }
                 }
-                composable(ProductScreens.ProductOrder.route) {
-                    ProductOrderScreen(navControllerApp = navControllerApp)
-                }
-                composable(MyAccountScreens.Login.route) {
-                    LoginScreen(navControllerApp = navControllerApp)
-                }
-                composable(MyAccountScreens.SignUp.route) {
-                    SignUpScreen(navControllerApp = navControllerApp)
-                }
-                composable("startScreen") {
-                    StartScreen(navControllerApp = navControllerApp)
-                }
-                composable(MyChartScreen.Vetement.route){
-                    VetementScreen(navController = navControllerApp)
-                }
-                composable(MyChartScreen.Billet.route){
-                    BilletScreen(navControllerApp = navControllerApp)
-                }
-                composable(MyChartScreen.Goodies.route){
-                    GoodiesScreen(navControllerApp = navControllerApp)
-                }
+
+                CommandCategoryDetailsScreen(
+                    navController = navControllerApp,
+                    commandItem = commandItem,
+                    mainViewModel = mainViewModel,
+                    onGetCommandCategoryProducts = {
+                        mainViewModel.getCommandedProducts(commandItem.productCategoryEndpointName)
+                    }
+                )
             }
         }
     }
+}
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    @Composable
-    @Preview
-    fun BottomNavigationBarPreview(){
-        var navControllerApp = rememberNavController()
-        BottomNavigationBar(navControllerApp, mainViewModel = hiltViewModel());
-    }
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+@Preview
+fun BottomNavigationBarPreview() {
+    var navControllerApp = rememberNavController()
+    BottomNavigationBar(navControllerApp, mainViewModel = hiltViewModel());
+}

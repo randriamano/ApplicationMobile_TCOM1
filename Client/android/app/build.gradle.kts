@@ -53,36 +53,28 @@ android {
 
 dependencies {
 
-    val nav_version = "2.7.0-rc01"
-//    implementation("androidx.navigation:navigation-compose:$nav_version")
-    implementation(libs.androidx.navigation.compose)
-//    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation(libs.androidx.constraintlayout.compose)
+//    val roomVersion = "2.6.0"
+//    implementation("androidx.room:room-ktx:$roomVersion")
+//    implementation(libs.androidx.datastore.preferences)
+//    implementation(libs.androidx.datastore.preferences)
 
-    // Retrofit
-//    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-//    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.constraintlayout.compose)
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
-//    implementation("com.google.dagger:hilt-android:2.50")
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-//    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation(libs.androidx.hilt.navigation.compose)
 
-    //Coroutine
-//    implementation("org.jetbrains.kotlink:kotlinx-couroutines-core:1.7.1")
-//    implementation(libs.kotlinx.couroutines.core)
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-//    implementation(libs.kotlinx.coroutines.android)
+
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     implementation(libs.coil.compose)
-
-//    implementation(libs.kotlin.bom)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
