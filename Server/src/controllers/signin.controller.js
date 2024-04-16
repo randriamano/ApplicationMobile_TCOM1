@@ -7,9 +7,31 @@ const signinController = {}
  * Add a new student 
  */
 signinController.addStudent = async (studentData) => {
-  const apiURL = process.env.API_URL
   // Verify student data from other api
-  //studentInfo = await fetchAPI(apiURL)
+  let match = false
+  let studentName = studentData.studentName.toUpperCase()
+  let studentId = studentData.studentCardNum
+  studentId = studentId.split('-')
+
+  const apiURL = process.env.API_URL
+
+  studentInfo = await fetchAPI(apiURL)
+
+  studentInfo.forEach((info) => {
+    let id = info.id
+    id = id.split('-');
+
+    if (studentId[0] === id[0] & studentId[1].toUpperCase() === id[2]) {
+      if (studentName === info.lastname || studentData.studentFirstname === info.firstname) {
+        match = true
+        return
+      }
+    }
+  });
+
+  if (!match)
+    throw new Error()
+  //
 
   // Add new student from prisma
   const student = await prisma.student.create({

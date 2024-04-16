@@ -8,7 +8,7 @@ const salt = bcrypt.genSaltSync(saltRounds)
 
 const adminData = [
   {
-    studentCardNum: "025-M1",
+    studentCardNum: "015-M1",
     adminPassword: bcrypt.hashSync("123456", salt),
     adminKey: bcrypt.hashSync("admin", salt),
   },
@@ -77,7 +77,7 @@ const studentData = [
     studentPassword: "123456",
   },
   {
-    studentCardNum: "011-M1",
+    studentCardNum: "012-M1",
     studentName: "RAMAROKOTO",
     studentFirstname: "Tommy",
     studentPassword: "123456",
