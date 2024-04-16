@@ -1,6 +1,5 @@
 package com.example.e_comget.screens.Card.Components
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -37,13 +36,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.e_comget.Datoum.model.item.CommandItem
-import com.example.e_comget.Datoum.model.ProductCommandedDetails
-import com.example.e_comget.Datoum.model.tempProductCommandedDetails
+import com.example.e_comget.Datoum.model.item.ProductCommandedDetails
 import com.example.e_comget.MainViewModel
 import com.example.e_comget.ui.theme.Primary
 
@@ -53,128 +52,150 @@ fun CommandCategoryDetailsScreen(
     commandItem: CommandItem = CommandItem(),
     mainViewModel: MainViewModel,
     onGetCommandCategoryProducts: () -> Unit
-){
+) {
 
     DisposableEffect(Unit) {
-        onDispose {
-            onGetCommandCategoryProducts()
-        }
+        mainViewModel.reinitializeTheCommandedProduct()
+        onGetCommandCategoryProducts()
+
+        onDispose { }
     }
 
-    var productCommandedDetailsList: List<ProductCommandedDetails>? = mainViewModel.uiStateProductCommanded.value.data
+    var productCommandedDetailsList: List<ProductCommandedDetails>? =
+        mainViewModel.uiStateProductCommanded.value.data
     val uiState = mainViewModel.uiStateProductCommanded.value
 
-    if(productCommandedDetailsList == null) {
-        onGetCommandCategoryProducts()
-    }
-    else {
-        if(uiState.isLoading){
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .size(35.dp),
-            )
-        }else if(!uiState.error.isNullOrEmpty()) {
-            Text(text = "Error")
-            Button(onClick = onGetCommandCategoryProducts) {
-                Text(text = "Recharger")
-            }
-        }else {
+    Column {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
 
-            Column{
-                Box(
+        ) {
+            Box {
+                Image(
+                    painter = painterResource(commandItem.productCategoryImageId),
+                    contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-
+                )
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .border(BorderStroke(1.dp, color = Color.White))
+                        .padding(10.dp)
                 ) {
-                    Box{
-                        Image(painter = painterResource(commandItem.productCategoryImageId),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .fillMaxWidth()
+                    Text(
+                        text = "${commandItem.productCategoryName}",
+                        letterSpacing = 13.sp,
+                        style = TextStyle(
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = FontFamily.Monospace,
+                            color = Color.White,
                         )
-                        Box (
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .border(BorderStroke(1.dp, color = Color.White))
-                                .padding(10.dp)
-                        ) {
-                            Text(
-                                text = "${commandItem.productCategoryName}",
-                                letterSpacing = 13.sp,
-                                style = TextStyle(
-                                    fontSize = 30.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontFamily = FontFamily.Monospace,
-                                    color = Color.White,
-                                )
-                            )
-                        }
-                    }
-
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Sharp.ArrowBack,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-
-                    }
-
+                    )
                 }
+            }
 
-                if(productCommandedDetailsList.size > 0){
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(600.dp),
-                        modifier = Modifier
-                            .padding(start = 10.dp, end = 10.dp)
-                    ) {
-                        items(productCommandedDetailsList.size) {
-                                index -> CommandListItem(productCommandedDetails = productCommandedDetailsList[index], navController)
-                        }
+            IconButton(onClick = {
+                navController.popBackStack()
+            }) {
+                Icon(
+                    imageVector = Icons.Sharp.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+        }
+
+        if (uiState.isLoading) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(35.dp),
+                )
+            }
+        } else if (!uiState.error.isNullOrEmpty()) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+            ) {
+                Text(text = "Vérifier votre connexion internet", color = Color.LightGray)
+                Spacer(modifier = Modifier.height(15.dp))
+                Button(
+                    onClick = onGetCommandCategoryProducts,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Primary
+                    )
+                ) {
+                    Text(text = "Recharger")
+                }
+            }
+
+        } else {
+            if (productCommandedDetailsList!!.isNotEmpty()) {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(600.dp),
+                    modifier = Modifier
+                        .padding(start = 10.dp, end = 10.dp)
+                ) {
+                    items(productCommandedDetailsList!!.size) { index ->
+                        CommandListItem(
+                            productCommandedDetails = productCommandedDetailsList!![index],
+                            navController
+                        )
                     }
-                }else {
-                    Row{
-                        Text(text = "${productCommandedDetailsList.size}")
-                        Text(text = "${commandItem.productCategoryEndpointName}")
-                    }
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
+                }
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                ) {
+                    Text(
+                        text = "Vous n'avez pas encore fait des commandes dans cette catégorie ):",
+                        color = Color.LightGray,
+                        fontSize = 17.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Button(
+                        onClick = { navController.navigate("bottomNavigation") },
+                        modifier = Modifier,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Primary
+                        )
                     ) {
                         Text(
-                            text = "Pas de produit Commander",
-                            color = Color.LightGray,
-                            fontSize = 17.sp
+                            text = "Explorer des nouveaux produits",
+                            fontSize = 15.sp
                         )
-                        Spacer(modifier = Modifier.height(20.dp))
-                        Button(
-//                            onClick = {navController.navigate("bottomNavigation")},
-                            onClick = {onGetCommandCategoryProducts},
-                            modifier = Modifier,
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Primary
-                            )
-                        ) {
-                            Text(
-                                text = "Chercher des nouveaux produits",
-                                fontSize = 15.sp
-                            )
-                        }
                     }
                 }
             }
         }
     }
+
 }
 
 
 @Composable
-fun CommandListItem(productCommandedDetails: ProductCommandedDetails, navController: NavController) {
+fun CommandListItem(
+    productCommandedDetails: ProductCommandedDetails,
+    navController: NavController
+) {
 
     // Définir la bordure
     val border = BorderStroke(
@@ -188,7 +209,7 @@ fun CommandListItem(productCommandedDetails: ProductCommandedDetails, navControl
 
     ) {
 
-        Column (
+        Column(
             modifier = Modifier
                 .padding(13.dp)
         ) {
@@ -232,10 +253,10 @@ fun CommandListItem(productCommandedDetails: ProductCommandedDetails, navControl
                     fontWeight = FontWeight.Light
                 )
             )
-            Row (
+            Row(
                 modifier = Modifier
                     .padding(1.dp)
-            ){
+            ) {
 
                 Text(
                     modifier = Modifier
@@ -247,13 +268,14 @@ fun CommandListItem(productCommandedDetails: ProductCommandedDetails, navControl
                         fontWeight = FontWeight.Light
                     )
                 )
-                Row (
+                Row(
                     Modifier
                         .absolutePadding(top = 7.dp),
                     verticalAlignment = Alignment.CenterVertically
-                ){
-                    if(productCommandedDetails.productIsPaid){
-                        Icon(Icons.Outlined.OfflinePin,
+                ) {
+                    if (productCommandedDetails.productIsPaid) {
+                        Icon(
+                            Icons.Outlined.OfflinePin,
                             contentDescription = "navigation next",
                             tint = Color.Red,
                             modifier = Modifier
@@ -269,8 +291,9 @@ fun CommandListItem(productCommandedDetails: ProductCommandedDetails, navControl
                                 color = Color.Red
                             )
                         )
-                    }else {
-                        Icon(Icons.Outlined.HourglassTop,
+                    } else {
+                        Icon(
+                            Icons.Outlined.HourglassTop,
                             contentDescription = "navigation next",
                             tint = Color.Red,
                             modifier = Modifier

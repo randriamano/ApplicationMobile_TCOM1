@@ -12,44 +12,44 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.e_comget.ui.theme.BgColor
 import com.example.e_comget.ui.theme.Primary
+import com.example.e_comget.ui.theme.Secondary
 import com.example.e_comget.ui.theme.TextColor
 import com.example.e_comget.ui.theme.componentShapes
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
-import com.example.e_comget.ui.theme.Secondary
 
 @Composable
-fun NormalTextComponent(value: String){
+fun NormalTextComponent(value: String) {
     Text(
         text = value,
         modifier = Modifier
@@ -66,7 +66,7 @@ fun NormalTextComponent(value: String){
 }
 
 @Composable
-fun HeadingTextComponent(value: String){
+fun HeadingTextComponent(value: String) {
     Text(
         text = value,
         modifier = Modifier
@@ -84,8 +84,10 @@ fun HeadingTextComponent(value: String){
 
 
 @Composable
-fun MyTextFieldComponent(labelValue: String, painterResource: Painter,
-                         onTextSelected: (String) -> Unit){
+fun MyTextFieldComponent(
+    labelValue: String, painterResource: Painter,
+    onTextSelected: (String) -> Unit
+) {
 
     val textValue = remember {
         mutableStateOf("")
@@ -114,7 +116,7 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter,
                 cursorColor = Primary,
             ),
             keyboardOptions = KeyboardOptions.Default,
-            value = textValue.value ,
+            value = textValue.value,
 //            value = textValue,
             onValueChange = {
                 textValue.value = it
@@ -129,12 +131,15 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter,
     }
 
 
-
 }
 
 
 @Composable
-fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter, onTextSelected: (String) -> Unit){
+fun PasswordTextFieldComponent(
+    labelValue: String,
+    painterResource: Painter,
+    onTextSelected: (String) -> Unit
+) {
 
     val password = remember {
         mutableStateOf("")
@@ -168,7 +173,7 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter, onT
 
                 ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            value = password.value ,
+            value = password.value,
             onValueChange = {
                 password.value = it
                 onTextSelected(it)
@@ -177,23 +182,23 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter, onT
                 Icon(painter = painterResource, contentDescription = "")
             },
             trailingIcon = {
-                val iconImage = if (passwordVisible.value){
+                val iconImage = if (passwordVisible.value) {
                     Icons.Filled.Visibility
-                }else{
+                } else {
                     Icons.Filled.VisibilityOff
                 }
 
-                val description = if (passwordVisible.value){
+                val description = if (passwordVisible.value) {
                     "Hide password"
                 } else {
                     "Show password"
                 }
 
-                IconButton(onClick = { passwordVisible.value = !passwordVisible.value}) {
+                IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
                     Icon(imageVector = iconImage, contentDescription = description)
                 }
             },
-            visualTransformation = if(passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
+            visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
 
         )
     }
@@ -201,13 +206,14 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter, onT
 }
 
 @Composable
-fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (String) -> Unit){
-    val initialText = if (tryingToLogin)"Vous-avez déjà un compte? " else "Vous n'avez pas de compte? "
+fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (String) -> Unit) {
+    val initialText =
+        if (tryingToLogin) "Vous-avez déjà un compte? " else "Vous n'avez pas de compte? "
     val loginText = if (tryingToLogin) "Se connecter" else "Créer un compte"
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
-        withStyle(style = SpanStyle(color = Primary)){
+        withStyle(style = SpanStyle(color = Primary)) {
             pushStringAnnotation(tag = loginText, annotation = loginText)
             append(loginText)
         }
@@ -223,12 +229,12 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
             fontStyle = FontStyle.Normal,
             textAlign = TextAlign.Center
         ),
-        text = annotatedString, onClick = {offset ->
+        text = annotatedString, onClick = { offset ->
             annotatedString.getStringAnnotations(offset, offset)
-                .firstOrNull()?.also {span ->
+                .firstOrNull()?.also { span ->
                     Log.d("ClickableLoginTextComponent", "{${span.item}}")
 
-                    if (span.item == loginText){
+                    if (span.item == loginText) {
                         onTextSelected(span.item)
                     }
 
@@ -238,27 +244,31 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
 }
 
 @Composable
-fun ButtonComponent(value: String, onButtonClicked : () -> Unit){
-    Button(onClick = {onButtonClicked.invoke()},
+fun ButtonComponent(value: String, onButtonClicked: () -> Unit) {
+    Button(
+        onClick = { onButtonClicked.invoke() },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp)
-            .clickable {  },
+            .clickable { },
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent)
-    ){
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(48.dp)
-            .background(
-                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
-                shape = RoundedCornerShape(50.dp)
-            ),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(48.dp)
+                .background(
+                    brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                    shape = RoundedCornerShape(50.dp)
+                ),
             contentAlignment = Alignment.Center
-        ){
-            Text(text = value,
+        ) {
+            Text(
+                text = value,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold)
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

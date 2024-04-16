@@ -1,7 +1,7 @@
 package com.example.e_comget.Datoum.model.item
 
 import com.example.e_comget.R
-import com.example.e_comget.screens.Routes.MyChartScreen
+import com.example.e_comget.Routes.MyChartScreen
 
 data class CommandItem(
     val productCategoryName: String = "",
@@ -9,12 +9,27 @@ data class CommandItem(
     val productCategoryCommandedCount: Int = 0,
     val productCategoryNavigationRoute: String = "",
     val productCategoryEndpointName: String = ""
-){
-    fun getCommandItems() : List<CommandItem>{
+) {
+    fun getCommandItems(): List<CommandItem> {
         return listOf(
-            CommandItem(productCategoryEndpointName = "vetements" ,productCategoryName = "Vêtements", productCategoryImageId = R.drawable.vetements, productCategoryNavigationRoute = MyChartScreen.Vetement.route),
-            CommandItem(productCategoryEndpointName = "billets" ,productCategoryName = "Billets", productCategoryImageId = R.drawable.billet, productCategoryNavigationRoute = MyChartScreen.Billet.route),
-            CommandItem(productCategoryEndpointName = "goodies",productCategoryName = "Goodies", productCategoryImageId = R.drawable.goodies, productCategoryNavigationRoute = MyChartScreen.Goodies.route),
-            )
+            CommandItem(
+                productCategoryEndpointName = "vetements",
+                productCategoryName = "Vêtements",
+                productCategoryImageId = R.drawable.vetements,
+                productCategoryNavigationRoute = MyChartScreen.Vetement.route
+            ),
+            CommandItem(
+                productCategoryEndpointName = "billets",
+                productCategoryName = "Billets",
+                productCategoryImageId = R.drawable.billet,
+                productCategoryNavigationRoute = MyChartScreen.Billet.route
+            ),
+            CommandItem(
+                productCategoryEndpointName = "goodies",
+                productCategoryName = "Goodies",
+                productCategoryImageId = R.drawable.goodies,
+                productCategoryNavigationRoute = MyChartScreen.Goodies.route
+            ),
+        )
     }
 }

@@ -8,7 +8,6 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Sell
 import androidx.compose.ui.graphics.vector.ImageVector
 
-
 data class ProfileItem (
     val label: String = "",
     val icon: ImageVector = Icons.Filled.Home,

@@ -1,8 +1,8 @@
-package com.example.e_comget.Datoum.model
+package com.example.e_comget.Datoum.model.item
 
 //Product Image Name must change to the URL to the image or a byte Array
 data class ProductDetail(
-    val productId : Int,
+    val productId: Int,
     val productName: String,
     val productPrice: String,
     val productDescription: String,
@@ -22,7 +22,7 @@ val product = ProductDetail(
     productCategory = "Vetements",
     productDescription = "This is the steph curry new brand",
     productRemainingStock = 15,
-    productImageURLList = listOf("curry1","curry2","curry2","curry3","curry4"),
+    productImageURLList = listOf("curry1", "curry2", "curry2", "curry3", "curry4"),
     availableColorList = listOf("Black", "Navy Blue", "Red", "Gray", "White"),
     availableSizeList = listOf("S", "M", "L", "XL")
 )

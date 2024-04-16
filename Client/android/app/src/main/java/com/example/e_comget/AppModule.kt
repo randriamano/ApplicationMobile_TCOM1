@@ -1,7 +1,5 @@
 package com.example.e_comget
 
-import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.e_comget.Datoum.GetApi
 import dagger.Module
 import dagger.Provides
@@ -17,9 +15,9 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(): Retrofit{
-//        val baseUrl = "http://192.168.43.10:3000"
-        val baseUrl = "http://192.168.88.220:3000"
+    fun provideRetrofit(): Retrofit {
+        val baseUrl = "https://applicationmobile-tcom1.onrender.com"
+//      val baseUrl = "http://192.168.43.226:3000"
 
         return Retrofit.Builder()
             .baseUrl(baseUrl)

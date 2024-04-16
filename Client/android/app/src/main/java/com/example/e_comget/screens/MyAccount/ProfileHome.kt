@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -34,18 +35,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.e_comget.DataStoreViewModel
+import com.example.e_comget.Datoum.model.item.ProfileItemList
+import com.example.e_comget.MainViewModel
 import com.example.e_comget.R
 import com.example.e_comget.screens.MyAccount.SignIn.components.HeadingTextComponent
-import com.example.e_comget.Datoum.model.item.ProfileItemList
 import com.example.e_comget.ui.theme.GrayColor
 import com.example.e_comget.ui.theme.TextColor
 
 
 @Composable
-fun ProfileHomeScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun ProfileHomeScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    dataStoreViewModel: DataStoreViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel
+) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -59,10 +67,18 @@ fun ProfileHomeScreen(navController: NavHostController, modifier: Modifier = Mod
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
-            Icon(painter = painterResource(id = R.drawable.account_circle_24px), contentDescription = "close", modifier = Modifier.size(128.dp))
-            HeadingTextComponent("Randriamanohisoa") //avy any am back
+            Icon(
+                painter = painterResource(id = R.drawable.account_circle_24px),
+                contentDescription = "close",
+                modifier = Modifier.size(128.dp)
+            )
+            HeadingTextComponent("${dataStoreViewModel.userName.collectAsState(initial = true).value}")
 
-            ItemDisp(navController = navController)
+            ItemDisp(
+                navController = navController,
+                dataStoreViewModel = dataStoreViewModel,
+                mainViewModel = mainViewModel
+            )
 
         }
 
@@ -72,7 +88,11 @@ fun ProfileHomeScreen(navController: NavHostController, modifier: Modifier = Mod
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ItemDisp (navController: NavHostController) {
+fun ItemDisp(
+    navController: NavHostController,
+    dataStoreViewModel: DataStoreViewModel,
+    mainViewModel: MainViewModel
+) {
 
     var navigationSelectedItem by remember {
         mutableIntStateOf(0)
@@ -91,14 +111,22 @@ fun ItemDisp (navController: NavHostController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navigationSelectedItem = index
-                            navController.navigate(btn.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
+                            if (btn.label.equals("Se déconnecter")) {
+                                dataStoreViewModel.updateIsLoggedIn(false);
+                                dataStoreViewModel.updateUserCardNum("");
+                                dataStoreViewModel.updateUserFirstName("");
+                                dataStoreViewModel.updtadeUserName("")
+
+                                mainViewModel.reinitializeAuthenticatedUser()
                             }
+//                            navigationSelectedItem = index
+//                            navController.navigate(btn.route) {
+//                                popUpTo(navController.graph.findStartDestination().id) {
+//                                    saveState = true
+//                                }
+//                                launchSingleTop = true
+//                                restoreState = true
+//                            }
                         }
                         .padding(vertical = 12.dp)
                 ) {
@@ -126,27 +154,21 @@ fun ItemDisp (navController: NavHostController) {
                         )
 
                         Icon(Icons.Outlined.NavigateNext, contentDescription = "navigation next")
-
                     }
-
                 }
-
                 DividerComponent()
             }
-
-
         }
 
     }
 }
 
-
 @Composable
-fun DividerComponent(){
-    Row (
+fun DividerComponent() {
+    Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
@@ -159,7 +181,7 @@ fun DividerComponent(){
 
 @Preview
 @Composable
-fun ProfileHomeScreenPreview(){
+fun ProfileHomeScreenPreview() {
     val navController = rememberNavController()
-    ProfileHomeScreen(navController = navController)
+//    ProfileHomeScreen(navController = navController)
 }
