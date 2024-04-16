@@ -1,8 +1,6 @@
 const { Router } = require("express");
 
 const searchController = require("../controllers/search.controller");
-const auth = require("../lib/auth");
-const { extractData, successResponse } = require("../lib/helper");
 
 const searchRouter = Router();
 
@@ -14,7 +12,10 @@ searchRouter.get("/:keyword", async function (req, res) {
   const result = await searchController.getProductsByKeyword(keyword);
 
   if (result.length === 0) {
-    res.json({ message: "Products list is empty" });
+    res.json({
+      product: [],
+      size: 0,
+    });
   } else {
     res.json({
       product: result,

@@ -2,7 +2,7 @@ const { Router } = require("express")
 
 const commandController = require("../controllers/command.controller")
 const auth = require("../lib/auth")
-const { extractData, successResponse } = require("../lib/helper")
+const { extractData } = require("../lib/helper")
 
 const commandRouter = Router()
 
@@ -20,20 +20,36 @@ const commandRouter = Router()
 })
 
 /** 
- * Route to buy product
+ * Route to command product
  */
-commandRouter.post('/:productId', auth, async (req, res) => {
+commandRouter.post('/', auth, async (req, res) => {
   try {
     const data = JSON.parse(await extractData(req))
     const productData = {
-      productId: data.id,
+      productId: data.productId,
+      studentId: data.studentId,
+      productSizeChosen: data.productSizeChosen,
+      productColorChosen: data.productColorChosen, 
     }
 
-    const product = await commandController.buyProduct(productData)
+    const product = await commandController.commandProduct(productData)
 
-    res.json(successResponse("Product buyed", product))
+    res.json({
+      success: true,
+      products: product,
+    })
   } catch (e) {
-    res.status(400).json({ message: "The request or data type is not correct" })
+    res.status(400).json({
+      success: false,
+      products: {
+        commandId: -1,
+        productId: -1,
+        studentId: -1,
+        productSizeChosen: "",
+        productColorChosen: "",
+        commandDate: "",
+    },
+    })
   }
 })
 

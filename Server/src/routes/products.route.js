@@ -2,7 +2,7 @@ const { Router } = require("express");
 
 const productsController = require("../controllers/products.controller");
 const auth = require("../lib/auth");
-const { extractData, successResponse } = require("../lib/helper");
+const { extractData } = require("../lib/helper");
 
 const productsRouter = Router();
 
@@ -13,9 +13,11 @@ productsRouter.get("/", async function (req, res) {
   const result = await productsController.getAllProducts();
 
   if (result.length === 0) {
-    res.json({ message: "Products list is empty" });
+    res.json({
+      product: [],
+      size: 0,
+    });
   } else {
-    //res.json(successResponse("Products list", result))
     res.json({
       product: result,
       size: result.length,
@@ -24,35 +26,46 @@ productsRouter.get("/", async function (req, res) {
 });
 
 /**
- * Route to get a product item
- */
-productsRouter.get("/category/:category", async function (req, res) {
-  const category = req.params.category;
-  const product = await productsController.getProductByCategory(category);
-
-  if (product === null) {
-    res.status(404).json({ message: "Product is not found" });
-  } else {
-    res.json({
-      product: product,
-      size: product.length,
-    })
-    // res.json(successResponse("View product", product));
-  }
-});
-
-/**
- * Route to get a product item
+ * Route to get a product item by id
  */
 productsRouter.get("/:productId", async function (req, res) {
   const productId = req.params.productId;
   const product = await productsController.getProductById(productId);
 
   if (product === null) {
-    res.status(404).json({ message: "Product is not found" });
+    res.status(404).json({
+      productId: -1,
+      productName: "",
+      productPrice: "",
+      productDescription: "",
+      availableColorList: [],
+      availableSizeList: [],
+      productCategory: "",
+      productRemainingStock: 0,
+      productImageURLList: []
+    });
   } else {
     res.json(product)
-    // res.json(successResponse("View product", product));
+  }
+});
+
+/**
+ * Route to get a product item by category
+ */
+productsRouter.get("/category/:category", async function (req, res) {
+  const category = req.params.category;
+  const product = await productsController.getProductByCategory(category);
+
+  if (product === null) {
+    res.status(404).json({
+      product: [],
+      size: 0,
+    });
+  } else {
+    res.json({
+      product: product,
+      size: product.length,
+    })
   }
 });
 
@@ -79,11 +92,26 @@ productsRouter.post("/", auth, async function (req, res) {
       imagesNumber
     );
 
-    res.json(successResponse("Product added", product));
+    res.json({
+      success: true,
+      product: product,
+    })
   } catch (e) {
-    res
-      .status(400)
-      .json({ message: "The request or data type is not correct" });
+    res.status(400).json({
+      success: false,
+      product: {
+          productId: -1,
+          productName: "",
+          productPrice: "",
+          productDescription: "",
+          productCategory: "",
+          availableColorList: [],
+          availableSizeList: [],
+          productRemainingStock: -1,
+          productImageURLList: [],
+          productPostedDate: ""
+      }
+    });
   }
 });
 
@@ -99,11 +127,13 @@ productsRouter.put("/:productId", auth, async function (req, res) {
       productData: { ...data },
     });
 
-    res.json(successResponse("Product updated", product));
+    res.json({
+      success: true,
+    })
   } catch (e) {
-    res
-      .status(400)
-      .json({ message: "The request or data type is not correct" });
+    res.status(400).json({
+      success: false,
+    });
   }
 });
 
@@ -115,9 +145,13 @@ productsRouter.delete("/:productId", auth, async function (req, res) {
     const productId = req.params.productId;
     const deleteResult = await productsController.deleteProduct(productId);
 
-    res.json(successResponse("Product deleted", deleteResult));
+    res.json({
+      success: true
+    })
   } catch (e) {
-    res.status(403).json({ message: "Can not delete this product" });
+    res.status(403).json({
+      success: false
+    });
   }
 });
 
