@@ -67,7 +67,7 @@ fun TextFieldComponent(productName: String,
 
 
 @Composable
-fun MultipleTextFieldComponent(productName: String,
+fun MultipleTextFieldComponent(description: String,
                        label : String,
                        onProductNameChange: (String) -> Unit,
                        placeholderText: String){
@@ -82,7 +82,7 @@ fun MultipleTextFieldComponent(productName: String,
         TextField(
             modifier = Modifier
                 .fillMaxWidth(),
-            value = productName,
+            value = description,
             onValueChange = onProductNameChange,
             placeholder = { Text(text = placeholderText) },
             singleLine = false,
@@ -181,7 +181,7 @@ fun CategoryDropdownComponent(
                 onDismissRequest = { onExpandedChange(false)},
                 modifier = Modifier
                     .background(Bg40)
-                    .width(maxWidth)
+                    .width(135.dp)
             ) {
                 options.forEach { text ->
                     DropdownMenuItem(

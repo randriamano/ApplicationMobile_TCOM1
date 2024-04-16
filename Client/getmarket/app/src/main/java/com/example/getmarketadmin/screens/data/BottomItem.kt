@@ -2,6 +2,8 @@ package com.example.e_comget.screens.data
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.sharp.Book
+import androidx.compose.material.icons.sharp.Bookmark
 import androidx.compose.material.icons.sharp.Home
 import androidx.compose.material.icons.sharp.List
 import androidx.compose.material.icons.sharp.Person
@@ -22,7 +24,7 @@ data class BottomNavigationItem (
             ),
             BottomNavigationItem(
                 label = "Commandes",
-                icon = Icons.Sharp.List,
+                icon = Icons.Sharp.Bookmark,
                 route = MainScreens.Order.route
             ),
             BottomNavigationItem(

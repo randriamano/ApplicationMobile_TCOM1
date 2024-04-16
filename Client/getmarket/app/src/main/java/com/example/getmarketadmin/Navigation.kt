@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -28,11 +27,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.getmarketadmin.screens.home.ProductDetailsScreen
 import com.example.e_comget.screens.Routes.MainScreens
+import com.example.getmarketadmin.screens.start.StartScreen
 import com.example.e_comget.screens.data.BottomNavigationItem
 import com.example.getmarketadmin.screens.command.OrderScreen
 import com.example.getmarketadmin.screens.home.AddNewProductScreen
 import com.example.getmarketadmin.screens.home.HomeScreen
-import com.example.getmarketadmin.screens.profile.ProfileScreen
+import com.example.getmarketadmin.screens.home.SearchBar
+import com.example.getmarketadmin.screens.profile.LoginScreen
+import com.example.getmarketadmin.screens.profile.ProfileHomeScreen
 import com.example.getmarketadmin.ui.theme.Bg
 import com.example.getmarketadmin.ui.theme.BgButtonColor
 
@@ -101,8 +103,9 @@ fun BottomNavigationBar(navControllerApp: NavHostController){
                 OrderScreen(navControllerApp = navControllerApp)
             }
             composable(MainScreens.Profile.route) {
-                ProfileScreen(navControllerApp = navControllerApp)
+                ProfileHomeScreen(navControllerApp = navControllerApp)
             }
+
         }
     }
 }
@@ -113,7 +116,7 @@ fun AppNavigation(){
 
 
  Box{
-     NavHost(navController = navControllerApp, startDestination = "bottomNavigation"){
+     NavHost(navController = navControllerApp, startDestination = MainScreens.Start.route){
          composable("bottomNavigation") {
              BottomNavigationBar(navControllerApp = navControllerApp)
          }
@@ -122,6 +125,15 @@ fun AppNavigation(){
          }
          composable(MainScreens.ProductDetails.route){
              ProductDetailsScreen(navControllerApp = navControllerApp)
+         }
+         composable(MainScreens.Search.route) {
+             SearchBar(navControllerApp = navControllerApp)
+         }
+         composable(MainScreens.Login.route) {
+             LoginScreen(navControllerApp = navControllerApp)
+         }
+         composable(MainScreens.Start.route) {
+             StartScreen(navControllerApp = navControllerApp)
          }
 
      }

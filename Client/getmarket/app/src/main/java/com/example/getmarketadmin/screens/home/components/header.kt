@@ -18,13 +18,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.e_comget.screens.Routes.MainScreens
 import com.example.getmarketadmin.R
+import com.example.getmarketadmin.screens.home.DropDownMenu
 import com.example.getmarketadmin.ui.theme.ButtonColor
 
 
 //Main header
 @Composable
-fun Header(){
+fun Header(navControllerApp: NavHostController){
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -61,7 +64,10 @@ fun Header(){
             )
         }
 
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = {
+            navControllerApp.navigate(MainScreens.Search.route)
+            /*TODO*/
+        }) {
             Icon(
                 Icons.Outlined.Search,
                 contentDescription = "search",
@@ -69,13 +75,7 @@ fun Header(){
             )
         }
 
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(
-                painter = painterResource(id = R.drawable.tune_24px),
-                contentDescription = "search",
-                tint = Color.Black
-            )
-        }
+        DropDownMenu()
 
     }
 

@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import com.example.getmarketadmin.screens.home.DropDownMenu
+import com.example.getmarketadmin.screens.profile.LoginScreen
 
 
 import com.example.getmarketadmin.ui.theme.GetMarketAdminTheme
@@ -22,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    App()
+                   App()
                 }
             }
         }

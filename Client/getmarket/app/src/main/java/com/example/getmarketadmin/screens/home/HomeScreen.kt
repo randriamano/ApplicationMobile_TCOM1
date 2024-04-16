@@ -82,7 +82,7 @@ fun HomeScreen(navControllerApp: NavHostController) {
                 modifier = Modifier
                     .padding(start = 20.dp, end = 7.dp)
             ) {
-                Header()
+                Header(navControllerApp)
                 CategoryTitle()
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(160.dp),

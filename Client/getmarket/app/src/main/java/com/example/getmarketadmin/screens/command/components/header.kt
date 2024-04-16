@@ -20,7 +20,7 @@ fun OrderHeader(){
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(70.dp)
+            .height(60.dp)
             .padding(start = 20.dp, end = 20.dp)
         ,
         verticalAlignment = Alignment.CenterVertically

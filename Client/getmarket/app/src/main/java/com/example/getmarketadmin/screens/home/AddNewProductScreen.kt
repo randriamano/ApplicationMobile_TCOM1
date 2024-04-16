@@ -99,13 +99,13 @@ fun AddProductScreen(navControllerApp: NavHostController) {
         "Billets",
     )
 
-
     var productName by rememberSaveable { mutableStateOf("") }
-    var priceString by rememberSaveable { mutableStateOf("0") }
+    var priceString by rememberSaveable { mutableStateOf("0") } //need to convert into Int
     var description by rememberSaveable { mutableStateOf("") }
-    var selectedOptionText by remember { mutableStateOf(options[0]) }
+    var selectedOptionText by remember { mutableStateOf(options[0]) } //Category
     var sizeSelectedList by remember { mutableStateOf(listOf<String>()) }
     var colorItemList by remember { mutableStateOf(listOf<ColorItem>()) }
+    var imageList by remember { mutableStateOf(listOf<SelectedImage>()) }
 
 
     Column(
@@ -144,7 +144,7 @@ fun AddProductScreen(navControllerApp: NavHostController) {
         //---------------------DESCRIPTION---------------------------
 
         MultipleTextFieldComponent(
-            productName = description,
+            description = description,
             label = "Descriptions",
             onProductNameChange = { description = it },
             placeholderText = "e.g. T-shirt personnalisé"
@@ -168,7 +168,6 @@ fun AddProductScreen(navControllerApp: NavHostController) {
         var isMSelected by rememberSaveable { mutableStateOf(false) }
         var isLSelected by rememberSaveable { mutableStateOf(false) }
         var isXLSelected by rememberSaveable { mutableStateOf(false) }
-        var imageList by remember { mutableStateOf(listOf<SelectedImage>()) }
 
 
         if (selectedOptionText == options[0]){
