@@ -8,7 +8,7 @@ const salt = bcrypt.genSaltSync(saltRounds)
 
 const adminData = [
   {
-    studentCardNum: "025-M1",
+    studentCardNum: "015-M1",
     adminPassword: bcrypt.hashSync("123456", salt),
     adminKey: bcrypt.hashSync("admin", salt),
   },
@@ -22,7 +22,6 @@ const productData = [
     productPrice: "21 000",
     productDescription: "Polo avec Logo Get conçu par le GET 2024",
     productCategory: "vetements",
-    // availableColorList: [ 'Navy Blue', 'White' ],
     availableColorList: [
       { colorItemCode: "#9C0202", colorItemName: "Rouge" },
       { colorItemCode: "#1A2692", colorItemName: "Navy Blue" },
@@ -44,6 +43,18 @@ const productData = [
     productRemainingStock: 10,
   },
   {
+    productName: "Bag",
+    productPrice: "18 000",
+    productDescription: "Sac avec Logo Get conçu par le GET 2024",
+    productCategory: "goodies",
+    availableColorList: [
+      { colorItemCode: "#1A2692", colorItemName: "Navy Blue" },
+    ],
+    availableSizeList: [ 'L' ],
+    productImageURLList: [ "/images/bag/0", "/images/bag/1", ],
+    productRemainingStock: 20,
+  },
+  {
     productName: "Tote Bag",
     productPrice: "15 000",
     productDescription: "Tote Bag avec Logo Get conçu par le GET 2024",
@@ -52,7 +63,7 @@ const productData = [
       { colorItemCode: "#DC6B19", colorItemName: "Orange" },
     ],
     availableSizeList: [ 'XL' ],
-    productImageURLList: [ "/images/totebag/0", "/images/totebag/1", "/images/totebag/2", "/images/totebag/3", ],
+    productImageURLList: [ "/images/totebag/0", "/images/totebag/1", "/images/totebag/2", ],
     productRemainingStock: 20,
   },
   {
@@ -77,7 +88,7 @@ const studentData = [
     studentPassword: "123456",
   },
   {
-    studentCardNum: "011-M1",
+    studentCardNum: "012-M1",
     studentName: "RAMAROKOTO",
     studentFirstname: "Tommy",
     studentPassword: "123456",

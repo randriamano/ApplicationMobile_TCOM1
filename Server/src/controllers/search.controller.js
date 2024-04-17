@@ -12,8 +12,8 @@ searchController.getProductsByKeyword = async (keyword) => {
   const products = await prisma.product.findMany({
     where: {
       OR: [
-        { productName: { contains: keyword } },
-        { productCategory: { contains: keyword } },
+        { productName: { contains: keyword, mode: 'insensitive' } },
+        { productCategory: { contains: keyword, mode: 'insensitive' } },
       ]
     },
     select: {
