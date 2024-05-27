@@ -2,6 +2,7 @@ package com.example.e_comget.screens.Home.Components
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,7 +20,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -64,15 +67,16 @@ fun ProductSection(
         Spacer(modifier = Modifier.height(10.dp))
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+//            verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxHeight()
         ) {
             if (uiState.isLoading) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
+                        .fillMaxWidth()
+                        .padding(top = 190.dp),
+                 //   verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CircularProgressIndicator(
@@ -87,7 +91,7 @@ fun ProductSection(
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(top = 190.dp)
                 ) {
                     Image(
                         painter = painterResource(
@@ -121,6 +125,8 @@ fun ProductSection(
                     columns = GridCells.Adaptive(160.dp),
                     modifier = Modifier
                 ) {
+                    Log.d("", "lllllllllllllllllllllllllllllllllllllllll")
+                    Log.d("", "${productList}")
                     items(productList.size) { index ->
                         ProductItem(productList[index], navController)
                     }
@@ -140,12 +146,11 @@ fun ProductItem(product: ProductDetail, navController: NavController) {
     Box(
         modifier = Modifier
             .padding(bottom = 15.dp)
-            .clickable {
-                navController.navigate("product_details_route/${product.productId}")
-            },
+            ,
     ) {
         Column(
             modifier = Modifier
+                .clip(RoundedCornerShape(10.dp))
                 .padding(start = 5.dp, end = 5.dp)
         ) {
 
@@ -156,29 +161,52 @@ fun ProductItem(product: ProductDetail, navController: NavController) {
                         .size(35.dp),
                 )
             } else {
-                Image(
-                    painter = image,
-                    contentDescription = "product",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(165.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                )
+
+                Box(modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable {
+                        navController.navigate("product_details_route/${product.productId}")
+                    }
+                ){
+                    Column {
+                        ElevatedCard(
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 2.dp
+                            ),
+                            modifier = Modifier
+                                .size(165.dp),
+                            shape = RoundedCornerShape(10.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                        ) {
+                            Image(
+                                painter = image,
+                                contentDescription = "product",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(165.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                            )
+                        }
+
+
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Column {
+                            Text(
+                                text = "${product.productName}",
+                                fontWeight = FontWeight.Light,
+                                fontSize = 15.sp
+                            )
+                            Text(
+                                text = "Ar ${product.productPrice}",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp
+                            )
+                        }
+                    }
+
+                }
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
-            Column {
-                Text(
-                    text = "${product.productName}",
-                    fontWeight = FontWeight.Light,
-                    fontSize = 15.sp
-                )
-                Text(
-                    text = "Ar ${product.productPrice}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }
         }
     }
 }

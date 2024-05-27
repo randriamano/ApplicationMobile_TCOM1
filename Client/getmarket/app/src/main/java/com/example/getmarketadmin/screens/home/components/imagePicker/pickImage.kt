@@ -103,7 +103,7 @@ fun PickImage(viewModel: ImagePickerViewModel, onSelected : (List<SelectedImage>
                     colors = CardDefaults.cardColors(containerColor = Color.White),
                 ) {
                     Image(
-                        painter = rememberAsyncImagePainter(image.bitmap),
+                        painter = rememberAsyncImagePainter(image.url),
                         contentScale = ContentScale.FillWidth,
                         contentDescription = null,
                         modifier = Modifier

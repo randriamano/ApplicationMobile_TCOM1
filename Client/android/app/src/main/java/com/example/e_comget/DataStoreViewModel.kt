@@ -24,6 +24,9 @@ class DataStoreViewModel @Inject constructor(
     val userFirstName = myPreferencesDataStore.taskStatusFlow.map {
         it.userFirstName
     }
+    val userId = myPreferencesDataStore.taskStatusFlow.map {
+        it.userId
+    }
 
     fun updateIsLoggedIn(isLoggedIn: Boolean) {
         viewModelScope.launch {
@@ -46,6 +49,12 @@ class DataStoreViewModel @Inject constructor(
     fun updateUserFirstName(userFirstName: String) {
         viewModelScope.launch {
             myPreferencesDataStore.updateUserFirstName(userFirstName = userFirstName)
+        }
+    }
+
+    fun updateUserId(userId: Int){
+        viewModelScope.launch {
+            myPreferencesDataStore.updateUserId(userId = userId)
         }
     }
 }

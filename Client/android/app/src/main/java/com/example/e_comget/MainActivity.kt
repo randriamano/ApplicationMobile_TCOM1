@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     App()
+                    //DialogExamples()
                 }
             }
         }

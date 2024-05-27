@@ -1,7 +1,7 @@
 package com.example.e_comget.Datoum.model.item
 
 data class UserItem(
-    val studentId: Int? = 0,
+    val studentId: Int,
     val studentCardNum: String,
     val studentName: String,
     val studentFirstname: String,

@@ -3,6 +3,8 @@ package com.example.e_comget.Datoum
 import com.example.e_comget.Datoum.model.AuthenticationWrapper
 import com.example.e_comget.Datoum.model.ProductCommandedDetailsWrapper
 import com.example.e_comget.Datoum.model.ProductDetailWrapper
+import com.example.e_comget.Datoum.model.item.CommandItemToSend
+import com.example.e_comget.Datoum.model.item.CommandStateResponse
 import com.example.e_comget.Datoum.model.item.ProductDetail
 import com.example.e_comget.Datoum.model.item.UserItemToSend
 import com.example.e_comget.Datoum.model.item.UserLoginItem
@@ -25,7 +27,6 @@ interface GetApi {
 
     @GET("/api/products/category/{category}")
     suspend fun getProductsByCategoryName(@Path("category") category: String): Response<ProductDetailWrapper>
-
     @POST("/api/student/signup?key=admin")
     suspend fun register(@Body requestData: UserItemToSend): Response<AuthenticationWrapper>
 
@@ -34,6 +35,12 @@ interface GetApi {
 
     @GET("/api/command/{category}")
     suspend fun getCommandedProducts(@Path("category") category: String): Response<ProductCommandedDetailsWrapper>
+
+    @POST("/api/command?key=admin")
+    suspend fun postCommand(@Body requestData: CommandItemToSend): Response<CommandStateResponse>
+
+    @GET("/api/search/{keyWord}")
+    suspend fun searchProducts(@Path("keyWord") keyWord: String): Response<ProductDetailWrapper>
 
     @GET("/")
     suspend fun getNom(): Response<Nom>

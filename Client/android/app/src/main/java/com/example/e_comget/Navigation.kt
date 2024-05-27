@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,11 +39,14 @@ import com.example.e_comget.screens.Card.CardScreen
 import com.example.e_comget.screens.Card.Components.CommandCategoryDetailsScreen
 import com.example.e_comget.screens.Home.Components.ProductDetailsScreen
 import com.example.e_comget.screens.Home.Components.ProductOrderScreen
+import com.example.e_comget.screens.Home.Components.SearchBar
 import com.example.e_comget.screens.Home.HomeScreen
 import com.example.e_comget.screens.MyAccount.ProfileScreen
 import com.example.e_comget.screens.MyAccount.SignIn.LoginScreen
 import com.example.e_comget.screens.MyAccount.SignIn.SignUpScreen
 import com.example.e_comget.screens.Start.StartScreen
+import com.example.e_comget.ui.theme.Bg40
+import com.example.e_comget.ui.theme.BgButtonColor
 
 //TODO
 //Fetching product commanded before navigating into ProductCommandedDetails
@@ -65,6 +70,8 @@ fun BottomNavigationBar(navControllerApp: NavHostController, mainViewModel: Main
         mutableStateOf(emptyList())
     }
 
+
+
     var navController = rememberNavController()
     Scaffold(
         modifier = Modifier
@@ -72,14 +79,15 @@ fun BottomNavigationBar(navControllerApp: NavHostController, mainViewModel: Main
             .fillMaxWidth(),
         bottomBar = {
             NavigationBar(
-                containerColor = Color.White,
+                containerColor = Bg40,
                 modifier = Modifier
-                    .height(80.dp)
+                    .height(80.dp),
             ) {
                 BottomNavigationItem().bottomNavigationItems()
                     .forEachIndexed { index, navigationItem ->
                         NavigationBarItem(
                             selected = index == navigationSelectedItem,
+                            colors = NavigationBarItemDefaults.colors(indicatorColor = BgButtonColor, ),
                             label = {
                                 Text(navigationItem.label)
                             },
@@ -135,6 +143,9 @@ fun BottomNavigationBar(navControllerApp: NavHostController, mainViewModel: Main
 @Composable
 fun AppNavigation(mainViewModel: MainViewModel, dataStoreViewModel: DataStoreViewModel) {
     var navControllerApp = rememberNavController()
+    var productSearchedList: List<ProductDetail> by remember {
+        mutableStateOf(emptyList())
+    }
 
     Box {
         NavHost(navController = navControllerApp, startDestination = "startScreen") {
@@ -190,6 +201,13 @@ fun AppNavigation(mainViewModel: MainViewModel, dataStoreViewModel: DataStoreVie
                     onGetCommandCategoryProducts = {
                         mainViewModel.getCommandedProducts(commandItem.productCategoryEndpointName)
                     }
+                )
+            }
+            composable(ProductScreens.Search.route) {
+                SearchBar(
+                    navControllerApp = navControllerApp,
+                    uiState = mainViewModel.uiStateProductSearched.value,
+                    mainViewModel = mainViewModel
                 )
             }
         }
