@@ -8,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.e_comget.Datoum.ResultGet
 import com.example.e_comget.Datoum.model.UIState
 import com.example.e_comget.Datoum.model.UIStateAuthenticatedUser
+import com.example.e_comget.Datoum.model.UIStateCommandResponse
 import com.example.e_comget.Datoum.model.UIStateName
 import com.example.e_comget.Datoum.model.UIStateProduct
 import com.example.e_comget.Datoum.model.UIStateProductCommanded
+import com.example.e_comget.Datoum.model.item.CommandItemToSend
 import com.example.e_comget.Datoum.model.item.ProductDetail
 import com.example.e_comget.Datoum.model.item.UserItemToSend
 import com.example.e_comget.Datoum.model.item.UserLoginItem
@@ -27,8 +29,12 @@ class MainViewModel @Inject constructor(
     var uiStateName = mutableStateOf(UIStateName())
     var uiStateProductFetchedById = mutableStateOf(UIStateProduct())
     var uiStateProductCommanded = mutableStateOf(UIStateProductCommanded())
-    var productList: MutableState<List<ProductDetail>> = mutableStateOf(emptyList())
     var uiStateAuthenticatedUser = mutableStateOf(UIStateAuthenticatedUser())
+    var uiStateCommandResponse = mutableStateOf(UIStateCommandResponse())
+    var uiStateProductSearched = mutableStateOf(UIState())
+
+    var productList: MutableState<List<ProductDetail>> = mutableStateOf(emptyList())
+    var productSearchedList: MutableState<List<ProductDetail>> = mutableStateOf(emptyList())
 
     init {
         getProduct()
@@ -48,7 +54,7 @@ class MainViewModel @Inject constructor(
 
                     is ResultGet.Success -> {
                         uiState.value = UIState(isLoading = false, data = result.data!!)
-                        productList.value = result.data!!
+                        productList.value = result.data
                     }
 
                     is ResultGet.Error -> {
@@ -218,7 +224,63 @@ class MainViewModel @Inject constructor(
     fun reinitializeAuthenticatedUser() {
         uiStateAuthenticatedUser.value = UIStateAuthenticatedUser(isLoading = false, data = null)
     }
+    fun commandProduct(commandItemToSend: CommandItemToSend){
+        viewModelScope.launch {
+            repository.postCommand(commandItemToSend).collect{ result ->
+                when(result){
+                    is ResultGet.Loading -> {
+                        uiStateCommandResponse.value = UIStateCommandResponse(isLoading = true)
+                    }
+                    is ResultGet.Success -> {
+                        uiStateCommandResponse.value = UIStateCommandResponse(isLoading = false, data = result.data)
+                    }
+                    is ResultGet.Error -> {
+                        uiStateCommandResponse.value = UIStateCommandResponse(isLoading = false, error = result.message)
+                    }
+                }
+            }
+        }
+    }
+    fun searchProducts(keyWord: String){
+        viewModelScope.launch {
+            repository.searchProducts(keyWord).collect { result ->
+                when (result) {
+                    is ResultGet.Loading -> {
+                        uiStateProductSearched.value = UIState(
+                            isLoading = true
+                        )
+                    }
+
+                    is ResultGet.Success -> {
+                        uiStateProductSearched.value = UIState(isLoading = false, data = result.data!!)
+                        productList.value = result.data
+                    }
+
+                    is ResultGet.Error -> {
+                        uiStateProductSearched.value = UIState(isLoading = false, error = result.message)
+                    }
+                }
+            }
+        }
+    }
+
+    fun reinitializeSearchedProducts(){
+        viewModelScope.launch {
+            uiStateProductSearched.value = UIState()
+            productSearchedList.value = emptyList()
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

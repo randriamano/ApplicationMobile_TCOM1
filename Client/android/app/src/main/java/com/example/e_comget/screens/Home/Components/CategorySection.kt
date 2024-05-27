@@ -49,7 +49,9 @@ fun CategorySection(mainViewModel: MainViewModel) {
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Column {
+        Column (
+            modifier = Modifier.background(Color.White)
+        ){
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

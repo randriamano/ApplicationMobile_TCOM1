@@ -2,6 +2,7 @@ package com.example.e_comget.screens.Home.Components
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,15 +27,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +47,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
@@ -59,24 +62,22 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import com.example.e_comget.CommandProductViewModel
 import com.example.e_comget.DataStoreViewModel
+import com.example.e_comget.Datoum.model.item.ColorItem
+import com.example.e_comget.Datoum.model.item.CommandItemToSend
 import com.example.e_comget.Datoum.model.item.ProductCommandedDetails
 import com.example.e_comget.Datoum.model.item.ProductDetail
 import com.example.e_comget.GlobalViewModel
 import com.example.e_comget.MainViewModel
 import com.example.e_comget.Routes.MyAccountScreens
-import com.example.e_comget.ui.theme.PoloColorBlack
-import com.example.e_comget.ui.theme.PoloColorGray
-import com.example.e_comget.ui.theme.PoloColorNavyBlue
-import com.example.e_comget.ui.theme.PoloColorRed
-import com.example.e_comget.ui.theme.PoloColorWhite
+import com.example.e_comget.ui.theme.ButtonColor
 import com.example.e_comget.ui.theme.Red
 import com.example.e_comget.ui.theme.VeryLightGray
 import kotlinx.coroutines.delay
 
 
 //TODO
-//Adding counting product to command (UI)
 //Create an object to store all data selected by user to send to the next screen (ProductOrderScreen)
 //  If not signined : redirect into sign in screen before productOrder
 //Logic to enable the "Continue" button when all data are complete
@@ -142,6 +143,8 @@ fun ProductDetailsScreen(
     } else {
         if (product == null) onGetProductDetails()
         else {
+            Log.d("", "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+            Log.d("", "${product}")
             if (uiState.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier
@@ -154,6 +157,7 @@ fun ProductDetailsScreen(
                 }
             } else {
                 Column(
+                    modifier = Modifier.background(VeryLightGray),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     DetailsTopBarSection(
@@ -162,25 +166,8 @@ fun ProductDetailsScreen(
                         mainViewModel = mainViewModel
                     )
                     DetailsBodySection(
-                        product = product,
-                        productToCommand = productToCommand
-                    ) { action ->
-                        when (action) {
-                            is UpdateAction.UpdateSizeChosen -> {
-                                productToCommand =
-                                    productToCommand.copy(productSizeChosen = action.newSizeChosen)
-                            }
-
-                            is UpdateAction.UpdateColorChosen -> {
-                                productToCommand =
-                                    productToCommand.copy(productColorChosen = action.newColorChosen)
-                            }
-
-                            is UpdateAction.UpdateAll -> {
-                                productToCommand = action.newProductCommandedDetails
-                            }
-                        }
-                    }
+                        product = product
+                    )
                     DetailsFooterSection(navControllerApp, product = product);
                 }
             }
@@ -209,7 +196,7 @@ fun DetailHeader(navControllerApp: NavHostController, mainViewModel: MainViewMod
     IconButton(
         onClick = {
             mainViewModel.reinitializeTheProductFetchedById()
-            navControllerApp.popBackStack()
+            navControllerApp.navigateUp()
         },
         enabled = true,
     ) {
@@ -236,7 +223,7 @@ fun ImageCarousel(images: List<String>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.50f)
+            .fillMaxHeight(0.45f)
     ) {
         Box(
             modifier = Modifier
@@ -255,6 +242,7 @@ fun ImageCarousel(images: List<String>) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth(1f)
+                    .padding(start = 8.dp, end = 8.dp)
                     .align(Alignment.Center),
                 Arrangement.SpaceBetween
             ) {
@@ -325,8 +313,7 @@ fun ImageCarousel(images: List<String>) {
 @Composable
 fun DetailsBodySection(
     product: ProductDetail,
-    productToCommand: ProductCommandedDetails,
-    onUpdateAction: (UpdateAction) -> Unit
+    commandProductViewModel: CommandProductViewModel = viewModel(),
 ) {
     val scrollState = rememberScrollState();
     var selectedColorIndex by remember {
@@ -337,12 +324,22 @@ fun DetailsBodySection(
         mutableStateOf(0)
     }
 
+    commandProductViewModel.productColorChosen =
+        product.availableColorList?.get(selectedColorIndex) ?: ColorItem("", "")
+
+    commandProductViewModel.productSizeChosen = product.availableSizeList?.get(selectedSizeIndex)
+        ?: ""
+
     fun changeSelectedColorIndex(newVal: Int) {
         selectedColorIndex = newVal;
+        commandProductViewModel.productColorChosen =
+            product.availableColorList?.get(selectedColorIndex) ?: ColorItem("", "")
     }
 
     fun changeSelectedSizeIndex(newSize: Int) {
         selectedSizeIndex = newSize;
+        commandProductViewModel.productSizeChosen = product.availableSizeList?.get(selectedSizeIndex)
+            ?: ""
     }
 
     Column(
@@ -352,35 +349,37 @@ fun DetailsBodySection(
             .fillMaxHeight(0.85f)
             .padding(10.dp)
     ) {
-        Column(
-
-        ) {
-            Text(
-                text = "Ar ${product.productPrice}",
-                fontSize = 17.sp,
-                fontFamily = FontFamily.Serif,
-                fontWeight = FontWeight.Bold,
-                color = Red
-            )
+        Column{
             Text(
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
-                text = "${product.productName}"
+                text = product.productName
+            )
+
+            Text(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Light,
+                color = Color.Black,
+                text = product.productDescription
+            )
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = "${product.productPrice} Ar",
+                fontSize = 35.sp,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.ExtraBold,
+                color = Red
             )
         }
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(7.dp))
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
                 .fillMaxWidth(1f),
             Arrangement.SpaceBetween
         ) {
-            Text(
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Light,
-                color = Color.Gray,
-                text = product.productDescription
-            )
+
             Spacer(modifier = Modifier.height(15.dp))
             if (product.availableColorList!!.isNotEmpty()) {
                 Column(
@@ -391,22 +390,23 @@ fun DetailsBodySection(
                     Text(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
-                        text = "Color : ${selectedColorIndex + 1}. ${product.availableColorList[selectedColorIndex]}",
+                        text = "Couleur : ${product.availableColorList[selectedColorIndex].colorItemName}",
                     )
                     Spacer(modifier = Modifier.height(7.dp))
                     ColorItems(
-                        product.availableColorList, selectedColorIndex,
+                        product.availableColorList,
+                        selectedColorIndex,
                         changeTheSelectedColorIndex = ::changeSelectedColorIndex
                     )
                 }
             }
-            if (product.availableSizeList!!.size > 0) {
+            if (product.availableSizeList!!.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Column {
                     Text(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
-                        text = "Size : ${product.availableSizeList[selectedSizeIndex]}",
+                        text = "Taille : ${product.availableSizeList[selectedSizeIndex]}",
                     )
                     Spacer(modifier = Modifier.height(7.dp))
                     SizeItems(
@@ -422,7 +422,7 @@ fun DetailsBodySection(
 
 @Composable
 fun ColorItems(
-    availableColorList: List<String>,
+    availableColorList: List<ColorItem>,
     selectedIndex: Int,
     changeTheSelectedColorIndex: (Int) -> Unit
 ) {
@@ -430,11 +430,11 @@ fun ColorItems(
         modifier = Modifier
             .fillMaxWidth(1f)
     ) {
-        itemsIndexed(availableColorList) { index, colorName ->
+        itemsIndexed(availableColorList) { index, _ ->
             AvailableColorItem(
+                availableColorList = availableColorList,
                 index = index,
                 indexSelected = selectedIndex,
-                colorName = colorName,
                 onClick = { newIndex -> changeTheSelectedColorIndex(newIndex) }
             )
         }
@@ -443,22 +443,17 @@ fun ColorItems(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AvailableColorItem(index: Int, indexSelected: Int, colorName: String, onClick: (Int) -> Unit) {
-    val mapColor: MutableMap<String, Color> = hashMapOf(
-        "Black" to PoloColorBlack,
-        "Navy Blue" to PoloColorNavyBlue,
-        "Red" to PoloColorRed,
-        "Gray" to PoloColorGray,
-        "White" to PoloColorWhite
-    )
+fun AvailableColorItem(availableColorList: List<ColorItem>, index: Int, indexSelected: Int, onClick: (Int) -> Unit) {
+    val colorItem = availableColorList[index]
+    val colorName = colorItem.colorItemName
+    val colorCode = Color(android.graphics.Color.parseColor(colorItem.colorItemCode))
 
-    val textColor: Color = if (colorName.equals("White")) Color.Black else Color.White;
+    val textColor: Color = if (colorName == "White") Color.Black else Color.White;
     var borderColor: Color = Color.Transparent;
-    val nullableColor = mapColor[colorName];
-    val backgroundColor = nullableColor ?: Color.Black;
+
 
     if (index == indexSelected) {
-        borderColor = if (colorName.equals("White")) Color.Black else Color.White;
+        borderColor = if (colorName == "White") Color.Black else Color.White;
     }
 
     val padding = if (index == 0) 0.dp else 10.dp
@@ -472,9 +467,10 @@ fun AvailableColorItem(index: Int, indexSelected: Int, colorName: String, onClic
     ) {
         Box(
             modifier = Modifier
-                .size(50.dp)
-                .background(color = backgroundColor, shape = RoundedCornerShape(10.dp))
-                .border(2.dp, color = borderColor, shape = RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(12.dp))
+                .size(55.dp)
+                .background(colorCode)
+                .border(2.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
                 .clickable(enabled = true, onClick = { onClick(index) }),
             contentAlignment = Alignment.Center
         ) {
@@ -515,7 +511,7 @@ fun SizeItems(
 @Composable
 fun AvailableSizeItem(index: Int, selectedIndex: Int, size: String, onClick: (Int) -> Unit) {
     val padding = if (index == 0) 0.dp else 10.dp
-    val border = if (index == selectedIndex) 3.dp else 0.dp
+    val border = if (index == selectedIndex) 2.5.dp else 0.dp
 
     Column(
         modifier = Modifier
@@ -525,9 +521,10 @@ fun AvailableSizeItem(index: Int, selectedIndex: Int, size: String, onClick: (In
     ) {
         Box(
             modifier = Modifier
+                .clip(RoundedCornerShape(10.dp))
                 .size(width = 60.dp, height = 25.dp)
-                .border(width = border, color = Color.Gray, shape = RoundedCornerShape(10.dp))
-                .background(Color.White, shape = RoundedCornerShape(10.dp))
+                .border(width = border, color = ButtonColor, shape = RoundedCornerShape(10.dp))
+                .background(Color.White)
                 .clickable(enabled = true, onClick = { onClick(index) }),
             contentAlignment = Alignment.Center
         ) {
@@ -541,51 +538,100 @@ fun AvailableSizeItem(index: Int, selectedIndex: Int, size: String, onClick: (In
 }
 
 @Composable
-fun DetailsFooterSection(navControllerApp: NavHostController, product: ProductDetail?) {
+fun DetailsFooterSection(
+    navControllerApp: NavHostController,
+    product: ProductDetail?,
+    commandProductViewModel: CommandProductViewModel = viewModel(),
+    mainViewModel: MainViewModel = hiltViewModel(),
+    dataStoreViewModel: DataStoreViewModel = hiltViewModel()
+) {
     val dataStoreViewModel: DataStoreViewModel = hiltViewModel()
+    var show by remember { mutableStateOf(false) }
+
+
 
     Row(
         modifier = Modifier
             .fillMaxWidth(1f)
             .fillMaxHeight(1f)
+            .padding(start = 25.dp, end = 25.dp)
             .background(VeryLightGray),
-//            .fillMaxHeight(0.4f),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
 
         ) {
 
         if (!dataStoreViewModel.isLoggedIn.collectAsState(initial = true).value) {
-            FilledTonalButton(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Black,
-                    contentColor = Color.White
-                ),
-                enabled = true,
-                onClick = {
-                    navControllerApp.navigate(MyAccountScreens.Login.route)
-                },
-                modifier = Modifier.fillMaxWidth(0.75f)
-            ) {
-                Text(text = "Se connecter")
-            }
+
+            ButtonComponent("Se connecter", true, onClick = {
+                navControllerApp.navigate(MyAccountScreens.Login.route)
+            } )
+
         } else {
-            FilledTonalButton(
-                modifier = Modifier
-                    .fillMaxWidth(0.75f),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Black,
-                    contentColor = Color.White
-                ),
-                enabled = true,
-                onClick = {
-                }
-            ) {
-                Text(text = "Commander")
+
+            ButtonComponent("Commander", true, onClick = {
+                show = show.not()
+                Log.d("", "Value of show = ${show}")
+            })
+
+            if (show) {
+                AlertDialog(
+                    onDismissRequest = { show = false },
+                    title = { Text("Confirmer votre commande") },
+                    text = { Text("${product?.productName}, ${commandProductViewModel.productSizeChosen}, ${commandProductViewModel.productColorChosen.colorItemName}") },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            Log.d("", "heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeere")
+//                            Log.d("", "${dataStoreViewModel.userId.}")
+                            Log.d("", "ttttttttttttttttttttttttthhhhhhhhhhhhhhhhhhereeeeeeeeeeeee")
+
+                            if (product != null) {
+                                mainViewModel.commandProduct(CommandItemToSend(
+                                    productId = product.productId,
+                                    studentId = 1,
+                                    productColorChosen = commandProductViewModel.productColorChosen,
+                                    productSizeChosen = commandProductViewModel.productSizeChosen,
+                                    productIsPayed = false
+                                ))
+                                show = false
+                            }
+                        }) {
+                            Text("Confirmer".uppercase())
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { show = false }) {
+                            Text("Annuler".uppercase())
+                        }
+                    },
+                )
             }
         }
     }
 }
+
+@Composable
+fun ButtonComponent(label : String, enable: Boolean, onClick: () -> Unit){
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        onClick = { onClick() },
+        colors = ButtonDefaults.buttonColors(containerColor = ButtonColor),
+        shape = MaterialTheme.shapes.extraLarge,
+        enabled = enable
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+
+
+
+
 
 @Preview
 @Composable

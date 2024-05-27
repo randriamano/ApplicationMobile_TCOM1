@@ -98,7 +98,7 @@ fun CommandCategoryDetailsScreen(
             }
 
             IconButton(onClick = {
-                navController.popBackStack()
+                navController.navigateUp()
             }) {
                 Icon(
                     imageVector = Icons.Sharp.ArrowBack,

@@ -1,6 +1,8 @@
 package com.example.e_comget.screens.Card.Components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,9 +13,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -25,6 +29,7 @@ fun HeadSection(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .background(Color.White)
             .padding(start = 15.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -37,7 +42,9 @@ fun HeadSection(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarWithBackArrow(navControllerApp: NavController) {
+
     TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
         title = {
             Text(text = "Liste des commandes", modifier = Modifier.padding(start = 4.dp))
         },
@@ -45,7 +52,7 @@ fun TopAppBarWithBackArrow(navControllerApp: NavController) {
             Icon(
                 Icons.TwoTone.ShoppingCart,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground
+               // tint = MaterialTheme.colorScheme.onBackground
             )
         }
     )

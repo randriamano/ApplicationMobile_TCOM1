@@ -6,7 +6,7 @@ data class ProductDetail(
     val productName: String,
     val productPrice: String,
     val productDescription: String,
-    val availableColorList: List<String>? = emptyList(),
+    val availableColorList: List<ColorItem>? = emptyList(),
     val availableSizeList: List<String>? = emptyList(),
     val productCategory: String?,
     val productRemainingStock: Int? = 0,
@@ -23,6 +23,6 @@ val product = ProductDetail(
     productDescription = "This is the steph curry new brand",
     productRemainingStock = 15,
     productImageURLList = listOf("curry1", "curry2", "curry2", "curry3", "curry4"),
-    availableColorList = listOf("Black", "Navy Blue", "Red", "Gray", "White"),
+    availableColorList = predefinedColorList,
     availableSizeList = listOf("S", "M", "L", "XL")
 )

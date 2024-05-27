@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -256,20 +257,19 @@ fun DetailsBodySection(){
             if (product.availableColorList!!.isNotEmpty()){
                 Column (
                     modifier = Modifier
-                        .fillMaxWidth(1f)
-                        ,
+                        .fillMaxWidth(1f),
                     Arrangement.SpaceBetween
                 ){
                     Text(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
-                        text = "Couleur : ${product.availableColorList[selectedColorIndex].colorItemName}",
+                        text = "Couleur :",
                     )
                     Spacer(modifier = Modifier.height(7.dp))
 
                     ColorItems(
-                        product.availableColorList
-                        , selectedColorIndex,
+                        product.availableColorList,
+                        selectedColorIndex,
                         changeTheSelectedColorIndex = ::changeSelectedColorIndex
                     )
                 }
@@ -280,7 +280,7 @@ fun DetailsBodySection(){
                     Text(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
-                        text = "Taille : ${product.availableSizeList[selectedSizeIndex]}",
+                        text = "Taille :",
                     )
                     Spacer(modifier = Modifier.height(7.dp))
                     SizeItems(
@@ -344,9 +344,7 @@ fun AvailableColorItem(availableColorList: List<ColorItem>, index: Int, indexSel
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
                 .size(55.dp)
-                .background(colorCode)
-                .border(2.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
-                .clickable { onClick(index) },
+                .background(colorCode),
             contentAlignment = Alignment.Center
         ){
             Text(
@@ -394,9 +392,7 @@ fun AvailableSizeItem(index: Int, selectedIndex: Int, size: String, onClick: (In
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
                 .size(width = 60.dp, height = 25.dp)
-                .background(Color.White)
-                .border(width = border, color = ButtonColor, shape = RoundedCornerShape(10.dp))
-                .clickable { onClick(index) },
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ){
             Text(
@@ -414,9 +410,9 @@ fun DetailsFooterSection(navControllerApp: NavHostController){
        modifier = Modifier
            .fillMaxWidth(1f)
            .fillMaxHeight(1f)
-           .background(VeryLightGray)
-           .fillMaxHeight(0.4f),
-        horizontalArrangement = Arrangement.Center,
+           .background(VeryLightGray),
+         //  .fillMaxHeight(0.4f),
+        horizontalArrangement = Arrangement.Absolute.Right,
         verticalAlignment = Alignment.CenterVertically,
 
     ){
@@ -424,7 +420,22 @@ fun DetailsFooterSection(navControllerApp: NavHostController){
             modifier = Modifier
                 .padding(start = 25.dp, end = 25.dp, bottom = 10.dp)
             ){
-            ButtonComponent(label = "Continuer", enable= true, onClick = {/*TODO*/})
+
+            TextButton(
+                onClick = {  },
+                //modifier = Modifier.fillMaxWidth(1f),
+                enabled = true
+            )
+            {
+                Text(text = "Supprimer",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = ButtonColor)
+            }
+            Box(modifier = Modifier.width(120.dp).height(50.dp)){
+                ButtonComponent(label = "Modifier", enable= true, onClick = {/*TODO*/})
+            }
+
+
         }
 
     }

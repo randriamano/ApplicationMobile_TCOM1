@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -19,6 +20,7 @@ val Context.myPreferencesDataStore: DataStore<Preferences> by preferencesDataSto
 
 data class ConnexionStatus(
     val isLoggedIn: Boolean,
+    val userId: Int,
     val userCardNum: String,
     val userName: String,
     val userFirstName: String
@@ -35,6 +37,7 @@ class MYPreferencesDataStore @Inject constructor(
         val USER_CARD_NAME: Preferences.Key<String> = stringPreferencesKey("card_name")
         val USER_NAME: Preferences.Key<String> = stringPreferencesKey("user_name")
         val USER_FIRSTNAME: Preferences.Key<String> = stringPreferencesKey("user_firstname")
+        val USER_ID: Preferences.Key<Int> = intPreferencesKey("user_id")
     }
 
     val taskStatusFlow = myPreferencesDataStore.data
@@ -49,12 +52,14 @@ class MYPreferencesDataStore @Inject constructor(
             val userCardNum = preferences[PreferencesKeys.USER_CARD_NAME] ?: ""
             val userName = preferences[PreferencesKeys.USER_NAME] ?: ""
             val userFirstName = preferences[PreferencesKeys.USER_FIRSTNAME] ?: ""
+            val userId = preferences[PreferencesKeys.USER_ID] ?: -1
 
             ConnexionStatus(
                 isLoggedIn = isLoggedIn,
                 userCardNum = userCardNum,
                 userName = userName,
-                userFirstName = userFirstName
+                userFirstName = userFirstName,
+                userId = userId
             )
         }
 
@@ -79,6 +84,12 @@ class MYPreferencesDataStore @Inject constructor(
     suspend fun updateUserFirstName(userFirstName: String) {
         myPreferencesDataStore.edit { preferences ->
             preferences[PreferencesKeys.USER_FIRSTNAME] = userFirstName
+        }
+    }
+
+    suspend fun updateUserId(userId: Int) {
+        myPreferencesDataStore.edit { preferences ->
+            preferences[PreferencesKeys.USER_ID] = userId
         }
     }
 }

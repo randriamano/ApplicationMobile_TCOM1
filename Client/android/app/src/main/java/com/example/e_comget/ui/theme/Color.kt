@@ -31,3 +31,10 @@ val AccentColor = Color(0xFFC58BF2)
 val GrayColor = Color(0xFF7B6F72)
 val WhiteColor = Color(0xFFFFFFFF)
 val BgColor = Color(0xFFF7F8F8)
+
+val Bg40 = Color(0x20DDDDDD)
+val Bg60 = Color(0xffDDDDDD)
+val Bg80 = Color(0xff7D7C7C)
+val BgButtonColor = Color(0x10C4E4FF)
+
+val ButtonColor = Color(0xff074173)

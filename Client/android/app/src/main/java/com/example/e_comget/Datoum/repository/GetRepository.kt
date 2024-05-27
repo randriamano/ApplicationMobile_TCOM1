@@ -3,6 +3,7 @@ package com.example.e_comget.Datoum.repository
 import android.util.Log
 import com.example.e_comget.Datoum.GetApi
 import com.example.e_comget.Datoum.ResultGet
+import com.example.e_comget.Datoum.model.item.CommandItemToSend
 import com.example.e_comget.Datoum.model.item.UserItemToSend
 import com.example.e_comget.Datoum.model.item.UserLoginItem
 import kotlinx.coroutines.flow.catch
@@ -64,6 +65,22 @@ class GetRepository @Inject constructor(
         emit(ResultGet.Loading())
         val loggedUser = api.login(userLoginItem).body()
         emit(ResultGet.Success(data = loggedUser))
+    }.catch { error ->
+        emit(ResultGet.Error(message = error.message!!))
+    }
+
+    suspend fun postCommand(commandItemToSend: CommandItemToSend) = flow{
+        emit(ResultGet.Loading())
+        val postCommmandResponse = api.postCommand(commandItemToSend).body()
+        emit(ResultGet.Success(data = postCommmandResponse))
+    }.catch { error ->
+        emit(ResultGet.Error(message = error.message!!))
+    }
+
+    suspend fun searchProducts(keyWord: String) = flow{
+        emit(ResultGet.Loading())
+        val products = api.searchProducts(keyWord).body()?.product
+        emit(ResultGet.Success(data = products))
     }.catch { error ->
         emit(ResultGet.Error(message = error.message!!))
     }

@@ -99,10 +99,10 @@ fun ItemDisp(
     }
 
     Surface(
-
+        modifier = Modifier.background(Color.White)
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().background(Color.White),
             contentPadding = PaddingValues(vertical = 56.dp, horizontal = 12.dp)
         ) {
             items(ProfileItemList.size) { index ->

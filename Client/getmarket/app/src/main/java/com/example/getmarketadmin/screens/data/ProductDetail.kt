@@ -16,11 +16,11 @@ data class ProductDetail(
 
 val product = ProductDetail(
     productId = 0,
-    productName = "Steph Curry",
-    productPrice = "150_000",
+    productName = "T-shirt",
+    productPrice = "21_000",
     productCategory = "Vêtements",
-    productDescription = "This is the steph curry new brand",
-    productImageURLList = listOf("pro1","pro2","pro3","pro4", "pro5"),
+    productDescription = "T-shirt avec logo Get conçu par le GET 2024",
+    productImageURLList = listOf("pro2","pro1","pro3","pro4", "pro5"),
     availableColorList = predefinedColorList,
     availableSizeList = listOf("S", "M", "L", "XL")
 )
