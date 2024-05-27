@@ -29,26 +29,26 @@ commandRouter.post('/', auth, async (req, res) => {
       productId: data.productId,
       studentId: data.studentId,
       productSizeChosen: data.productSizeChosen,
-      productColorChosen: data.productColorChosen, 
+      productColorChosen: data.productColorChosen,
+      productIsPayed: data.productIsPayed 
     }
 
     const product = await commandController.commandProduct(productData)
 
     res.json({
-      success: true,
       products: product,
     })
   } catch (e) {
-    res.status(400).json({
-      success: false,
+    res.json({
       products: {
         commandId: -1,
         productId: -1,
         studentId: -1,
         productSizeChosen: "",
-        productColorChosen: "",
+        productColorChosen: {},
+        productIsPayed: false,
         commandDate: "",
-    },
+      },
     })
   }
 })

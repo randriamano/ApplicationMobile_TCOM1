@@ -1,9 +1,7 @@
 package com.example.e_comget.Datoum
 
 import com.example.e_comget.Datoum.model.AuthenticationWrapper
-import com.example.e_comget.Datoum.model.ProductCommandedDetails
 import com.example.e_comget.Datoum.model.ProductCommandedDetailsWrapper
-
 import com.example.e_comget.Datoum.model.ProductDetailWrapper
 import com.example.e_comget.Datoum.model.item.CommandItemToSend
 import com.example.e_comget.Datoum.model.item.CommandStateResponse
@@ -29,8 +27,6 @@ interface GetApi {
 
     @GET("/api/products/category/{category}")
     suspend fun getProductsByCategoryName(@Path("category") category: String): Response<ProductDetailWrapper>
-
-
     @POST("/api/student/signup?key=admin")
     suspend fun register(@Body requestData: UserItemToSend): Response<AuthenticationWrapper>
 
